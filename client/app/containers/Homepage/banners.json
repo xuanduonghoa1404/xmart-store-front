@@ -1,12 +1,12 @@
 [
   {
-    "imageUrl": "/images/banners/banner-3.jpg",
+    "imageUrl": "https://res.cloudinary.com/hoaduonghx/image/upload/v1663862288/image/foodmartbanner1_vib6ax.png",
     "link": "",
     "title": "",
-    "content": "<p></p>\n"
+    "content": "<p>Haha</p>\n"
   },
   {
-    "imageUrl": "/images/banners/banner-4.jpg",
+    "imageUrl": "https://res.cloudinary.com/hoaduonghx/image/upload/v1663862300/image/raining_ll9pky.png",
     "link": "",
     "title": "",
     "content": "<p></p>\n"

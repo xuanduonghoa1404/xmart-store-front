@@ -100,22 +100,22 @@ export const fetchBrand = brandId => {
 };
 
 // fetch brands select api
-export const fetchBrandsSelect = () => {
-  return async (dispatch, getState) => {
-    try {
-      const response = await axios.get(`/api/product/list/select`);
+// export const fetchBrandsSelect = () => {
+//   return async (dispatch, getState) => {
+//     try {
+//       const response = await axios.get(`/api/product/list/select`);
 
-      const formattedBrands = formatSelectOptions(response.data.brands, true);
+//       const formattedBrands = formatSelectOptions(response.data.brands, true);
 
-      dispatch({
-        type: FETCH_BRANDS_SELECT,
-        payload: formattedBrands
-      });
-    } catch (error) {
-      handleError(error, dispatch);
-    }
-  };
-};
+//       dispatch({
+//         type: FETCH_BRANDS_SELECT,
+//         payload: formattedBrands
+//       });
+//     } catch (error) {
+//       handleError(error, dispatch);
+//     }
+//   };
+// };
 
 // add brand api
 export const addBrand = () => {

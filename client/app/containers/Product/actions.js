@@ -207,22 +207,22 @@ export const fetchBrandProducts = slug => {
   };
 };
 
-export const fetchProductsSelect = () => {
-  return async (dispatch, getState) => {
-    try {
-      const response = await axios.get(`/api/product/list/select`);
+// export const fetchProductsSelect = () => {
+//   return async (dispatch, getState) => {
+//     try {
+//       const response = await axios.get(`/api/product/list/select`);
 
-      const formattedProducts = formatSelectOptions(response.data.products);
+//       const formattedProducts = formatSelectOptions(response.data.products);
 
-      dispatch({
-        type: FETCH_PRODUCTS_SELECT,
-        payload: formattedProducts
-      });
-    } catch (error) {
-      handleError(error, dispatch);
-    }
-  };
-};
+//       dispatch({
+//         type: FETCH_PRODUCTS_SELECT,
+//         payload: formattedProducts
+//       });
+//     } catch (error) {
+//       handleError(error, dispatch);
+//     }
+//   };
+// };
 
 // add product api
 export const addProduct = () => {

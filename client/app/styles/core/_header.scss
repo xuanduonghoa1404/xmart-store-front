@@ -13,7 +13,7 @@
 }
 
 .header {
-  background-color: $red;
+  background-color: $white;
   border-bottom: $border-primary;
 
   .logo {
@@ -73,7 +73,7 @@
   }
 
   .navbar {
-    background-color: $red !important;
+    background-color: $white !important;
     justify-content: flex-end;
     padding: 0;
 
@@ -84,6 +84,14 @@
     }
 
     .cart-icon {
+      .cart-bag {
+        background-image: $foodpromarts_background_image_icon;
+        background-size: $foodpromarts_background_image_size;
+        background-position: -281px -163px;
+        width: 26px;
+        height: 26px;
+        display: block;
+      }
       .bag-icon {
         vertical-align: text-bottom;
       }
@@ -137,7 +145,7 @@
   .brand {
     @include flex();
     flex-wrap: wrap;
-    align-items: flex-start;
+    align-items: center;
     @include media-breakpoint-down(sm) {
       margin-top: 10px;
       justify-content: center;
