@@ -8,6 +8,7 @@ import {
   HANDLE_CART,
   ADD_TO_CART,
   REMOVE_FROM_CART,
+  INCREASE_QTY,
   HANDLE_CART_TOTAL,
   SET_CART_ID,
   CLEAR_CART
@@ -25,11 +26,18 @@ const cartReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case ADD_TO_CART:
+      let itemId = state.cartItems.findIndex(
+        x => x._id == action.payload._id
+      );
+      if (itemId === -1) {
       newState = {
         ...state,
         cartItems: [...state.cartItems, action.payload],
         itemsInCart: [...state.itemsInCart, action.payload._id]
       };
+    } else {
+        
+    }
 
       localStorage.setItem('cart_items', JSON.stringify(newState.cartItems));
       localStorage.setItem(
@@ -66,6 +74,33 @@ const cartReducer = (state = initialState, action) => {
       };
 
       localStorage.setItem('cart_total', newState.cartTotal);
+      return newState;
+    case INCREASE_QTY:
+      let itemIdex = state.cartItems.findIndex(
+        x => x._id == action.payload._id
+      );
+      let item = state.cartItems[itemIdex]
+      let newItem = {
+        ...item,
+        quantity: item.quantity + 1,
+        totalPrice: (item.quantity + 1) * item.price
+      }
+      state.cartItems[itemIdex] = newItem;
+      newState = {
+        ...state,
+        cartItems: [
+          ...state.cartItems
+        ],
+        itemsInCart: [
+          ...state.cartItems
+        ]
+      };
+
+      localStorage.setItem('cart_items', JSON.stringify(newState.cartItems));
+      localStorage.setItem(
+        'items_in_cart',
+        JSON.stringify(newState.itemsInCart)
+      );
       return newState;
     case HANDLE_CART:
       newState = {

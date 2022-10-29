@@ -13,6 +13,8 @@ import actions from '../../actions';
 import banners from './banners.json';
 import CarouselSlider from '../../components/Common/CarouselSlider';
 import { responsiveOneItemCarousel } from '../../components/Common/CarouselSlider/helpers';
+import ShopByCategory from '../FlashSaleSection/ShopByCategory';
+import FlashSaleMaxSlider from '../FlashSaleSection/FlashSaleMaxSlider';
 
 class Homepage extends React.PureComponent {
   componentDidMount() {
@@ -20,12 +22,10 @@ class Homepage extends React.PureComponent {
   }
 
   render() {
+    console.log("props", this.props)
     const {
       categories,
-      storeCategories
     } = this.props;
-    console.log('categories', categories)
-    console.log('storeCategories', storeCategories)
     return (
       <div className='homepage'>
         <Row className='flex-row'>
@@ -58,7 +58,7 @@ class Homepage extends React.PureComponent {
             </div>
           </Col>
         </Row>
-        <Row className='flex-row'>
+        {/* <Row className='flex-row'>
           <Col xs='12' lg='12' className='order-lg-2 mb-3 px-3 px-md-2'>
             <div className='home-carousel'>
             {categories && categories.length &&
@@ -76,6 +76,11 @@ class Homepage extends React.PureComponent {
               </CarouselSlider>}
             </div>
           </Col>
+        </Row> */}
+        <Row>
+        <FlashSaleMaxSlider />
+        <br />
+          <ShopByCategory categories={categories}/>
         </Row>
       </div>
     );
@@ -83,7 +88,9 @@ class Homepage extends React.PureComponent {
 }
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    categories: state.homepage.categories,
+  };
 };
 
 export default connect(mapStateToProps, actions)(Homepage);

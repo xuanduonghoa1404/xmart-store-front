@@ -34,6 +34,7 @@ import AuthSuccess from '../AuthSuccess';
 
 import Footer from '../../components/Common/Footer';
 import Page404 from '../../components/Common/Page404';
+import FooterSection from '../FooterSection/FooterSection';
 
 class Application extends React.PureComponent {
   componentDidMount() {
@@ -98,6 +99,7 @@ class Application extends React.PureComponent {
             </div>
           </Container>
         </main>
+        {/* <FooterSection /> */}
         <Footer />
       </div>
     );

@@ -12,6 +12,7 @@ import {
   HANDLE_CART,
   ADD_TO_CART,
   REMOVE_FROM_CART,
+  INCREASE_QTY ,
   HANDLE_CART_TOTAL,
   SET_CART_ID,
   CLEAR_CART
@@ -32,6 +33,7 @@ export const handleAddToCart = product => {
     product.quantity = Number(getState().product.productShopData.quantity);
     product.totalPrice = product.quantity * product.price;
     product.totalPrice = parseFloat(product.totalPrice.toFixed(2));
+    console.log('product.totalPrice', product.totalPrice, product.quantity)
     const inventory = getState().product.storeProduct.inventory;
 
     const result = calculatePurchaseQuantity(inventory);
@@ -62,6 +64,17 @@ export const handleAddToCart = product => {
   };
 };
 
+// Handle increase qty item From Cart
+export const increaseQtyItemFromCart = product => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: INCREASE_QTY,
+      payload: product
+    });
+    dispatch(calculateCartTotal());
+    // dispatch(toggleCart());
+  };
+};
 // Handle Remove From Cart
 export const handleRemoveFromCart = product => {
   return (dispatch, getState) => {
@@ -73,7 +86,6 @@ export const handleRemoveFromCart = product => {
     // dispatch(toggleCart());
   };
 };
-
 export const calculateCartTotal = () => {
   return (dispatch, getState) => {
     const cartItems = getState().cart.cartItems;
