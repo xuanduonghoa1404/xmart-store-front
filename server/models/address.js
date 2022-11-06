@@ -22,6 +22,12 @@ const AddressSchema = new Schema({
   zipCode: {
     type: String
   },
+  long: {
+    type: String
+  },
+  lat: {
+    type: String
+  },
   isDefault: {
     type: Boolean,
     default: false

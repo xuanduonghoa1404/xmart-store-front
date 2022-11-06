@@ -9,6 +9,7 @@ import {
   ADD_TO_CART,
   REMOVE_FROM_CART,
   INCREASE_QTY,
+  DECREASE_QTY,
   HANDLE_CART_TOTAL,
   SET_CART_ID,
   CLEAR_CART
@@ -29,16 +30,20 @@ const cartReducer = (state = initialState, action) => {
       let itemId = state.cartItems.findIndex(
         x => x._id == action.payload._id
       );
-      if (itemId === -1) {
-      newState = {
-        ...state,
-        cartItems: [...state.cartItems, action.payload],
-        itemsInCart: [...state.itemsInCart, action.payload._id]
-      };
-    } else {
+    //   if (itemId === -1) {
+    //   newState = {
+    //     ...state,
+    //     cartItems: [...state.cartItems, action.payload],
+    //     itemsInCart: [...state.itemsInCart, action.payload._id]
+    //   };
+    // } else {
         
-    }
-
+    // }
+    newState = {
+      ...state,
+      cartItems: [...state.cartItems, action.payload],
+      itemsInCart: [...state.itemsInCart, action.payload._id]
+    };
       localStorage.setItem('cart_items', JSON.stringify(newState.cartItems));
       localStorage.setItem(
         'items_in_cart',
@@ -102,6 +107,33 @@ const cartReducer = (state = initialState, action) => {
         JSON.stringify(newState.itemsInCart)
       );
       return newState;
+    case DECREASE_QTY:
+        let itemIde = state.cartItems.findIndex(
+          x => x._id == action.payload._id
+        );
+        let itemDecrease = state.cartItems[itemIde]
+        let newItemDecrease = {
+          ...itemDecrease,
+          quantity: itemDecrease.quantity - 1,
+          totalPrice: (itemDecrease.quantity - 1) * itemDecrease.price
+        }
+        state.cartItems[itemIde] = newItemDecrease;
+        newState = {
+          ...state,
+          cartItems: [
+            ...state.cartItems
+          ],
+          itemsInCart: [
+            ...state.cartItems
+          ]
+        };
+  
+        localStorage.setItem('cart_items', JSON.stringify(newState.cartItems));
+        localStorage.setItem(
+          'items_in_cart',
+          JSON.stringify(newState.itemsInCart)
+        );
+        return newState;
     case HANDLE_CART:
       newState = {
         ...state,

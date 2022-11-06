@@ -3,7 +3,7 @@ const router = express.Router();
 
 // Bring in Models & Helpers
 const User = require('../../models/user');
-const Brand = require('../../models/brand');
+const Address = require('../../models/address');
 const auth = require('../../middleware/auth');
 const role = require('../../middleware/role');
 
@@ -45,9 +45,12 @@ router.get('/', auth, async (req, res) => {
     
     const user = req.user._id;
     const userDoc = await User.findById(user, { password: 0 });
-
+    const addressDoc = await Address.find({user})
     res.status(200).json({
-      user: userDoc
+      user: {
+        ...userDoc._doc,
+        address: addressDoc
+      }
     });
   } catch (error) {
     res.status(400).json({

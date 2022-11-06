@@ -11,6 +11,8 @@ import { Row, Col } from 'reactstrap';
 import Checkbox from '../../Common/Checkbox';
 import Input from '../../Common/Input';
 import Button from '../../Common/Button';
+import { Map, Marker, TileLayer, Tooltip as TooltipMap } from "react-leaflet";
+import L from "leaflet";
 
 const EditAddress = props => {
   const {
@@ -30,6 +32,38 @@ const EditAddress = props => {
   return (
     <div className='edit-address'>
       <form onSubmit={handleSubmit} noValidate>
+        {/* <Row map style={{ height: 500 ,display: 'none'}}>
+          <Map
+          style={{ height: "50%", width: "50%" }}
+            zoom={13}
+            center={[address.latitude || 21.028511, address.longitude || 105.804817]}
+            zoomControl={false}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker
+                    position={[address.latitude || 21.028511, address.longitude || 105.804817]}
+                    icon={showIcon(index)}
+                  ></Marker>
+            {
+              gpsPoints.map((item, index) => {
+                return (
+                  <Marker
+                    position={[item.latitude, item.longitude]}
+                    icon={showIcon(index)}
+                  >
+                    <TooltipMap offset={[12.5, -22.5]}>
+                      {showTooltip(item)}
+                    </TooltipMap>
+                  </Marker>
+                )
+              })
+            }
+
+          </Map>
+        </Row> */}
         <Row>
           <Col xs='12' md='12'>
             <Input

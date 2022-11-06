@@ -12,7 +12,7 @@ import { Container, Row, Col } from 'reactstrap';
 import Button from '../../Common/Button';
 import "./CartSection.css";
 const CartList = props => {
-  const { cartItems, handleRemoveFromCart, increaseQtyItemFromCart } = props;
+  const { cartItems, handleRemoveFromCart, increaseQtyItemFromCart, decreaseQtyItemFromCart } = props;
 
   console.log(cartItems);
   const handleProductClick = () => {
@@ -89,8 +89,8 @@ const CartList = props => {
                     <img
                       className='item-image mr-2'
                       src={`${item.photo
-                          ? item.photo
-                          : '/images/placeholder-image.png'
+                        ? item.photo
+                        : '/images/placeholder-image.png'
                         }`}
                     />
 
@@ -116,10 +116,10 @@ const CartList = props => {
                 </Col>
               </Row>
               <Row className='mb-2 align-items-center'>
-                <Col xs='9'>
+                <Col xs='7'>
                   <p className='item-label'>Giá</p>
                 </Col>
-                <Col xs='3' className='text-right'>
+                <Col xs='5' className='text-right'>
                   <p className='value price'>{`${item?.price} ₫`}</p>
                 </Col>
               </Row>
@@ -133,11 +133,12 @@ const CartList = props => {
                 
               </Row> */}
               <Row className='mb-2 align-items-center'>
-              <div className="d-flex bot justify-content-between align-items-center">
+                <div className="d-flex bot justify-content-between align-items-center">
                   <div className="count d-flex">
                     <button
                       className="decrease w-25"
-                    // onClick={() => action(decreaseFunc(idx))}
+                      onClick={() => decreaseQtyItemFromCart(item)}
+                      disabled={item.quantity <= 1}
                     >
                       -
                     </button>
@@ -153,7 +154,7 @@ const CartList = props => {
                     {/* {`$${parseFloat(price.slice(1, price.length) * amount).toFixed(
                 2
               )}`} */}
-              {`${item?.totalPrice} ₫`}
+                    {`${item?.totalPrice} ₫`}
                   </p>
                 </div>
               </Row>

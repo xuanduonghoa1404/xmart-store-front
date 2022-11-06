@@ -13,6 +13,7 @@ import {
   ADD_TO_CART,
   REMOVE_FROM_CART,
   INCREASE_QTY ,
+  DECREASE_QTY ,
   HANDLE_CART_TOTAL,
   SET_CART_ID,
   CLEAR_CART
@@ -69,6 +70,16 @@ export const increaseQtyItemFromCart = product => {
   return (dispatch, getState) => {
     dispatch({
       type: INCREASE_QTY,
+      payload: product
+    });
+    dispatch(calculateCartTotal());
+    // dispatch(toggleCart());
+  };
+};
+export const decreaseQtyItemFromCart = product => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: DECREASE_QTY,
       payload: product
     });
     dispatch(calculateCartTotal());
@@ -153,7 +164,7 @@ export const getCartId = () => {
       const cartId = localStorage.getItem('cart_id');
       const cartItems = getState().cart.cartItems;
       const products = getCartItems(cartItems);
-
+      console.log('cartId', cartId);
       // create cart id if there is no one
       if (!cartId) {
         const response = await axios.post(`/api/cart/add`, { products });
