@@ -66,3 +66,18 @@ export const onSuggestionsClearRequested = () => {
     payload: []
   };
 };
+
+export const fetchLocator = () => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(setLocatorLoading(true));
+      const response = await axios.get(`/api/locator`);
+
+      dispatch({ type: FETCH_LOCATOR, payload: response.data });
+    } catch (error) {
+      handleError(error, dispatch);
+    } finally {
+      dispatch(setLocatorLoading(false));
+    }
+  };
+};

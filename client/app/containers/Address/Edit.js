@@ -35,13 +35,15 @@ class Edit extends React.PureComponent {
       addressEditChange,
       defaultChange,
       updateAddress,
-      deleteAddress
+      deleteAddress,
+      locators,
+      user,
     } = this.props;
 
     return (
       <SubPage
-        title='Edit Address'
-        actionTitle='Cancel'
+        title="Sửa địa chỉ"
+        actionTitle="Quay lại"
         handleAction={() => history.goBack()}
       >
         {address?._id ? (
@@ -52,9 +54,11 @@ class Edit extends React.PureComponent {
             updateAddress={updateAddress}
             deleteAddress={deleteAddress}
             defaultChange={defaultChange}
+            locators={locators}
+            user={user}
           />
         ) : (
-          <NotFound message='no Address found.' />
+          <NotFound message="no Address found." />
         )}
       </SubPage>
     );
@@ -64,7 +68,9 @@ class Edit extends React.PureComponent {
 const mapStateToProps = state => {
   return {
     address: state.address.address,
-    formErrors: state.address.editFormErrors
+    formErrors: state.address.editFormErrors,
+    locators: state.locator.locators,
+    user: state.account.user,
   };
 };
 

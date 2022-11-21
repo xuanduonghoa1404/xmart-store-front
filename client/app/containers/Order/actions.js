@@ -160,11 +160,22 @@ export const addOrder = () => {
     try {
       const cartId = localStorage.getItem('cart_id');
       const total = getState().cart.cartTotal;
-
+      const auth = getState().authentication.authenticated;
+      let shippingAddress = getState().address.shippingAddress;
+      if (auth) {
+        if (shippingAddress.name === "") {
+          shippingAddress = getState().account.user.address?.find(
+            (a) => a.isDefault === true
+          );
+        }
+      } else {
+        dispatch(push(`/login`));
+      }
       if (cartId) {
         const response = await axios.post(`/api/order/add`, {
           cartId,
-          total
+          total,
+          shippingAddress,
         });
 
         dispatch(push(`/order/success/${response.data.order._id}`));

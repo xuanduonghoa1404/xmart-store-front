@@ -16,15 +16,33 @@ router.post('/add', auth, async (req, res) => {
     const cart = req.body.cartId;
     const total = req.body.total;
     const user = req.user._id;
+    const name = req.body.shippingAddress.name;
+    const address = req.body.shippingAddress.address;
+    const phone = req.body.shippingAddress.phone;
+    const city = req.body.shippingAddress.city;
+    const state = req.body.shippingAddress.state;
+    const country = req.body.shippingAddress.country;
+    const zipCode = req.body.shippingAddress.zipCode;
+    const lng = Number(req.body.shippingAddress.lng);
+    const lat = Number(req.body.shippingAddress.lat);
 
     const order = new Order({
       cart,
       user,
-      total
+      total,
+      name,
+      address,
+      city,
+      phone,
+      state,
+      country,
+      zipCode,
+      lng,
+      lat,
     });
 
+    console.log("order", order);
     const orderDoc = await order.save();
-
     const cartDoc = await Cart.findById(orderDoc.cart._id).populate({
       path: 'products.product',
       populate: {
@@ -40,7 +58,7 @@ router.post('/add', auth, async (req, res) => {
       products: cartDoc.products
     };
 
-    await mailgun.sendEmail(order.user.email, 'order-confirmation', newOrder);
+    // await mailgun.sendEmail(order.user.email, 'order-confirmation', newOrder);
 
     res.status(200).json({
       success: true,
@@ -210,7 +228,16 @@ router.get('/:orderId', auth, async (req, res) => {
       created: orderDoc.created,
       totalTax: 0,
       products: orderDoc?.cart?.products,
-      cartId: orderDoc.cart._id
+      cartId: orderDoc.cart._id,
+      name: orderDoc.name,
+      address: orderDoc.address,
+      city: orderDoc.city,
+      phone: orderDoc.phone,
+      state: orderDoc.state,
+      country: orderDoc.country,
+      zipCode: orderDoc.zipCode,
+      lng: orderDoc.lng,
+      lat: orderDoc.lat,
     };
 
     order = store.caculateTaxAmount(order);

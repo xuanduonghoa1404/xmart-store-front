@@ -1,14 +1,14 @@
 /*
  *
- * Address constants
+ * Checkout shipping Address constants
  *
  */
 
 export const FETCH_ADDRESS = 'src/Address/FETCH_ADDRESS';
 export const FETCH_ADDRESSES = 'src/Address/FETCH_ADDRESSES';
 export const ADDRESS_CHANGE = 'src/Address/ADDRESS_CHANGE';
-export const ADDRESS_EDIT_CHANGE = 'src/Address/ADDRESS_EDIT_CHANGE';
 export const SHIPPING_ADDRESS_CHANGE = "src/Address/SHIPPING_ADDRESS_CHANGE";
+export const ADDRESS_EDIT_CHANGE = 'src/Address/ADDRESS_EDIT_CHANGE';
 export const SET_ADDRESS_FORM_ERRORS = 'src/Address/SET_ADDRESS_FORM_ERRORS';
 export const SET_ADDRESS_FORM_EDIT_ERRORS =
   'src/Address/SET_ADDRESS_FORM_EDIT_ERRORS';

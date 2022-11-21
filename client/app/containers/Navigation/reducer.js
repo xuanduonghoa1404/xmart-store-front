@@ -10,8 +10,9 @@ import {
   TOGGLE_BRAND,
   SEARCH_CHANGE,
   SUGGESTIONS_FETCH_REQUEST,
-  SUGGESTIONS_CLEAR_REQUEST
-} from './constants';
+  SUGGESTIONS_CLEAR_REQUEST,
+  FETCH_LOCATOR,
+} from "./constants";
 
 const initialState = {
   isMenuOpen: false,
@@ -27,33 +28,38 @@ const navigationReducer = (state = initialState, action) => {
       return {
         ...state,
         isMenuOpen: !state.isMenuOpen,
-        isCartOpen: false
+        isCartOpen: false,
       };
     case TOGGLE_CART:
       return {
         ...state,
         isCartOpen: !state.isCartOpen,
-        isMenuOpen: false
+        isMenuOpen: false,
       };
     case TOGGLE_BRAND:
       return {
         ...state,
-        isBrandOpen: !state.isBrandOpen
+        isBrandOpen: !state.isBrandOpen,
       };
     case SEARCH_CHANGE:
       return {
         ...state,
-        searchValue: action.payload
+        searchValue: action.payload,
       };
     case SUGGESTIONS_FETCH_REQUEST:
       return {
         ...state,
-        searchSuggestions: action.payload
+        searchSuggestions: action.payload,
       };
     case SUGGESTIONS_CLEAR_REQUEST:
       return {
         ...state,
-        searchSuggestions: action.payload
+        searchSuggestions: action.payload,
+      };
+    case FETCH_LOCATOR:
+      return {
+        ...state,
+        locators: action.payload,
       };
     default:
       return state;

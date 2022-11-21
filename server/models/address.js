@@ -5,38 +5,44 @@ const { Schema } = Mongoose;
 const AddressSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: "User",
+  },
+  name: {
+    type: String,
+  },
+  phone: {
+    type: String,
   },
   address: {
-    type: String
+    type: String,
   },
   city: {
-    type: String
+    type: String,
   },
   state: {
-    type: String
+    type: String,
   },
   country: {
-    type: String
+    type: String,
   },
   zipCode: {
-    type: String
+    type: String,
   },
-  long: {
-    type: String
+  lng: {
+    type: Number,
   },
   lat: {
-    type: String
+    type: Number,
   },
   isDefault: {
     type: Boolean,
-    default: false
+    default: false,
   },
   updated: Date,
   created: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 module.exports = Mongoose.model('Address', AddressSchema);

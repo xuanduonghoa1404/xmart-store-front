@@ -39,6 +39,7 @@
    componentDidMount() {
      this.props.fetchStoreBrands();
      this.props.fetchStoreCategories();
+     this.props.fetchLocator();
    }
  
    toggleBrand() {

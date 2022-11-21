@@ -12,8 +12,8 @@ import {
   FETCH_ADDRESS,
   FETCH_ADDRESSES,
   ADDRESS_CHANGE,
-  ADDRESS_EDIT_CHANGE,
   SHIPPING_ADDRESS_CHANGE,
+  ADDRESS_EDIT_CHANGE,
   SET_ADDRESS_FORM_ERRORS,
   SET_ADDRESS_FORM_EDIT_ERRORS,
   RESET_ADDRESS,
@@ -35,16 +35,6 @@ export const addressChange = (name, value) => {
     payload: formData
   };
 };
-
-export const addressEditChange = (name, value) => {
-  let formData = {};
-  formData[name] = value;
-
-  return {
-    type: ADDRESS_EDIT_CHANGE,
-    payload: formData
-  };
-};
 export const shippingAddressChange = (name, value) => {
   let formData = {};
   formData[name] = value;
@@ -54,6 +44,24 @@ export const shippingAddressChange = (name, value) => {
     payload: formData,
   };
 };
+
+export const addressEditChange = (name, value) => {
+  let formData = {};
+  formData[name] = value;
+  return {
+    type: ADDRESS_EDIT_CHANGE,
+    payload: formData
+  };
+};
+export const selectAddress = (name, value) => {
+  let formData = {};
+  formData[name] = value;
+  return {
+    type: FETCH_ADDRESSES_SELECT,
+    payload: formData,
+  };
+};
+
 export const handleAddressSelect = value => {
   return {
     type: ADDRESS_SELECT,

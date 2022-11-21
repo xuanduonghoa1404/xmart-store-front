@@ -14,47 +14,48 @@ const orderRoutes = require('./order');
 const reviewRoutes = require('./review');
 const wishlistRoutes = require('./wishlist');
 const typeRoutes = require('./type');
+const locatorRoutes = require('./locator');
 
 // auth routes
-router.use('/auth', authRoutes);
+router.use("/auth", authRoutes);
 
 // user routes
-router.use('/user', userRoutes);
+router.use("/user", userRoutes);
 
 // address routes
-router.use('/address', addressRoutes);
+router.use("/address", addressRoutes);
 
 // newsletter routes
-router.use('/newsletter', newsletterRoutes);
+router.use("/newsletter", newsletterRoutes);
 
 // product routes
-router.use('/product', productRoutes);
+router.use("/product", productRoutes);
 
 // typeRoutes routes
-router.use('/type', typeRoutes);
+router.use("/type", typeRoutes);
 
 // category routes
-router.use('/category', categoryRoutes);
+router.use("/category", categoryRoutes);
 
 // brand routes
-router.use('/brand', brandRoutes);
+router.use("/brand", brandRoutes);
 
 // contact routes
-router.use('/contact', contactRoutes);
+router.use("/contact", contactRoutes);
 
 // merchant routes
-router.use('/merchant', merchantRoutes);
+router.use("/merchant", merchantRoutes);
 
 // cart routes
-router.use('/cart', cartRoutes);
+router.use("/cart", cartRoutes);
 
 // order routes
-router.use('/order', orderRoutes);
+router.use("/order", orderRoutes);
 
 // Review routes
-router.use('/review', reviewRoutes);
+router.use("/review", reviewRoutes);
 
-// Wishlist routes
-router.use('/wishlist', wishlistRoutes);
+// locator routes
+router.use("/locator", locatorRoutes);
 
 module.exports = router;

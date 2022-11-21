@@ -8,8 +8,8 @@ import {
   FETCH_ADDRESS,
   FETCH_ADDRESSES,
   ADDRESS_CHANGE,
-  ADDRESS_EDIT_CHANGE,
   SHIPPING_ADDRESS_CHANGE,
+  ADDRESS_EDIT_CHANGE,
   SET_ADDRESS_FORM_ERRORS,
   SET_ADDRESS_FORM_EDIT_ERRORS,
   RESET_ADDRESS,
@@ -21,8 +21,6 @@ import {
 const initialState = {
   addresses: [],
   addressFormData: {
-    name: "",
-    phone: "",
     address: "",
     city: "",
     state: "",
@@ -31,14 +29,15 @@ const initialState = {
   },
   address: {
     _id: "",
-    name: "",
-    phone: "",
     address: "",
     city: "",
     state: "",
     country: "",
     zipCode: "",
     isDefault: false,
+  },
+  cart: {
+    _id: ""
   },
   shippingAddress: {
     name: "",
@@ -53,7 +52,7 @@ const initialState = {
   editFormErrors: {},
 };
 
-const addressReducer = (state = initialState, action) => {
+const checkoutReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_ADDRESSES:
       return {
@@ -137,4 +136,4 @@ const addressReducer = (state = initialState, action) => {
   }
 };
 
-export default addressReducer;
+export default checkoutReducer;

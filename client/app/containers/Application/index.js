@@ -31,15 +31,16 @@ import Contact from '../Contact';
 import OrderSuccess from '../OrderSuccess';
 import OrderPage from '../OrderPage';
 import CheckoutPage from '../CheckoutPage';
-import AuthSuccess from '../AuthSuccess';
+import Locator from "../Locator";
+import AuthSuccess from "../AuthSuccess";
 
-import Footer from '../../components/Common/Footer';
-import Page404 from '../../components/Common/Page404';
-import FooterSection from '../FooterSection/FooterSection';
+import Footer from "../../components/Common/Footer";
+import Page404 from "../../components/Common/Page404";
+import FooterSection from "../FooterSection/FooterSection";
 
 class Application extends React.PureComponent {
   componentDidMount() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     if (token) {
       this.props.fetchProfile();
@@ -47,56 +48,57 @@ class Application extends React.PureComponent {
 
     this.props.handleCart();
 
-    document.addEventListener('keydown', this.handleTabbing);
-    document.addEventListener('mousedown', this.handleMouseDown);
+    document.addEventListener("keydown", this.handleTabbing);
+    document.addEventListener("mousedown", this.handleMouseDown);
   }
 
   handleTabbing(e) {
     if (e.keyCode === 9) {
-      document.body.classList.add('user-is-tabbing');
+      document.body.classList.add("user-is-tabbing");
     }
   }
 
   handleMouseDown() {
-    document.body.classList.remove('user-is-tabbing');
+    document.body.classList.remove("user-is-tabbing");
   }
 
   render() {
     return (
-      <div className='application'>
+      <div className="application">
         <Notification />
         <Navigation />
-        <main className='main'>
+        <main className="main">
           <Container>
-            <div className='wrapper'>
+            <div className="wrapper">
               <Switch>
-                <Route exact path='/' component={HomePage} />
-                <Route path='/shop' component={Shop} />
-                <Route path='/sell' component={Sell} />
-                <Route path='/contact' component={Contact} />
-                <Route path='/brands' component={BrandsPage} />
-                <Route path='/product/:slug' component={ProductPage} />
-                <Route path='/order/success/:id' component={OrderSuccess} />
-                <Route path='/order/:id' component={OrderPage} />
-                <Route path='/checkout' component={CheckoutPage} />
-                <Route path='/login' component={Login} />
-                <Route path='/register' component={Signup} />
+                <Route exact path="/" component={HomePage} />
+                <Route path="/shop" component={Shop} />
+                <Route path="/sell" component={Sell} />
+                <Route path="/contact" component={Contact} />
+                <Route path="/brands" component={BrandsPage} />
+                <Route path="/product/:slug" component={ProductPage} />
+                <Route path="/order/success/:id" component={OrderSuccess} />
+                <Route path="/order/:id" component={OrderPage} />
+                <Route path="/checkout" component={CheckoutPage} />
+                <Route path="/login" component={Login} />
+                <Route path="/locator" component={Locator} />
+                <Route path="/register" component={Signup} />
                 <Route
-                  path='/merchant-signup/:token'
+                  path="/merchant-signup/:token"
                   component={MerchantSignup}
                 />
-                <Route path='/forgot-password' component={ForgotPassword} />
+                <Route path="/forgot-password" component={ForgotPassword} />
                 <Route
-                  path='/reset-password/:token'
+                  path="/reset-password/:token"
                   component={ResetPassword}
                 />
-                <Route path='/auth/success' component={AuthSuccess} />
+                <Route path="/auth/success" component={AuthSuccess} />
                 <Route
-                  path='/dashboard'
+                  path="/dashboard"
                   component={Authentication(Dashboard)}
                 />
-                <Route path='/404' component={Page404} />
-                <Route path='*' component={Page404} />
+                <Route path="/404" component={Page404} />
+                <Route path="*" component={Page404} />
               </Switch>
             </div>
           </Container>

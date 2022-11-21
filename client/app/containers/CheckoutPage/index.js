@@ -39,6 +39,14 @@ class CheckoutPage extends React.PureComponent {
       cart,
       cancelOrder,
       updateOrderItemStatus,
+      locators,
+      formErrors,
+      addressEditChange,
+      shippingAddressChange,
+      defaultChange,
+      updateAddress,
+      selectAddress,
+      placeOrder,
     } = this.props;
 
     return (
@@ -47,17 +55,25 @@ class CheckoutPage extends React.PureComponent {
           <LoadingIndicator backdrop />
         ) : (
           <div className="checkout-section">
-              <div className="container-xxl">
-                <span>Thanh toán</span>
-              </div>
+            <div className="container-xxl">
+              <span>Thanh toán</span>
+            </div>
             <div className="container-xxl">
               <div className="row justify-content-between">
                 <div className="col-12 col-lg-5 col-xl-6 form mb-5 mb-lg-0">
-                    <ShippingAddress user={user} />
+                  <ShippingAddress
+                    user={user}
+                    locators={locators}
+                    formErrors={formErrors}
+                    addressChange={addressEditChange}
+                    shippingAddressChange={shippingAddressChange}
+                    selectAddress={selectAddress}
+                    placeOrder={placeOrder}
+                  />
                 </div>
-                  <div className="col-12 col-lg-6 col-xl-5 orders ">
-                    <YourOrders products={ cart.cartItems} />
-                    <OrderSummary cart={cart} />
+                <div className="col-12 col-lg-6 col-xl-5 orders ">
+                  <YourOrders products={cart.cartItems} />
+                  <OrderSummary cart={cart} />
                 </div>
               </div>
             </div>
@@ -74,6 +90,7 @@ const mapStateToProps = (state) => {
     order: state.order.order,
     cart: state.cart,
     isLoading: state.order.isLoading,
+    locators: state.locator.locators,
   };
 };
 

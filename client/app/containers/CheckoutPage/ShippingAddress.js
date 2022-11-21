@@ -1,221 +1,448 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { Map, Marker, TileLayer, Tooltip as TooltipMap } from "react-leaflet";
+import L from "leaflet";
+import * as ELG from "esri-leaflet-geocoder";
+import { Row, Col } from "reactstrap";
+import Input from "../../components/Common/Input";
+import SelectOption from "../../components/Common/SelectOption";
+import Button from "../../components/Common/Button";
 
 const ShippingAddress = (props) => {
-  const { user } = props;
+  const {
+    user,
+    updateAddress,
+    locators,
+    formErrors,
+    addressChange,
+    shippingAddressChange,
+    selectAddress,
+    placeOrder,
+  } = props;
   const { name, phone, email, _id, address } = user;
-  const defaultAddress = address?.find(a => a.isDefault === true)
-  console.log('defaultAddress', defaultAddress);
-  return address?.length ? (
-    <form className="shippingAddressFrom">
-    <h3 className="fw-bold mb-4">Địa chỉ</h3>
-    <div className="row justify-content-between mb-3">
-      <div className="col-12 px-2">
-        <label className="py-2 d-block" htmlFor="checkout-firstName">
-          Tên người nhận *
-        </label>
-        <input
-          className="rounded overflow-hidden border-1 p-2 w-100"
-          type="text"
-          id="checkout-firstName"
-          value={name}
+  const defaultAddress = address?.find((a) => a.isDefault === true);
+  const mapCheckoutRef = useRef();
+  const apiKey =
+    "AAPKb10821df102a46a4b930958d7a6a06593sdla7i0cMWoosp7XXlYflDTAxsZMUq-oKvVOaom9B8CokPvJFd-sE88vOQ2B_rC";
+  const [addressMap, setAddressMap] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
+  const [state, setState] = useState("");
+  const [zipcode, setZipcode] = useState("");
+  const [lat, setLat] = useState(0);
+  const [lng, setLng] = useState(0);
+  const addressSelect = [
+  ];
+;
+  address?.map((addr) => {
+    let a = { value: addr._id, label: addr.address };
+    addressSelect.push(a)
+  });
+  console.log(addressSelect);
+
+  useEffect(() => {
+    const map = mapCheckoutRef?.current?.leafletElement;
+
+    console.log(mapCheckoutRef);
+    const searchControl = new ELG.geosearch({
+      useMapBounds: false,
+      position: "topleft",
+      placeholder: "Tìm địa chỉ",
+      providers: [
+        ELG.arcgisOnlineProvider({
+          apikey: apiKey,
+          nearby: {
+            lat: -33.8688,
+            lng: 151.2093,
+          },
+        }),
+      ],
+    }).addTo(map);
+
+    const results = new L.LayerGroup().addTo(map);
+    results.addLayer(
+      L.marker({ lat: address?.lat || 33.8688, lng: address?.lng || 151.2093 })
+    );
+    searchControl.on("results", function (data) {
+      results.clearLayers();
+      for (let i = data.results.length - 1; i >= 0; i--) {
+        results.addLayer(L.marker(data.results[i].latlng));
+      }
+    });
+    map.on("click", function (e) {
+      ELG.reverseGeocode({
+        apikey: apiKey,
+      })
+        .latlng(e.latlng)
+
+        .run(function (error, result) {
+          if (error) {
+            return;
+          }
+
+          results.clearLayers();
+
+          let marker = L.marker(result.latlng).addTo(results);
+
+          const lngLatString = `${
+            Math.round(result.latlng.lng * 100000) / 100000
+          }, ${Math.round(result.latlng.lat * 100000) / 100000}`;
+
+          marker.bindPopup(
+            `<b>${lngLatString}</b><p>${result.address.Match_addr}</p>`
+          );
+          setCity(result.address.City);
+          setCountry(result.address.CntryName);
+          setAddressMap(
+            `${result.address.Address} ${result.address.Neighborhood}`
+          );
+
+          setState(result.address.District);
+          setZipcode(result.address.Postal);
+          setLat(Math.round(result.latlng.lat * 100000) / 100000);
+          setLng(Math.round(result.latlng.lng * 100000) / 100000);
+          addressChange(
+            "lat",
+            Math.round(result.latlng.lat * 100000) / 100000 || 0
+          );
+          addressChange(
+            "lng",
+            Math.round(result.latlng.lng * 100000) / 100000 || 0
+          );
+          addressChange("city", result.address.City || "");
+          addressChange("country", result.address.CntryName || "");
+          addressChange(
+            "address",
+            `${result.address.Address} ${result.address.Neighborhood}` || ""
+          );
+          addressChange("state", result.address.District || "");
+          addressChange("zipCode", result.address.Postal || "");
+          marker.openPopup();
+        });
+    });
+  }, []);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    updateAddress();
+  };
+
+  const mapComponent = (
+    <Row map style={{ height: 300, with: 600 }}>
+      <Map
+        style={{ height: "100%", width: "100%" }}
+        zoom={13}
+        center={[
+          address?.lat || locators[0]?.lat || 33.8688,
+          address?.lng || locators[0]?.lng || 151.2093,
+        ]}
+        zoomControl={false}
+        // onClick={handleSelectPosition}
+        ref={mapCheckoutRef}
+      >
+        <TileLayer
+          attribution=""
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-      </div>
+        {locators?.map((locator, index) => {
+          return (
+            <Marker
+              position={[locator.lat, locator.lng]}
+              icon={L.icon({
+                iconUrl:
+                  "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41],
+              })}
+            >
+              <TooltipMap offset={[12.5, -22.5]}>
+                <b>{locator.address}</b>
+              </TooltipMap>
+            </Marker>
+          );
+        })}
+      </Map>
+    </Row>
+  );
+  const formAddress = address?.length ? (
+    <div className="edit-address">
+      <form onSubmit={handleSubmit} noValidate>
+        {mapComponent}
+        <Row>
+          <Col xs="12" md="6">
+            <Input
+              type={"text"}
+              // error={formErrors["address"]}
+              label={"Người nhận"}
+              name={"name"}
+              placeholder={"Người nhận"}
+              value={addressMap ? addressMap : address?.address || ""}
+              onInputChange={(name, value) => {
+                shippingAddressChange(name, value);
+              }}
+            />
+          </Col>
+          <Col xs="12" md="6">
+            <Input
+              type={"text"}
+              // error={formErrors["address"]}
+              label={"Số điện thoại"}
+              name={"phone"}
+              placeholder={"Số điện thoại"}
+              value={addressMap ? addressMap : address?.address || ""}
+              onInputChange={(name, value) => {
+                addressChange(name, value);
+              }}
+            />
+          </Col>
+          <Col xs="12" md="6">
+            <Input
+              type={"text"}
+              // error={formErrors["address"]}
+              label={"Địa chỉ"}
+              name={"address"}
+              placeholder={"Số nhà, Phố Phường"}
+              value={addressMap ? addressMap : address?.address || ""}
+              onInputChange={(name, value) => {
+                addressChange(name, value);
+              }}
+            />
+          </Col>
+          <Col xs="12" lg="6">
+            <Input
+              type={"text"}
+              // error={formErrors["state"]}
+              label={"Quận/Huyện"}
+              name={"state"}
+              placeholder={"Quận Hai Bà Trưng"}
+              value={state ? state : address.state}
+              onInputChange={(name, value) => {
+                addressChange(name, value);
+              }}
+            />
+          </Col>
+          <Col xs="12" md="6">
+            <Input
+              type={"text"}
+              // error={formErrors["city"]}
+              label={"Thành phố"}
+              name={"city"}
+              placeholder={"Hà Nội"}
+              value={city ? city : address.city}
+              onInputChange={(name, value) => {
+                addressChange(name, value);
+              }}
+            />
+          </Col>
+
+          <Col xs="12" lg="6">
+            <Input
+              type={"text"}
+              // error={formErrors["country"]}
+              label={"Quốc gia"}
+              name={"country"}
+              placeholder={"Việt Nam"}
+              value={country ? country : address.country}
+              onInputChange={(name, value) => {
+                addressChange(name, value);
+              }}
+            />
+          </Col>
+          <Col xs="12" lg="6">
+            <Input
+              type={"text"}
+              // error={formErrors["zipCode"]}
+              label={"Mã bưu điện"}
+              name={"zipCode"}
+              placeholder={"VD: 10000"}
+              value={zipcode ? zipcode : address.zipCode}
+              onInputChange={(name, value) => {
+                addressChange(name, value);
+              }}
+            />
+          </Col>
+          <Col xs="12" md="4" style={{ display: "none" }}>
+            <Input
+              type={"text"}
+              label={"Lat"}
+              // error={formErrors["lat"]}
+              name={"lat"}
+              value={lat ? lat : address.lat}
+              onInputChange={(name, value) => {
+                addressChange(name, value);
+              }}
+            />
+          </Col>
+          <Col xs="12" md="4" style={{ display: "none" }}>
+            <Input
+              type={"text"}
+              // error={formErrors["lng"]}
+              label={"Lng"}
+              name={"lng"}
+              value={lng ? lng : address.lng}
+              onInputChange={(name, value) => {
+                addressChange(name, value);
+              }}
+            />
+          </Col>
+        </Row>
+        <hr />
+        <div className="d-flex flex-column flex-md-row">
+          <Button
+            onClick={() => placeOrder()}
+            text="Lưu"
+            variant="danger"
+            className="mb-3 mb-md-0 mr-0 mr-md-3"
+          />
+        </div>
+      </form>
     </div>
-    <div className="row mb-3">
-      <div className="col-12 px-2">
-        <label className="py-2 d-block" htmlFor="checkout-address">
-          Địa chỉ *
-        </label>
-        <input
-          className="rounded overflow-hidden border-1 p-2 w-100"
-          type="text"
-            id="checkout-address"
-            value={defaultAddress.address}
-        />
-      </div>
-    </div>
-    <div className="row justify-content-between mb-3">
-      <div className="col-12 col-xl-6 px-2">
-        <label className="py-2 d-block" htmlFor="checkout-phone">
-          Số điện thoại *
-        </label>
-        <input
-          className="rounded overflow-hidden border-1 p-2 w-100"
-          type="text"
-          id="checkout-phone"
-          value={phone}
-        />
-      </div>
-      <div className="col-12 col-xl-6 px-2">
-        <label className="py-2 d-block" htmlFor="checkout-email">
-          email *
-        </label>
-        <input
-          className="rounded overflow-hidden border-1 p-2 w-100"
-          type="email"
-          id="checkout-email"
-          value={email}
-        />
-      </div>
-    </div>
-    <div className="row justify-content-between mb-3">
-      <div className="col-12 col-xl-6 px-2">
-        <label className="py-2 d-block" htmlFor="checkout-city/town">
-          city/town *
-        </label>
-        <input
-          className="rounded overflow-hidden border-1 p-2 w-100"
-          type="text"
-            id="checkout-city/town"
-            value={defaultAddress.city}
-        />
-      </div>
-      <div className="col-12 col-xl-6 px-2">
-        <label className="py-2 d-block" htmlFor="checkout-postcode">
-          postcode *
-        </label>
-        <input
-          className="rounded overflow-hidden border-1 p-2 w-100"
-          type="text"
-            id="checkout-postcode"
-            value={defaultAddress.zipCode}
-        />
-      </div>
-    </div>
-    <div className="row mb-4">
-      <div className="col-12 position-relative px-2">
-        <input
-          className="rounded overflow-hidden w-auto border-1 p-2 me-3"
-          type="checkbox"
-          id="save-info"
-          value="save the information for next time"
-        />
-      </div>
-    </div>
-    <div className="row mb-3">
-      <div className="col-12 px-2">
-        <label htmlFor="checkout-order-notes" className="py-2 d-block">
-          Order Notes (Optional)
-        </label>
-        <textarea
-          id="checkout-order-notes"
-          className="w-100 rounded"
-          placeholder="notes about your order, e.g. special notes from delivery"
-        ></textarea>
-      </div>
-    </div>
-    <div className="row">
-      <div className="save button px-2">
-        <button type="button" className="btn btn-dark p-4 py-2">
-          place order
-        </button>
-      </div>
-    </div>
-  </form>
   ) : (
-    <form className="shippingAddressFrom">
-    <h3 className="fw-bold mb-4">Địa chỉ</h3>
-    <div className="row justify-content-between mb-3">
-      <div className="col-12 px-2">
-        <label className="py-2 d-block" htmlFor="checkout-firstName">
-          Tên người nhận *
-        </label>
-        <input
-          className="rounded overflow-hidden border-1 p-2 w-100"
-          type="text"
-          id="checkout-firstName"
-          value={name}
-        />
-      </div>
+    <div className="edit-address">
+      <form onSubmit={handleSubmit} noValidate>
+        {mapComponent}
+        <Row>
+          <Col xs="12" md="6">
+            <Input
+              type={"text"}
+              // error={formErrors["address"]}
+              label={"Người nhận"}
+              name={"name"}
+              placeholder={"Người nhận"}
+              value={name}
+              onInputChange={(name, value) => {
+                shippingAddressChange(name, value);
+              }}
+            />
+          </Col>
+          <Col xs="12" md="6">
+            <Input
+              type={"text"}
+              // error={formErrors["address"]}
+              label={"Số điện thoại"}
+              name={"phone"}
+              placeholder={"Số điện thoại"}
+              value={phone}
+              onInputChange={(name, value) => {
+                addressChange(name, value);
+              }}
+            />
+          </Col>
+          <Col xs="12" md="6">
+            <Input
+              type={"text"}
+              // error={formErrors["address"]}
+              label={"Địa chỉ"}
+              name={"address"}
+              placeholder={"Số nhà, Phố Phường"}
+              value={address || ""}
+              onInputChange={(name, value) => {
+                addressChange(name, value);
+              }}
+            />
+          </Col>
+          <Col xs="12" lg="6">
+            <Input
+              type={"text"}
+              // error={formErrors["state"]}
+              label={"Quận/Huyện"}
+              name={"state"}
+              placeholder={"Quận Hai Bà Trưng"}
+              value={state || ""}
+              onInputChange={(name, value) => {
+                addressChange(name, value);
+              }}
+            />
+          </Col>
+          <Col xs="12" md="6">
+            <Input
+              type={"text"}
+              // error={formErrors["city"]}
+              label={"Thành phố"}
+              name={"city"}
+              placeholder={"Hà Nội"}
+              value={city}
+              onInputChange={(name, value) => {
+                addressChange(name, value);
+              }}
+            />
+          </Col>
+
+          <Col xs="12" lg="6">
+            <Input
+              type={"text"}
+              // error={formErrors["country"]}
+              label={"Quốc gia"}
+              name={"country"}
+              placeholder={"Việt Nam"}
+              value={country}
+              onInputChange={(name, value) => {
+                addressChange(name, value);
+              }}
+            />
+          </Col>
+          <Col xs="12" lg="6">
+            <Input
+              type={"text"}
+              // error={formErrors["zipCode"]}
+              label={"Mã bưu điện"}
+              name={"zipCode"}
+              placeholder={"VD: 10000"}
+              value={zipcode}
+              onInputChange={(name, value) => {
+                addressChange(name, value);
+              }}
+            />
+          </Col>
+          <Col xs="12" md="4" style={{ display: "none" }}>
+            <Input
+              type={"text"}
+              label={"Lat"}
+              // error={formErrors["lat"]}
+              name={"lat"}
+              value={lat}
+              onInputChange={(name, value) => {
+                addressChange(name, value);
+              }}
+            />
+          </Col>
+          <Col xs="12" md="4" style={{ display: "none" }}>
+            <Input
+              type={"text"}
+              // error={formErrors["lng"]}
+              label={"Lng"}
+              name={"lng"}
+              value={lng}
+              onInputChange={(name, value) => {
+                addressChange(name, value);
+              }}
+            />
+          </Col>
+        </Row>
+        <hr />
+        <div className="d-flex flex-column flex-md-row">
+          <Button
+            onClick={() => placeOrder()}
+            text="Lưu"
+            variant="danger"
+            className="mb-3 mb-md-0 mr-0 mr-md-3"
+          />
+        </div>
+      </form>
     </div>
-    <div className="row mb-3">
-      <div className="col-12 px-2">
-        <label className="py-2 d-block" htmlFor="checkout-address">
-          Địa chỉ *
-        </label>
-        <input
-          className="rounded overflow-hidden border-1 p-2 w-100"
-          type="text"
-          id="checkout-address"
-        />
-      </div>
+  );
+
+  return (
+    <div>
+      <SelectOption
+        value={defaultAddress?._id || ''}
+        options={addressSelect}
+        handleSelectChange={(value) => {
+          selectAddress("id", value);
+        }}
+      ></SelectOption>
+      {formAddress}
     </div>
-    <div className="row justify-content-between mb-3">
-      <div className="col-12 col-xl-6 px-2">
-        <label className="py-2 d-block" htmlFor="checkout-phone">
-          Số điện thoại *
-        </label>
-        <input
-          className="rounded overflow-hidden border-1 p-2 w-100"
-          type="text"
-          id="checkout-phone"
-          value={phone}
-        />
-      </div>
-      <div className="col-12 col-xl-6 px-2">
-        <label className="py-2 d-block" htmlFor="checkout-email">
-          email *
-        </label>
-        <input
-          className="rounded overflow-hidden border-1 p-2 w-100"
-          type="email"
-          id="checkout-email"
-          value={email}
-        />
-      </div>
-    </div>
-    <div className="row justify-content-between mb-3">
-      <div className="col-12 col-xl-6 px-2">
-        <label className="py-2 d-block" htmlFor="checkout-city/town">
-          city/town *
-        </label>
-        <input
-          className="rounded overflow-hidden border-1 p-2 w-100"
-          type="number"
-          id="checkout-city/town"
-        />
-      </div>
-      <div className="col-12 col-xl-6 px-2">
-        <label className="py-2 d-block" htmlFor="checkout-postcode">
-          postcode *
-        </label>
-        <input
-          className="rounded overflow-hidden border-1 p-2 w-100"
-          type="email"
-          id="checkout-postcode"
-        />
-      </div>
-    </div>
-    <div className="row mb-4">
-      <div className="col-12 position-relative px-2">
-        <input
-          className="rounded overflow-hidden w-auto border-1 p-2 me-3"
-          type="checkbox"
-          id="save-info"
-          value="save the information for next time"
-        />
-      </div>
-    </div>
-    <div className="row mb-3">
-      <div className="col-12 px-2">
-        <label htmlFor="checkout-order-notes" className="py-2 d-block">
-          Order Notes (Optional)
-        </label>
-        <textarea
-          id="checkout-order-notes"
-          className="w-100 rounded"
-          placeholder="notes about your order, e.g. special notes from delivery"
-        ></textarea>
-      </div>
-    </div>
-    <div className="row">
-      <div className="save button px-2">
-        <button type="button" className="btn btn-dark p-4 py-2">
-          place order
-        </button>
-      </div>
-    </div>
-  </form>
   );
 };
 

@@ -18,13 +18,14 @@ const YourOrders = (props) => {
             height="64px"
             style={{ objectFit: "cover" }}
           />
-          <p className="mb-0 me-2">
+          <p className="mb-0 me-2 d-flex" style={{ flexDirection: "column" }}>
             <span>{product.name}</span>
+            <span>
+              {product.price}₫ x {product.quantity}
+            </span>
           </p>
         </div>
-        <div className="right ms-3">
-          {(+product.price * product.quantity)} ₫
-        </div>
+        <div className="right ms-5">{+product.price * product.quantity}₫</div>
       </div>
     ));
 

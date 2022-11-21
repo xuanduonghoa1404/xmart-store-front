@@ -10,6 +10,7 @@
     { "to": "/merchants", "name": "Merchants" },
     { "to": "/orders", "name": "Orders" },
     { "to": "/review", "name": "Reviews" },
+    { "to": "/locator", "name": "Locator" },
     { "to": "/wishlist", "name": "WishList" },
     { "to": "/support", "name": "Support" }
   ],

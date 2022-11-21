@@ -157,6 +157,19 @@ export const handleShopping = () => {
   };
 };
 
+export const handleLogin = () => {
+  return (dispatch, getState) => {
+    dispatch(push("/login"));
+    dispatch(toggleCart());
+  };
+};
+
+export const redirectCheckoutPage = () => {
+  return (dispatch, getState) => {
+    dispatch(push("/checkout"));
+    dispatch(toggleCart());
+  };
+};
 // create cart id api
 export const getCartId = () => {
   return async (dispatch, getState) => {

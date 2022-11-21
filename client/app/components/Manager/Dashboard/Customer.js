@@ -16,26 +16,28 @@ import Account from '../../../containers/Account';
 import AccountSecurity from '../../../containers/AccountSecurity';
 import Address from '../../../containers/Address';
 import Order from '../../../containers/Order';
-import Wishlist from '../../../containers/WishList';
-import Support from '../../../containers/Support';
+import Locator from "../../../containers/Locator";
+import Wishlist from "../../../containers/WishList";
+import Support from "../../../containers/Support";
 
-const Customer = props => {
+const Customer = (props) => {
   return (
-    <div className='customer'>
+    <div className="customer">
       <Row>
-        <Col xs='12' md='5' xl='3'>
+        <Col xs="12" md="5" xl="3">
           <AccountMenu {...props} />
         </Col>
-        <Col xs='12' md='7' xl='9'>
-          <div className='panel-body'>
+        <Col xs="12" md="7" xl="9">
+          <div className="panel-body">
             <Switch>
-              <Route exact path='/dashboard' component={Account} />
-              <Route path='/dashboard/security' component={AccountSecurity} />
-              <Route path='/dashboard/address' component={Address} />
-              <Route path='/dashboard/orders' component={Order} />
-              <Route path='/dashboard/wishlist' component={Wishlist} />
-              <Route path='/dashboard/support' component={Support} />
-              <Route path='*' component={Page404} />
+              <Route exact path="/dashboard" component={Account} />
+              <Route path="/dashboard/security" component={AccountSecurity} />
+              <Route path="/dashboard/address" component={Address} />
+              <Route path="/dashboard/orders" component={Order} />
+              <Route path="/dashboard/wishlist" component={Wishlist} />
+              {/* <Route path="/locator" component={Locator} /> */}
+              <Route path="/dashboard/support" component={Support} />
+              <Route path="*" component={Page404} />
             </Switch>
           </div>
         </Col>

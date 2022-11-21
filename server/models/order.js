@@ -5,25 +5,48 @@ const { Schema } = Mongoose;
 const OrderSchema = new Schema({
   cart: {
     type: Schema.Types.ObjectId,
-    ref: 'Cart'
+    ref: "Cart",
   },
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: "User",
+  },
+  name: {
+    type: String,
+  },
+  phone: {
+    type: String,
   },
   address: {
-    type: Schema.Types.ObjectId,
-    ref: 'Address'
+    type: String,
+  },
+  city: {
+    type: String,
+  },
+  state: {
+    type: String,
+  },
+  country: {
+    type: String,
+  },
+  zipCode: {
+    type: String,
+  },
+  lng: {
+    type: Number,
+  },
+  lat: {
+    type: Number,
   },
   total: {
     type: Number,
-    default: 0
+    default: 0,
   },
   updated: Date,
   created: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 module.exports = Mongoose.model('Order', OrderSchema);

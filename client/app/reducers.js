@@ -33,8 +33,10 @@ import contactReducer from './containers/Contact/reducer';
 import orderReducer from './containers/Order/reducer';
 import reviewReducer from './containers/Review/reducer';
 import wishListReducer from './containers/WishList/reducer';
+import locatorReducer from "./containers/Locator/reducer";
+import checkoutReducer from "./containers/CheckoutPage/reducer";
 
-const createReducer = history =>
+const createReducer = (history) =>
   combineReducers({
     router: connectRouter(history),
     notifications,
@@ -61,7 +63,9 @@ const createReducer = history =>
     contact: contactReducer,
     order: orderReducer,
     review: reviewReducer,
-    wishlist: wishListReducer
+    locator: locatorReducer,
+    wishlist: wishListReducer,
+    checkout: checkoutReducer,
   });
 
 export default createReducer;
