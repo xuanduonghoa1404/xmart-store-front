@@ -43,27 +43,27 @@ router.post('/add', auth, async (req, res) => {
 
     console.log("order", order);
     const orderDoc = await order.save();
-    const cartDoc = await Cart.findById(orderDoc.cart._id).populate({
-      path: 'products.product',
-      populate: {
-        path: 'brand'
-      }
-    });
+    // const cartDoc = await Cart.findById(orderDoc.cart._id).populate({
+    //   path: 'products.product',
+    //   populate: {
+    //     path: 'brand'
+    //   }
+    // });
 
-    const newOrder = {
-      _id: orderDoc._id,
-      created: orderDoc.created,
-      user: orderDoc.user,
-      total: orderDoc.total,
-      products: cartDoc.products
-    };
+    // const newOrder = {
+    //   _id: orderDoc._id,
+    //   created: orderDoc.created,
+    //   user: orderDoc.user,
+    //   total: orderDoc.total,
+    //   products: cartDoc.products
+    // };
 
     // await mailgun.sendEmail(order.user.email, 'order-confirmation', newOrder);
 
     res.status(200).json({
       success: true,
       message: `Your order has been placed successfully!`,
-      order: { _id: orderDoc._id }
+      order: { _id: orderDoc._id },
     });
   } catch (error) {
     res.status(400).json({

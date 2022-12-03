@@ -78,49 +78,52 @@ const CartList = props => {
       </div>
     ));
   return (
-    <div className='cart-list aside cartSection'>
+    <div className="cart-list aside cartSection">
       {cartItems.map((item, index) => (
-        <div key={index} className='item-box products'>
-          <div className='item-details product '>
-            <Container className='content'>
-              <Row className='mb-2 align-items-center'>
-                <Col xs='10' className='pr-0'>
-                  <div className='d-flex align-items-center'>
+        <div key={index} className="item-box products">
+          <div className="item-details product ">
+            <Container className="content">
+              <Row className="mb-2 align-items-center">
+                <Col xs="10" className="pr-0">
+                  <div className="d-flex align-items-center">
                     <img
-                      className='item-image mr-2'
-                      src={`${item.photo
-                        ? item.photo
-                        : '/images/placeholder-image.png'
-                        }`}
+                      className="item-image mr-2"
+                      src={`${
+                        item.photo
+                          ? item.photo
+                          : "/images/placeholder-image.png"
+                      }`}
                     />
 
                     <Link
                       to={`/product/${item.slug}`}
-                      className='item-link one-line-ellipsis'
+                      className="item-link one-line-ellipsis"
                       onClick={handleProductClick}
                     >
-                      <h1 className='item-name one-line-ellipsis'>
+                      <h1 className="item-name one-line-ellipsis">
                         {item.name}
                       </h1>
                     </Link>
                   </div>
                 </Col>
-                <Col xs='2' className='text-right'>
+                <Col xs="2" className="text-right">
                   <Button
                     borderless
-                    variant='empty'
+                    variant="empty"
                     ariaLabel={`remove ${item.name} from cart`}
-                    icon={<i className='icon-trash' aria-hidden='true' />}
+                    icon={<i className="icon-trash" aria-hidden="true" />}
                     onClick={() => handleRemoveFromCart(item)}
                   />
                 </Col>
               </Row>
-              <Row className='mb-2 align-items-center'>
-                <Col xs='7'>
-                  <p className='item-label'>Giá</p>
+              <Row className="mb-2 align-items-center">
+                <Col xs="7">
+                  <p className="item-label">Giá</p>
                 </Col>
-                <Col xs='5' className='text-right'>
-                  <p className='value price'>{`${item?.price} ₫`}</p>
+                <Col xs="5" className="text-right">
+                  <p className="value price">{`${
+                    item?.final_price ? item?.final_price : item?.price
+                  } ₫`}</p>
                 </Col>
               </Row>
               {/* <Row className='mb-2 align-items-center'>
@@ -132,7 +135,7 @@ const CartList = props => {
                 </Col>
                 
               </Row> */}
-              <Row className='mb-2 align-items-center'>
+              <Row className="mb-2 align-items-center">
                 <div className="d-flex bot justify-content-between align-items-center">
                   <div className="count d-flex">
                     <button

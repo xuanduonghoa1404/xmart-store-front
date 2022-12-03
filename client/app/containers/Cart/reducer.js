@@ -30,15 +30,14 @@ const cartReducer = (state = initialState, action) => {
       let itemId = state.cartItems.findIndex(
         x => x._id == action.payload._id
       );
-    //   if (itemId === -1) {
-    //   newState = {
-    //     ...state,
-    //     cartItems: [...state.cartItems, action.payload],
-    //     itemsInCart: [...state.itemsInCart, action.payload._id]
-    //   };
-    // } else {
-        
-    // }
+      if (itemId === -1) {
+        newState = {
+          ...state,
+          cartItems: [...state.cartItems, action.payload],
+          itemsInCart: [...state.itemsInCart, action.payload._id],
+        };
+      } else {
+      }
     newState = {
       ...state,
       cartItems: [...state.cartItems, action.payload],
@@ -84,12 +83,13 @@ const cartReducer = (state = initialState, action) => {
       let itemIdex = state.cartItems.findIndex(
         x => x._id == action.payload._id
       );
-      let item = state.cartItems[itemIdex]
+      let item = state.cartItems[itemIdex];
+      let price = item?.final_price || item.price;
       let newItem = {
         ...item,
         quantity: item.quantity + 1,
-        totalPrice: (item.quantity + 1) * item.price
-      }
+        totalPrice: (item.quantity + 1) * price,
+      };
       state.cartItems[itemIdex] = newItem;
       newState = {
         ...state,
@@ -111,12 +111,13 @@ const cartReducer = (state = initialState, action) => {
         let itemIde = state.cartItems.findIndex(
           x => x._id == action.payload._id
         );
-        let itemDecrease = state.cartItems[itemIde]
-        let newItemDecrease = {
-          ...itemDecrease,
-          quantity: itemDecrease.quantity - 1,
-          totalPrice: (itemDecrease.quantity - 1) * itemDecrease.price
-        }
+      let itemDecrease = state.cartItems[itemIde];
+      let priceItem = itemDecrease?.final_price || itemDecrease.price;
+      let newItemDecrease = {
+        ...itemDecrease,
+        quantity: itemDecrease.quantity - 1,
+        totalPrice: (itemDecrease.quantity - 1) * priceItem,
+      };
         state.cartItems[itemIde] = newItemDecrease;
         newState = {
           ...state,

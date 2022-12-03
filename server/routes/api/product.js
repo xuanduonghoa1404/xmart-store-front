@@ -7,13 +7,14 @@ var jwt = require('jsonwebtoken');
 
 // Bring in Models & Helpers
 const Product = require('../../models/product');
-const Brand = require('../../models/brand');
-const Type = require('../../models/Type');
-const Category = require('../../models/category');
-const Wishlist = require('../../models/wishlist');
-const auth = require('../../middleware/auth');
-const role = require('../../middleware/role');
-const checkAuth = require('../../helpers/auth');
+const Marketing = require("../../models/Marketing");
+const Brand = require("../../models/brand");
+const Type = require("../../models/Type");
+const Category = require("../../models/category");
+const Wishlist = require("../../models/wishlist");
+const auth = require("../../middleware/auth");
+const role = require("../../middleware/role");
+const checkAuth = require("../../helpers/auth");
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -23,11 +24,11 @@ const upload = multer({ storage });
 //   console.log(req.product)
 //   res.send(req.product);
 // });
-router.get('/item/:slug', async (req, res) => {
+router.get("/item/:slug", async (req, res) => {
   try {
     const slug = req.params.slug;
 
-    const productDoc = await Product.findOne({ slug, status: true })
+    const productDoc = await Product.findOne({ slug, status: true });
     // .populate(
     //   {
     //     path: 'brand',
@@ -38,16 +39,16 @@ router.get('/item/:slug', async (req, res) => {
     // if (!productDoc || (productDoc && productDoc?.brand?.isActive === false)) {
     if (!productDoc || (productDoc && productDoc?.type?.status === false)) {
       return res.status(404).json({
-        message: 'No product found.'
+        message: "No product found.",
       });
     }
 
     res.status(200).json({
-      product: productDoc
+      product: productDoc,
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again.",
     });
   }
 });
@@ -80,32 +81,35 @@ router.get('/item/:slug', async (req, res) => {
 // });
 
 // fetch  product name search api
-router.get('/list/search/:name', async (req, res) => {
+router.get("/list/search/:name", async (req, res) => {
   try {
     const name = req.params.name;
 
     const productDoc = await Product.find(
-      { name: { $regex: new RegExp(name), $options: 'is' }, isActive: true },
+      { name: { $regex: new RegExp(name), $options: "is" }, isActive: true },
       { name: 1, slug: 1, imageUrl: 1, price: 1, _id: 0 }
     );
 
     if (productDoc.length < 0) {
       return res.status(404).json({
-        message: 'No product found.'
+        message: "No product found.",
       });
     }
-
+    const marketings = await Marketing.find({ status: true }).sort({
+      createdAt: -1,
+    });
+    const product = getProductAfterDiscount(productDoc, marketings);
     res.status(200).json({
-      products: productDoc
+      products: product,
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again.",
     });
   }
 });
 //edit hxd
-router.post('/list', async (req, res) => {
+router.post("/list", async (req, res) => {
   try {
     let {
       sortOrder,
@@ -113,13 +117,14 @@ router.post('/list', async (req, res) => {
       max,
       min,
       category,
-      pageNumber: page = 1
+      pageNumber: page = 1,
     } = req.body;
     const pageSize = 8;
     const categoryFilter = category ? { category } : {};
-    const categoryDoc = await Type.findOne(
-      { slug: categoryFilter.category, status: true }
-    );
+    const categoryDoc = await Type.findOne({
+      slug: categoryFilter.category,
+      status: true,
+    });
     const priceFilter = min && max ? { price: { $gte: min, $lte: max } } : {};
     const basicQuery = [
       // {
@@ -131,7 +136,7 @@ router.post('/list', async (req, res) => {
         $match: {
           status: true,
           // price: priceFilter.price
-        }
+        },
       },
     ];
     if (categoryDoc && categoryFilter !== category) {
@@ -142,8 +147,8 @@ router.post('/list', async (req, res) => {
           //   // $in: Array.from(categoryDoc._id)
           //   $eq: categoryDoc._id
           // }
-          type: categoryDoc._id
-        }
+          type: categoryDoc._id,
+        },
       });
     }
     // productsCount = await Product.aggregate(basicQuery);
@@ -155,26 +160,32 @@ router.post('/list', async (req, res) => {
     const products = await Product.aggregate(basicQuery);
 
     const productsCount = products.length;
+    const marketings = await Marketing.find({ status: true }).sort({
+      createdAt: -1,
+    });
+    let productList = [];
+    for (let item of products) {
+      productList.push(getProductAfterDiscount(item, marketings));
+    }
+
+    let a = productList && productList.length ? productList : products;
     res.status(200).json({
-      products,
+      products: a,
       page,
-      pages:
-        productsCount.length > 0
-          ? Math.ceil(productsCount / pageSize)
-          : 0,
-      totalProducts: productsCount
+      pages: productsCount.length > 0 ? Math.ceil(productsCount / pageSize) : 0,
+      totalProducts: productsCount,
     });
     // res.status(200).json({
     //   products
     // });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again. edit hxd",
     });
   }
 });
 // fetch store products by advancedFilters api
-router.post('/list', async (req, res) => {
+router.post("/list", async (req, res) => {
   try {
     let {
       sortOrder,
@@ -182,7 +193,7 @@ router.post('/list', async (req, res) => {
       max,
       min,
       category,
-      pageNumber: page = 1
+      pageNumber: page = 1,
     } = req.body;
 
     const pageSize = 8;
@@ -193,76 +204,76 @@ router.post('/list', async (req, res) => {
       : { rating: { $gte: rating } };
 
     const basicQuery = [
-      {
-        $lookup: {
-          from: 'brands',
-          localField: 'brand',
-          foreignField: '_id',
-          as: 'brands'
-        }
-      },
-      {
-        $unwind: {
-          path: '$brands',
-          preserveNullAndEmptyArrays: true
-        }
-      },
-      {
-        $addFields: {
-          'brand.name': '$brands.name',
-          'brand._id': '$brands._id',
-          'brand.isActive': '$brands.isActive'
-        }
-      },
-      {
-        $match: {
-          'brand.isActive': true
-        }
-      },
-      {
-        $lookup: {
-          from: 'reviews',
-          localField: '_id',
-          foreignField: 'product',
-          as: 'reviews'
-        }
-      },
-      {
-        $addFields: {
-          totalRatings: { $sum: '$reviews.rating' },
-          totalReviews: { $size: '$reviews' }
-        }
-      },
-      {
-        $addFields: {
-          averageRating: {
-            $cond: [
-              { $eq: ['$totalReviews', 0] },
-              0,
-              { $divide: ['$totalRatings', '$totalReviews'] }
-            ]
-          }
-        }
-      },
+      // {
+      //   $lookup: {
+      //     from: 'brands',
+      //     localField: 'brand',
+      //     foreignField: '_id',
+      //     as: 'brands'
+      //   }
+      // },
+      // {
+      //   $unwind: {
+      //     path: '$brands',
+      //     preserveNullAndEmptyArrays: true
+      //   }
+      // },
+      // {
+      //   $addFields: {
+      //     'brand.name': '$brands.name',
+      //     'brand._id': '$brands._id',
+      //     'brand.isActive': '$brands.isActive'
+      //   }
+      // },
+      // {
+      //   $match: {
+      //     'brand.isActive': true
+      //   }
+      // },
+      // {
+      //   $lookup: {
+      //     from: 'reviews',
+      //     localField: '_id',
+      //     foreignField: 'product',
+      //     as: 'reviews'
+      //   }
+      // },
+      // {
+      //   $addFields: {
+      //     totalRatings: { $sum: '$reviews.rating' },
+      //     totalReviews: { $size: '$reviews' }
+      //   }
+      // },
+      // {
+      //   $addFields: {
+      //     averageRating: {
+      //       $cond: [
+      //         { $eq: ['$totalReviews', 0] },
+      //         0,
+      //         { $divide: ['$totalRatings', '$totalReviews'] }
+      //       ]
+      //     }
+      //   }
+      // },
       {
         $match: {
           isActive: true,
           price: priceFilter.price,
-          averageRating: ratingFilter.rating
-        }
+          // averageRating: ratingFilter.rating
+        },
       },
-      {
-        $project: {
-          brands: 0,
-          reviews: 0
-        }
-      }
+      // {
+      //   $project: {
+      //     brands: 0,
+      //     reviews: 0
+      //   }
+      // }
     ];
 
     const userDoc = await checkAuth(req);
     const categoryDoc = await Category.findOne(
       { slug: categoryFilter.category, isActive: true },
-      'products -_id'
+      "products -_id"
     );
 
     if (categoryDoc && categoryFilter !== category) {
@@ -270,103 +281,122 @@ router.post('/list', async (req, res) => {
         $match: {
           isActive: true,
           _id: {
-            $in: Array.from(categoryDoc.products)
-          }
-        }
+            $in: Array.from(categoryDoc.products),
+          },
+        },
       });
     }
 
     let products = null;
     let productsCount = 0;
 
+    const marketings = await Marketing.find({ status: true }).sort({
+      createdAt: -1,
+    });
+    let productList = [];
+
+    // if (productList.length > 0) {
+    //   res.status(200).json(productList);
+    // } else {
+    //   res.json(product);
+    // }
+
     if (userDoc) {
       productsCount = await Product.aggregate(
         [
           {
             $lookup: {
-              from: 'wishlists',
-              let: { product: '$_id' },
+              from: "wishlists",
+              let: { product: "$_id" },
               pipeline: [
                 {
                   $match: {
                     $and: [
-                      { $expr: { $eq: ['$$product', '$product'] } },
-                      { user: new Mongoose.Types.ObjectId(userDoc.id) }
-                    ]
-                  }
-                }
+                      { $expr: { $eq: ["$$product", "$product"] } },
+                      { user: new Mongoose.Types.ObjectId(userDoc.id) },
+                    ],
+                  },
+                },
               ],
-              as: 'isLiked'
-            }
+              as: "isLiked",
+            },
           },
           {
             $addFields: {
-              isLiked: { $arrayElemAt: ['$isLiked.isLiked', 0] }
-            }
-          }
+              isLiked: { $arrayElemAt: ["$isLiked.isLiked", 0] },
+            },
+          },
         ].concat(basicQuery)
       );
       const paginateQuery = [
         { $sort: sortOrder },
         { $skip: pageSize * (productsCount.length > 8 ? page - 1 : 0) },
-        { $limit: pageSize }
+        { $limit: pageSize },
       ];
       products = await Product.aggregate(
         [
           {
             $lookup: {
-              from: 'wishlists',
-              let: { product: '$_id' },
+              from: "wishlists",
+              let: { product: "$_id" },
               pipeline: [
                 {
                   $match: {
                     $and: [
-                      { $expr: { $eq: ['$$product', '$product'] } },
-                      { user: new Mongoose.Types.ObjectId(userDoc.id) }
-                    ]
-                  }
-                }
+                      { $expr: { $eq: ["$$product", "$product"] } },
+                      { user: new Mongoose.Types.ObjectId(userDoc.id) },
+                    ],
+                  },
+                },
               ],
-              as: 'isLiked'
-            }
+              as: "isLiked",
+            },
           },
           {
             $addFields: {
-              isLiked: { $arrayElemAt: ['$isLiked.isLiked', 0] }
-            }
-          }
+              isLiked: { $arrayElemAt: ["$isLiked.isLiked", 0] },
+            },
+          },
         ]
           .concat(basicQuery)
           .concat(paginateQuery)
       );
+      // for (let item of products) {
+      //   productList.push(getProductAfterDiscount(item, marketings));
+      // }
     } else {
       productsCount = await Product.aggregate(basicQuery);
       const paginateQuery = [
         { $sort: sortOrder },
         { $skip: pageSize * (productsCount.length > 8 ? page - 1 : 0) },
-        { $limit: pageSize }
+        { $limit: pageSize },
       ];
       products = await Product.aggregate(basicQuery.concat(paginateQuery));
-    }
 
+      // for (let item of products) {
+      //   productList.push(getProductAfterDiscount(item, marketings));
+      // }
+    }
+    // let list = productList && productList.length ? productList : products;
     res.status(200).json({
-      products,
+      products: products,
       page,
       pages:
         productsCount.length > 0
           ? Math.ceil(productsCount.length / pageSize)
           : 0,
-      totalProducts: productsCount.length
+      totalProducts: productsCount.length,
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error:
+        "Your request could not be processed. Please try again. fetch store products by advancedFilters api",
     });
   }
 });
 
 // fetch store products by brand api
-router.get('/list/brand/:slug', async (req, res) => {
+router.get("/list/brand/:slug", async (req, res) => {
   try {
     const slug = req.params.slug;
 
@@ -374,7 +404,7 @@ router.get('/list/brand/:slug', async (req, res) => {
 
     if (!brand) {
       return res.status(404).json({
-        message: `Cannot find brand with the slug: ${slug}.`
+        message: `Cannot find brand with the slug: ${slug}.`,
       });
     }
 
@@ -385,98 +415,98 @@ router.get('/list/brand/:slug', async (req, res) => {
         {
           $match: {
             isActive: true,
-            brand: brand._id
-          }
+            brand: brand._id,
+          },
         },
         {
           $lookup: {
-            from: 'wishlists',
-            let: { product: '$_id' },
+            from: "wishlists",
+            let: { product: "$_id" },
             pipeline: [
               {
                 $match: {
                   $and: [
-                    { $expr: { $eq: ['$$product', '$product'] } },
-                    { user: new Mongoose.Types.ObjectId(userDoc.id) }
-                  ]
-                }
-              }
+                    { $expr: { $eq: ["$$product", "$product"] } },
+                    { user: new Mongoose.Types.ObjectId(userDoc.id) },
+                  ],
+                },
+              },
             ],
-            as: 'isLiked'
-          }
+            as: "isLiked",
+          },
         },
         {
           $lookup: {
-            from: 'brands',
-            localField: 'brand',
-            foreignField: '_id',
-            as: 'brands'
-          }
+            from: "brands",
+            localField: "brand",
+            foreignField: "_id",
+            as: "brands",
+          },
         },
         {
           $addFields: {
-            isLiked: { $arrayElemAt: ['$isLiked.isLiked', 0] }
-          }
+            isLiked: { $arrayElemAt: ["$isLiked.isLiked", 0] },
+          },
         },
         {
-          $unwind: '$brands'
+          $unwind: "$brands",
         },
         {
           $addFields: {
-            'brand.name': '$brands.name',
-            'brand._id': '$brands._id',
-            'brand.isActive': '$brands.isActive'
-          }
+            "brand.name": "$brands.name",
+            "brand._id": "$brands._id",
+            "brand.isActive": "$brands.isActive",
+          },
         },
-        { $project: { brands: 0 } }
+        { $project: { brands: 0 } },
       ]);
 
       res.status(200).json({
         products: products.reverse().slice(0, 8),
         page: 1,
         pages: products.length > 0 ? Math.ceil(products.length / 8) : 0,
-        totalProducts: products.length
+        totalProducts: products.length,
       });
     } else {
       const products = await Product.find({
         brand: brand._id,
-        isActive: true
-      }).populate('brand', 'name');
+        isActive: true,
+      }).populate("brand", "name");
 
       res.status(200).json({
         products: products.reverse().slice(0, 8),
         page: 1,
         pages: products.length > 0 ? Math.ceil(products.length / 8) : 0,
-        totalProducts: products.length
+        totalProducts: products.length,
       });
     }
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again.",
     });
   }
 });
 
-router.get('/list/select', async (req, res) => {
+router.get("/list/select", async (req, res) => {
   try {
     const products = await Type.find();
 
     res.status(200).json({
-      products
+      products,
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again.",
     });
   }
 });
 
 // add product api
 router.post(
-  '/add',
+  "/add",
   auth,
   role.checkRole(role.ROLES.Admin, role.ROLES.Merchant),
-  upload.single('image'),
+  upload.single("image"),
   async (req, res) => {
     try {
       const sku = req.body.sku;
@@ -490,37 +520,37 @@ router.post(
       const image = req.file;
 
       if (!sku) {
-        return res.status(400).json({ error: 'You must enter sku.' });
+        return res.status(400).json({ error: "You must enter sku." });
       }
 
       if (!description || !name) {
         return res
           .status(400)
-          .json({ error: 'You must enter description & name.' });
+          .json({ error: "You must enter description & name." });
       }
 
       if (!quantity) {
-        return res.status(400).json({ error: 'You must enter a quantity.' });
+        return res.status(400).json({ error: "You must enter a quantity." });
       }
 
       if (!price) {
-        return res.status(400).json({ error: 'You must enter a price.' });
+        return res.status(400).json({ error: "You must enter a price." });
       }
 
       const foundProduct = await Product.findOne({ sku });
 
       if (foundProduct) {
-        return res.status(400).json({ error: 'This sku is already in use.' });
+        return res.status(400).json({ error: "This sku is already in use." });
       }
 
-      let imageUrl = '';
-      let imageKey = '';
+      let imageUrl = "";
+      let imageKey = "";
 
       if (image) {
         const s3bucket = new AWS.S3({
           accessKeyId: process.env.AWS_ACCESS_KEY_ID,
           secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-          region: process.env.AWS_REGION
+          region: process.env.AWS_REGION,
         });
 
         const params = {
@@ -528,7 +558,7 @@ router.post(
           Key: image.originalname,
           Body: image.buffer,
           ContentType: image.mimetype,
-          ACL: 'public-read'
+          ACL: "public-read",
         };
 
         const s3Upload = await s3bucket.upload(params).promise();
@@ -547,7 +577,7 @@ router.post(
         isActive,
         brand,
         imageUrl,
-        imageKey
+        imageKey,
       });
 
       const savedProduct = await product.save();
@@ -555,11 +585,11 @@ router.post(
       res.status(200).json({
         success: true,
         message: `Product has been added successfully!`,
-        product: savedProduct
+        product: savedProduct,
       });
     } catch (error) {
       return res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again.",
       });
     }
   }
@@ -567,7 +597,7 @@ router.post(
 
 // fetch products api
 router.get(
-  '/',
+  "/",
   auth,
   role.checkRole(role.ROLES.Admin, role.ROLES.Merchant),
   async (req, res) => {
@@ -576,36 +606,36 @@ router.get(
 
       if (req.user.merchant) {
         const brands = await Brand.find({
-          merchant: req.user.merchant
-        }).populate('merchant', '_id');
+          merchant: req.user.merchant,
+        }).populate("merchant", "_id");
 
-        const brandId = brands[0]['_id'];
+        const brandId = brands[0]["_id"];
 
         products = await Product.find({})
           .populate({
-            path: 'brand',
+            path: "brand",
             populate: {
-              path: 'merchant',
-              model: 'Merchant'
-            }
+              path: "merchant",
+              model: "Merchant",
+            },
           })
-          .where('brand', brandId);
+          .where("brand", brandId);
       } else {
         products = await Product.find({}).populate({
-          path: 'brand',
+          path: "brand",
           populate: {
-            path: 'merchant',
-            model: 'Merchant'
-          }
+            path: "merchant",
+            model: "Merchant",
+          },
         });
       }
 
       res.status(200).json({
-        products
+        products,
       });
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again.",
       });
     }
   }
@@ -613,7 +643,7 @@ router.get(
 
 // fetch product api
 router.get(
-  '/:id',
+  "/:id",
   auth,
   role.checkRole(role.ROLES.Admin, role.ROLES.Merchant),
   async (req, res) => {
@@ -624,43 +654,43 @@ router.get(
 
       if (req.user.merchant) {
         const brands = await Brand.find({
-          merchant: req.user.merchant
-        }).populate('merchant', '_id');
+          merchant: req.user.merchant,
+        }).populate("merchant", "_id");
 
-        const brandId = brands[0]['_id'];
+        const brandId = brands[0]["_id"];
 
         productDoc = await Product.findOne({ _id: productId })
           .populate({
-            path: 'brand',
-            select: 'name'
+            path: "brand",
+            select: "name",
           })
-          .where('brand', brandId);
+          .where("brand", brandId);
       } else {
         productDoc = await Product.findOne({ _id: productId }).populate({
-          path: 'brand',
-          select: 'name'
+          path: "brand",
+          select: "name",
         });
       }
 
       if (!productDoc) {
         return res.status(404).json({
-          message: 'No product found.'
+          message: "No product found.",
         });
       }
 
       res.status(200).json({
-        product: productDoc
+        product: productDoc,
       });
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again.",
       });
     }
   }
 );
 
 router.put(
-  '/:id',
+  "/:id",
   auth,
   role.checkRole(role.ROLES.Admin, role.ROLES.Merchant),
   async (req, res) => {
@@ -670,23 +700,23 @@ router.put(
       const query = { _id: productId };
 
       await Product.findOneAndUpdate(query, update, {
-        new: true
+        new: true,
       });
 
       res.status(200).json({
         success: true,
-        message: 'Product has been updated successfully!'
+        message: "Product has been updated successfully!",
       });
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again.",
       });
     }
   }
 );
 
 router.put(
-  '/:id/active',
+  "/:id/active",
   auth,
   role.checkRole(role.ROLES.Admin, role.ROLES.Merchant),
   async (req, res) => {
@@ -696,23 +726,23 @@ router.put(
       const query = { _id: productId };
 
       await Product.findOneAndUpdate(query, update, {
-        new: true
+        new: true,
       });
 
       res.status(200).json({
         success: true,
-        message: 'Product has been updated successfully!'
+        message: "Product has been updated successfully!",
       });
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again.",
       });
     }
   }
 );
 
 router.delete(
-  '/delete/:id',
+  "/delete/:id",
   auth,
   role.checkRole(role.ROLES.Admin, role.ROLES.Merchant),
   async (req, res) => {
@@ -722,11 +752,11 @@ router.delete(
       res.status(200).json({
         success: true,
         message: `Product has been deleted successfully!`,
-        product
+        product,
       });
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again.",
       });
     }
   }
@@ -734,7 +764,9 @@ router.delete(
 async function getProductById(req, res, next) {
   let product;
   try {
-    product = await (await Product.findById(req.params.id)).populate('type','name');
+    product = await (
+      await Product.findById(req.params.id)
+    ).populate("type", "name");
     if (product == null) {
       return res.status(404).json({ message: "Can not find product" });
     }
@@ -742,7 +774,7 @@ async function getProductById(req, res, next) {
     return res.status(500).json({ message: error.message });
   }
   try {
-    type = await (await Type.findById(product.type)).populate('type','name');
+    type = await (await Type.findById(product.type)).populate("type", "name");
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -751,4 +783,64 @@ async function getProductById(req, res, next) {
 
   next();
 }
+
+// function return product after discount in marketing
+function getProductAfterDiscount(item, marketings) {
+  if (marketings.length > 0) {
+    let priceAfterDiscount = item.price;
+    for (let marketing of marketings) {
+      if (marketing.apply === "ALL") {
+        if (marketing.discount_type === "PERCENT") {
+          priceAfterDiscount =
+            item.price - (item.price * marketing.value) / 100;
+        } else if (marketing.discount_type === "FIX_AMOUNT") {
+          priceAfterDiscount = item.price - marketing.value;
+        } else if (marketing.discount_type === "FLAT") {
+          if (item.price > marketing.value) {
+            priceAfterDiscount = marketing.value;
+          }
+        }
+        item.final_price = priceAfterDiscount;
+        return item;
+      } else if (marketing.apply === "TYPE") {
+        // check condition if
+        if (
+          marketing.apply_type.toString().indexOf(item.type._id.toString()) >= 0
+        ) {
+          if (marketing.discount_type === "PERCENT") {
+            priceAfterDiscount =
+              item.price - (item.price * marketing.value) / 100;
+          } else if (marketing.discount_type === "FIX_AMOUNT") {
+            priceAfterDiscount = item.price - marketing.value;
+          } else if (marketing.discount_type === "FLAT") {
+            if (item.price > marketing.value) {
+              priceAfterDiscount = marketing.value;
+            }
+          }
+          item.final_price = priceAfterDiscount;
+          return item;
+        }
+      } else if (marketing.apply === "PRODUCT") {
+        if (
+          marketing.apply_product.toString().indexOf(item._id.toString()) >= 0
+        ) {
+          if (marketing.discount_type === "PERCENT") {
+            priceAfterDiscount =
+              item.price - (item.price * marketing.value) / 100;
+          } else if (marketing.discount_type === "FIX_AMOUNT") {
+            priceAfterDiscount = item.price - marketing.value;
+          } else if (marketing.discount_type === "FLAT") {
+            if (item.price > marketing.value) {
+              priceAfterDiscount = marketing.value;
+            }
+          }
+          item.final_price = priceAfterDiscount;
+          return item;
+        }
+      }
+    }
+  }
+  return item;
+}
+
 module.exports = router;

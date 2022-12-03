@@ -15,6 +15,7 @@ const reviewRoutes = require('./review');
 const wishlistRoutes = require('./wishlist');
 const typeRoutes = require('./type');
 const locatorRoutes = require('./locator');
+const marketingRoutes = require("./marketing");
 
 // auth routes
 router.use("/auth", authRoutes);
@@ -57,5 +58,8 @@ router.use("/review", reviewRoutes);
 
 // locator routes
 router.use("/locator", locatorRoutes);
+
+// locator routes
+router.use("/marketing", marketingRoutes);
 
 module.exports = router;

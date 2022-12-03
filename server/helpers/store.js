@@ -76,13 +76,17 @@ exports.caculateOrderTotal = order => {
 
 // calculate order tax amount
 exports.caculateItemsSalesTax = items => {
-  const taxRate = taxConfig.stateTaxRate;
+  const taxRate = 0;
 
   const products = items.map(item => {
     item.priceWithTax = 0;
     item.totalPrice = 0;
     item.totalTax = 0;
-    item.purchasePrice = item.price;
+    console.log("item", item);
+    item.purchasePrice =
+      item.final_price && item.final_price !== item.price
+        ? item.final_price
+        : item.price;
 
     const price = item.purchasePrice;
     const quantity = item.quantity;

@@ -14,6 +14,7 @@ import Button from "../../Common/Button";
 import { Map, Marker, TileLayer, Tooltip as TooltipMap } from "react-leaflet";
 import L from "leaflet";
 import * as ELG from "esri-leaflet-geocoder";
+import leafletKnn from "leaflet-knn";
 
 const EditAddress = (props) => {
   const {
@@ -27,8 +28,8 @@ const EditAddress = (props) => {
     user,
   } = props;
   const mapRef = useRef();
-  const apiKey =
-    "AAPKb10821df102a46a4b930958d7a6a06593sdla7i0cMWoosp7XXlYflDTAxsZMUq-oKvVOaom9B8CokPvJFd-sE88vOQ2B_rC";
+  const apiKey = process.env.REACT_APP_GEOCODER_API_KEY;
+  // "AAPKb10821df102a46a4b930958d7a6a06593sdla7i0cMWoosp7XXlYflDTAxsZMUq-oKvVOaom9B8CokPvJFd-sE88vOQ2B_rC";
 
   const [addressMap, setAddressMap] = useState("");
   const [city, setCity] = useState("");
@@ -79,7 +80,10 @@ const EditAddress = (props) => {
           results.clearLayers();
 
           let marker = L.marker(result.latlng).addTo(results);
-
+          let nearest = nearestLocatorByDistance(result.latlng)[0];
+          nearest.layer
+            .bindPopup("I'm nearest to where you clicked!")
+            .openPopup();
           const lngLatString = `${
             Math.round(result.latlng.lng * 100000) / 100000
           }, ${Math.round(result.latlng.lat * 100000) / 100000}`;
@@ -92,12 +96,15 @@ const EditAddress = (props) => {
           setAddressMap(
             `${result.address.Address} ${result.address.Neighborhood}`
           );
-          
+
           setState(result.address.District);
           setZipcode(result.address.Postal);
           setLat(Math.round(result.latlng.lat * 100000) / 100000);
           setLng(Math.round(result.latlng.lng * 100000) / 100000);
-          addressChange("lat", Math.round(result.latlng.lat * 100000) / 100000 || 0);
+          addressChange(
+            "lat",
+            Math.round(result.latlng.lat * 100000) / 100000 || 0
+          );
           addressChange(
             "lng",
             Math.round(result.latlng.lng * 100000) / 100000 || 0
@@ -115,6 +122,35 @@ const EditAddress = (props) => {
     });
   }, []);
 
+  const listLocatorsFeature = {
+    type: "FeatureCollection",
+    features: [],
+  };
+  const convertLngLatToObjectJSON = (lng, lat) => {
+    return {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [lng, lat],
+      },
+    };
+  };
+  const nearestLocatorByDistance = (lnglat) => {
+    console.log("handleSelectLocatorByDistance");
+    locators.map((locator) => {
+      listLocatorsFeature.features.push(
+        convertLngLatToObjectJSON(locator.lng, locator.lat)
+      );
+    });
+    let gj = L.geoJson(listLocatorsFeature);
+    let nearest = leafletKnn(gj).nearest(L.latLng(lnglat.lat, lnglat.lng), 1);
+    // let selected = listLocator.find(
+    //   (locator) => locator.lat === nearest.lat && locator.lng === nearest.lon
+    // );
+    // setSelectedLocator(value);
+    console.log("nearest", nearest);
+    return nearest;
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     updateAddress();

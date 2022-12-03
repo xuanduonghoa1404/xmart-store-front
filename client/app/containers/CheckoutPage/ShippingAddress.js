@@ -21,8 +21,8 @@ const ShippingAddress = (props) => {
   const { name, phone, email, _id, address } = user;
   const defaultAddress = address?.find((a) => a.isDefault === true);
   const mapCheckoutRef = useRef();
-  const apiKey =
-    "AAPKb10821df102a46a4b930958d7a6a06593sdla7i0cMWoosp7XXlYflDTAxsZMUq-oKvVOaom9B8CokPvJFd-sE88vOQ2B_rC";
+  const apiKey = process.env.REACT_APP_GEOCODER_API_KEY;
+  // "AAPKb10821df102a46a4b930958d7a6a06593sdla7i0cMWoosp7XXlYflDTAxsZMUq-oKvVOaom9B8CokPvJFd-sE88vOQ2B_rC";
   const [addressMap, setAddressMap] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
@@ -30,12 +30,10 @@ const ShippingAddress = (props) => {
   const [zipcode, setZipcode] = useState("");
   const [lat, setLat] = useState(0);
   const [lng, setLng] = useState(0);
-  const addressSelect = [
-  ];
-;
+  const addressSelect = [];
   address?.map((addr) => {
     let a = { value: addr._id, label: addr.address };
-    addressSelect.push(a)
+    addressSelect.push(a);
   });
   console.log(addressSelect);
 
@@ -148,9 +146,9 @@ const ShippingAddress = (props) => {
               position={[locator.lat, locator.lng]}
               icon={L.icon({
                 iconUrl:
-                  "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
+                  "https://res.cloudinary.com/hoaduonghx/image/upload/v1669541451/image/wsf2f8vtuxfdcuzpmxpg.png",
+                iconSize: [40, 40],
+                iconAnchor: [40, 40],
                 popupAnchor: [1, -34],
                 shadowSize: [41, 41],
               })}
@@ -168,6 +166,14 @@ const ShippingAddress = (props) => {
     <div className="edit-address">
       <form onSubmit={handleSubmit} noValidate>
         {mapComponent}
+        <SelectOption
+          value={defaultAddress?._id || ""}
+          options={addressSelect}
+          handleSelectChange={(value) => {
+            selectAddress("id", value);
+          }}
+          label={"Chọn địa chỉ của bạn"}
+        ></SelectOption>
         <Row>
           <Col xs="12" md="6">
             <Input
@@ -176,7 +182,7 @@ const ShippingAddress = (props) => {
               label={"Người nhận"}
               name={"name"}
               placeholder={"Người nhận"}
-              value={addressMap ? addressMap : address?.address || ""}
+              value={name || ""}
               onInputChange={(name, value) => {
                 shippingAddressChange(name, value);
               }}
@@ -189,7 +195,7 @@ const ShippingAddress = (props) => {
               label={"Số điện thoại"}
               name={"phone"}
               placeholder={"Số điện thoại"}
-              value={addressMap ? addressMap : address?.address || ""}
+              value={phone || ""}
               onInputChange={(name, value) => {
                 addressChange(name, value);
               }}
@@ -301,6 +307,14 @@ const ShippingAddress = (props) => {
     <div className="edit-address">
       <form onSubmit={handleSubmit} noValidate>
         {mapComponent}
+        <SelectOption
+          value={defaultAddress?._id || ""}
+          options={addressSelect}
+          handleSelectChange={(value) => {
+            selectAddress("id", value);
+          }}
+          label={"Chọn địa chỉ của bạn"}
+        ></SelectOption>
         <Row>
           <Col xs="12" md="6">
             <Input
@@ -434,16 +448,16 @@ const ShippingAddress = (props) => {
 
   return (
     <div>
-      <SelectOption
+      {/* <SelectOption
         value={defaultAddress?._id || ''}
         options={addressSelect}
         handleSelectChange={(value) => {
           selectAddress("id", value);
         }}
-      ></SelectOption>
+      ></SelectOption> */}
       {formAddress}
     </div>
   );
-};
+};;
 
 export default ShippingAddress;

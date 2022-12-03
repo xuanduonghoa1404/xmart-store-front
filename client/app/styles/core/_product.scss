@@ -195,6 +195,15 @@
       .price {
         font-size: $font-size-x-huge;
       }
+.special-price {
+  font-size: $font-size-x-huge;
+  font-weight: $font-weight-bold-two;
+  color: $primary-color;
+}
+
+.old-price {
+  font-size: $font-size-small;
+}
     }
 
     .item-actions {
@@ -239,7 +248,16 @@
     font-weight: $font-weight-bold-one;
     font-size: $font-size-huge;
   }
+.special-price {
+  font-size: $price_special-font-size;
+  font-weight: $font-weight-bold-two;
+  color: $price_special-color;
+}
 
+.old-price {
+  font-size: $price_old-font-size;
+  color: $price_old-color;
+}
   .by {
     text-transform: capitalize;
   }

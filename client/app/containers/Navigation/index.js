@@ -137,55 +137,55 @@
      };
  
      return (
-       <header className='header fixed-mobile-header'>
-         <div className='header-info'>
+       <header className="header fixed-mobile-header">
+         <div className="header-info">
            <Container>
              <Row>
-               <Col md='4' className='text-center d-none d-md-block'>
-                 <i className='fa fa-truck' />
+               <Col md="4" className="text-center d-none d-md-block">
+                 <i className="fa fa-truck" />
                  <span>Free Shipping</span>
                </Col>
-               <Col md='4' className='text-center d-none d-md-block'>
-                 <i className='fa fa-credit-card' />
+               <Col md="4" className="text-center d-none d-md-block">
+                 <i className="fa fa-credit-card" />
                  <span>Payment Methods</span>
                </Col>
-               <Col md='4' className='text-center d-none d-md-block'>
-                 <i className='fa fa-phone' />
+               <Col md="4" className="text-center d-none d-md-block">
+                 <i className="fa fa-phone" />
                  <span>Call us 951-999-9999</span>
                </Col>
-               <Col xs='12' className='text-center d-block d-md-none'>
-                 <i className='fa fa-phone' />
+               <Col xs="12" className="text-center d-block d-md-none">
+                 <i className="fa fa-phone" />
                  <span> Need advice? Call us 951-999-9999</span>
                </Col>
              </Row>
            </Container>
          </div>
          <Container>
-           <Row className='align-items-center top-header'>
+           <Row className="align-items-center top-header">
              <Col
                xs={{ size: 12, order: 1 }}
                sm={{ size: 12, order: 1 }}
                md={{ size: 3, order: 1 }}
                lg={{ size: 3, order: 1 }}
              >
-               <div className='brand'>
+               <div className="brand">
                  {categories && categories.length > 0 && (
                    <Button
                      borderless
-                     variant='empty'
-                     className='d-none d-md-block'
-                     ariaLabel='open the menu'
+                     variant="empty"
+                     className="d-none d-md-block"
+                     ariaLabel="open the menu"
                      icon={<BarsIcon />}
                      onClick={() => this.toggleMenu()}
                    />
                  )}
-                 <Link to='/'>
-                   <h1 className='logo'>
+                 <Link to="/">
+                   <h1 className="logo">
                      <img
-                         className='item-image'
-                         src={`https://foodpromarts.mgfdev.com/media/logo/stores/1/foodpromart-new-logo-1024_2x.png`}
-                         width={'60px'}
-                       />
+                       className="item-image"
+                       src={`https://res.cloudinary.com/hoaduonghx/image/upload/v1669542110/image/yhoyntyb7v44rcecmxha.png`}
+                       width={"130px"}
+                     />
                    </h1>
                  </Link>
                </div>
@@ -195,7 +195,7 @@
                sm={{ size: 12, order: 4 }}
                md={{ size: 12, order: 4 }}
                lg={{ size: 5, order: 2 }}
-               className='pt-2 pt-lg-0'
+               className="pt-2 pt-lg-0"
              >
                <Autosuggest
                  suggestions={suggestions}
@@ -214,13 +214,13 @@
                sm={{ size: 12, order: 2 }}
                md={{ size: 4, order: 1 }}
                lg={{ size: 5, order: 3 }}
-               className='desktop-hidden'
+               className="desktop-hidden"
              >
-               <div className='header-links'>
+               <div className="header-links">
                  <Button
                    borderless
-                   variant='empty'
-                   ariaLabel='open the menu'
+                   variant="empty"
+                   ariaLabel="open the menu"
                    icon={<BarsIcon />}
                    onClick={() => this.toggleMenu()}
                  />
@@ -234,9 +234,9 @@
                lg={{ size: 4, order: 3 }}
                // className='px-0'
              >
-               <Navbar color='light' light expand='md' className='mt-1 mt-md-0'>
+               <Navbar color="light" light expand="md" className="mt-1 mt-md-0">
                  <CartIcon
-                   className='d-none d-md-block'
+                   className="d-none d-md-block"
                    cartItems={cartItems}
                    onClick={toggleCart}
                  />
@@ -250,10 +250,10 @@
                      >
                        <DropdownToggle nav>
                          Brands
-                         <span className='fa fa-chevron-down dropdown-caret'></span>
+                         <span className="fa fa-chevron-down dropdown-caret"></span>
                        </DropdownToggle>
-                       <DropdownMenu right className='nav-brand-dropdown'>
-                         <div className='mini-brand'>
+                       <DropdownMenu right className="nav-brand-dropdown">
+                         <div className="mini-brand">
                            <MiniBrand
                              brands={brands}
                              toggleBrand={() => this.toggleBrand()}
@@ -265,8 +265,8 @@
                    <NavItem>
                      <NavLink
                        tag={ActiveLink}
-                       to='/shop'
-                       activeClassName='active'
+                       to="/shop"
+                       activeClassName="active"
                      >
                        Cửa hàng
                      </NavLink>
@@ -274,30 +274,34 @@
                    {authenticated ? (
                      <UncontrolledDropdown nav inNavbar>
                        <DropdownToggle nav>
-                         {user.firstName ? user.firstName : 'Tài khoản'}
-                         <span className='fa fa-chevron-down dropdown-caret'></span>
+                         {user.firstName ? user.firstName : "Tài khoản"}
+                         <span className="fa fa-chevron-down dropdown-caret"></span>
                        </DropdownToggle>
                        <DropdownMenu right>
                          <DropdownItem
-                           onClick={() => history.push('/dashboard')}
+                           onClick={() => history.push("/dashboard")}
                          >
                            Tài khoản
                          </DropdownItem>
-                         <DropdownItem onClick={signOut}>Đăng xuất</DropdownItem>
+                         <DropdownItem onClick={signOut}>
+                           Đăng xuất
+                         </DropdownItem>
                        </DropdownMenu>
                      </UncontrolledDropdown>
                    ) : (
                      <UncontrolledDropdown nav inNavbar>
                        <DropdownToggle nav>
                          Xin chào!
-                         <span className='fa fa-chevron-down dropdown-caret'></span>
+                         <span className="fa fa-chevron-down dropdown-caret"></span>
                        </DropdownToggle>
                        <DropdownMenu right>
-                         <DropdownItem onClick={() => history.push('/login')}>
+                         <DropdownItem onClick={() => history.push("/login")}>
                            Đăng nhập
                          </DropdownItem>
-                         <DropdownItem onClick={() => history.push('/register')}>
-                          Đăng ký
+                         <DropdownItem
+                           onClick={() => history.push("/register")}
+                         >
+                           Đăng ký
                          </DropdownItem>
                        </DropdownMenu>
                      </UncontrolledDropdown>
@@ -307,34 +311,34 @@
              </Col>
            </Row>
          </Container>
- 
+
          {/* hidden cart drawer */}
          <div
-           className={isCartOpen ? 'mini-cart-open' : 'hidden-mini-cart'}
+           className={isCartOpen ? "mini-cart-open" : "hidden-mini-cart"}
            aria-hidden={`${isCartOpen ? false : true}`}
          >
-           <div className='mini-cart'>
+           <div className="mini-cart">
              <Cart />
            </div>
            <div
              className={
-               isCartOpen ? 'drawer-backdrop dark-overflow' : 'drawer-backdrop'
+               isCartOpen ? "drawer-backdrop dark-overflow" : "drawer-backdrop"
              }
              onClick={toggleCart}
            />
          </div>
- 
+
          {/* hidden menu drawer */}
          <div
-           className={isMenuOpen ? 'mini-menu-open' : 'hidden-mini-menu'}
+           className={isMenuOpen ? "mini-menu-open" : "hidden-mini-menu"}
            aria-hidden={`${isMenuOpen ? false : true}`}
          >
-           <div className='mini-menu'>
+           <div className="mini-menu">
              <Menu />
            </div>
            <div
              className={
-               isMenuOpen ? 'drawer-backdrop dark-overflow' : 'drawer-backdrop'
+               isMenuOpen ? "drawer-backdrop dark-overflow" : "drawer-backdrop"
              }
              onClick={toggleMenu}
            />

@@ -29,23 +29,26 @@ import { allFieldsValidation } from '../../utils/validation';
 import { toggleCart } from '../Navigation/actions';
 
 // Handle Add To Cart
-export const handleAddToCart = product => {
+export const handleAddToCart = (product) => {
   return (dispatch, getState) => {
     product.quantity = Number(getState().product.productShopData.quantity);
-    product.totalPrice = product.quantity * product.price;
+    let price =
+      product.final_price && product.final_price !== product.price
+        ? product.final_price
+        : product.price;
+    product.totalPrice = product.quantity * price;
     product.totalPrice = parseFloat(product.totalPrice.toFixed(2));
-    console.log('product.totalPrice', product.totalPrice, product.quantity)
     const inventory = getState().product.storeProduct.inventory;
 
     const result = calculatePurchaseQuantity(inventory);
 
     const rules = {
-      quantity: `min:1|max:${result}`
+      quantity: `min:1|max:${result}`,
     };
 
     const { isValid, errors } = allFieldsValidation(product, rules, {
-      'min.quantity': 'Quantity must be at least 1.',
-      'max.quantity': `Quantity may not be greater than ${result}.`
+      "min.quantity": "Quantity must be at least 1.",
+      "max.quantity": `Quantity may not be greater than ${result}.`,
     });
 
     if (!isValid) {
@@ -53,12 +56,12 @@ export const handleAddToCart = product => {
     }
 
     dispatch({
-      type: RESET_PRODUCT_SHOP
+      type: RESET_PRODUCT_SHOP,
     });
 
     dispatch({
       type: ADD_TO_CART,
-      payload: product
+      payload: product,
     });
     dispatch(calculateCartTotal());
     dispatch(toggleCart());
@@ -66,32 +69,32 @@ export const handleAddToCart = product => {
 };
 
 // Handle increase qty item From Cart
-export const increaseQtyItemFromCart = product => {
+export const increaseQtyItemFromCart = (product) => {
   return (dispatch, getState) => {
     dispatch({
       type: INCREASE_QTY,
-      payload: product
+      payload: product,
     });
     dispatch(calculateCartTotal());
     // dispatch(toggleCart());
   };
 };
-export const decreaseQtyItemFromCart = product => {
+export const decreaseQtyItemFromCart = (product) => {
   return (dispatch, getState) => {
     dispatch({
       type: DECREASE_QTY,
-      payload: product
+      payload: product,
     });
     dispatch(calculateCartTotal());
     // dispatch(toggleCart());
   };
 };
 // Handle Remove From Cart
-export const handleRemoveFromCart = product => {
+export const handleRemoveFromCart = (product) => {
   return (dispatch, getState) => {
     dispatch({
       type: REMOVE_FROM_CART,
-      payload: product
+      payload: product,
     });
     dispatch(calculateCartTotal());
     // dispatch(toggleCart());
@@ -103,15 +106,19 @@ export const calculateCartTotal = () => {
 
     let total = 0;
 
-    cartItems.map(item => {
-      total += item.price * item.quantity;
+    cartItems.map((item) => {
+      let price =
+        item.final_price && item.final_price !== item.price
+          ? item.final_price
+          : item.price;
+      total += price * item.quantity;
     });
 
     total = parseFloat(total.toFixed(2));
 
     dispatch({
       type: HANDLE_CART_TOTAL,
-      payload: total
+      payload: total,
     });
   };
 };
@@ -119,17 +126,17 @@ export const calculateCartTotal = () => {
 // set cart store from cookie
 export const handleCart = () => {
   const cart = {
-    cartItems: JSON.parse(localStorage.getItem('cart_items')),
-    itemsInCart: JSON.parse(localStorage.getItem('items_in_cart')),
-    cartTotal: localStorage.getItem('cart_total'),
-    cartId: localStorage.getItem('cart_id')
+    cartItems: JSON.parse(localStorage.getItem("cart_items")),
+    itemsInCart: JSON.parse(localStorage.getItem("items_in_cart")),
+    cartTotal: localStorage.getItem("cart_total"),
+    cartId: localStorage.getItem("cart_id"),
   };
 
   return (dispatch, getState) => {
     if (cart.cartItems != undefined || cart.itemsInCart != undefined) {
       dispatch({
         type: HANDLE_CART,
-        payload: cart
+        payload: cart,
       });
     }
   };
@@ -138,13 +145,13 @@ export const handleCart = () => {
 export const handleCheckout = () => {
   return (dispatch, getState) => {
     const successfulOptions = {
-      title: `Please Login to proceed to checkout`,
-      position: 'tr',
-      autoDismiss: 1
+      title: `Đăng nhập để thanh toán`,
+      position: "tr",
+      autoDismiss: 1,
     };
 
     dispatch(toggleCart());
-    dispatch(push('/login'));
+    dispatch(push("/login"));
     dispatch(success(successfulOptions));
   };
 };

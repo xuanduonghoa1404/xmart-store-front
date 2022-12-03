@@ -56,9 +56,9 @@ class CheckoutPage extends React.PureComponent {
         ) : (
           <div className="checkout-section">
             <div className="container-xxl">
-              <span>Thanh toán</span>
+              <h1>Thanh toán</h1>
             </div>
-            <div className="container-xxl">
+            <div className="container-xxl mt-5">
               <div className="row justify-content-between">
                 <div className="col-12 col-lg-5 col-xl-6 form mb-5 mb-lg-0">
                   <ShippingAddress

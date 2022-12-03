@@ -6,7 +6,11 @@ import img3 from "./Imgs/lg-img-3.jpg";
 import SwiperContainer from "../../components/Common/SwiperContainer/SwiperContainer";
 
 const FlashSaleMaxSlider = () => {
-  const imgsArr = [img1, img2, img3];
+  const imgsArr = [
+    "https://res.cloudinary.com/hoaduonghx/image/upload/v1669905023/image/banner2_fqxbal.png",
+    "https://res.cloudinary.com/hoaduonghx/image/upload/v1669905017/image/banner3_khvtdi.png",
+    "https://res.cloudinary.com/hoaduonghx/image/upload/v1669905031/image/banner1_oub4ra.png",
+  ];
 
   const imgRender = () =>
     imgsArr.map((img, idx) => (

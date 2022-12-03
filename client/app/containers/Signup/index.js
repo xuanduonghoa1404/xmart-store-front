@@ -40,44 +40,44 @@ class Signup extends React.PureComponent {
     };
 
     return (
-      <div className='signup-form'>
+      <div className="signup-form">
         {isLoading && <LoadingIndicator />}
-        <h2>Sign Up</h2>
+        <h2>Đăng ký</h2>
         <hr />
         <form onSubmit={handleSubmit} noValidate>
           <Row>
             <Col
               xs={{ size: 12, order: 2 }}
-              md={{ size: '6', order: 1 }}
-              className='p-0'
+              md={{ size: "6", order: 1 }}
+              className="p-0"
             >
-              <Col xs='12' md='12'>
+              <Col xs="12" md="12">
                 <Input
-                  type={'text'}
-                  error={formErrors['email']}
-                  label={'Email Address'}
-                  name={'email'}
-                  placeholder={'Please Enter Your Email'}
+                  type={"text"}
+                  error={formErrors["email"]}
+                  label={"Email"}
+                  name={"email"}
+                  placeholder={"Nhập Email"}
                   value={signupFormData.email}
                   onInputChange={(name, value) => {
                     signupChange(name, value);
                   }}
                 />
               </Col>
-              <Col xs='12' md='12'>
+              <Col xs="12" md="12">
                 <Input
-                  type={'text'}
-                  error={formErrors['firstName']}
-                  label={'First Name'}
-                  name={'firstName'}
-                  placeholder={'Please Enter Your First Name'}
-                  value={signupFormData.firstName}
+                  type={"text"}
+                  error={formErrors["firstName"]}
+                  label={"Họ tên"}
+                  name={"name"}
+                  placeholder={"Nguyễn Văn A"}
+                  value={signupFormData.name}
                   onInputChange={(name, value) => {
                     signupChange(name, value);
                   }}
                 />
               </Col>
-              <Col xs='12' md='12'>
+              {/* <Col xs='12' md='12'>
                 <Input
                   type={'text'}
                   error={formErrors['lastName']}
@@ -89,14 +89,14 @@ class Signup extends React.PureComponent {
                     signupChange(name, value);
                   }}
                 />
-              </Col>
-              <Col xs='12' md='12'>
+              </Col> */}
+              <Col xs="12" md="12">
                 <Input
-                  type={'password'}
-                  label={'Password'}
-                  error={formErrors['password']}
-                  name={'password'}
-                  placeholder={'Please Enter Your Password'}
+                  type={"password"}
+                  label={"Mật khẩu"}
+                  error={formErrors["password"]}
+                  name={"password"}
+                  placeholder={"Nhập mật khẩu"}
                   value={signupFormData.password}
                   onInputChange={(name, value) => {
                     signupChange(name, value);
@@ -104,30 +104,30 @@ class Signup extends React.PureComponent {
                 />
               </Col>
             </Col>
-            <Col
+            {/* <Col
               xs={{ size: 12, order: 1 }}
               md={{ size: '6', order: 2 }}
               className='mb-2 mb-md-0'
             >
               <SignupProvider />
-            </Col>
+            </Col> */}
           </Row>
           <hr />
-          <Checkbox
-            id={'subscribe'}
-            label={'Subscribe to newsletter'}
+          {/* <Checkbox
+            id={"subscribe"}
+            label={"Đăng ký nhập thông tin mới nhất"}
             checked={isSubscribed}
             toggleCheckboxChange={subscribeChange}
-          />
-          <div className='d-flex flex-column flex-md-row align-items-md-center justify-content-between'>
+          /> */}
+          <div className="input-btn ml-md-3 custom-btn-link md text-only icon-left ">
             <Button
-              type='submit'
-              variant='primary'
-              text='Sign Up'
+              type="submit"
+              variant="primary"
+              text="Đăng ký"
               disabled={isSubmitting}
             />
-            <Link className='mt-3 mt-md-0 redirect-link' to={'/login'}>
-              Back to login
+            <Link className="ml-3 mt-md-0 redirect-link" to={"/login"}>
+              Đăng nhập
             </Link>
           </div>
         </form>

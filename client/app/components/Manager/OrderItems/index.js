@@ -118,11 +118,11 @@ const OrderItems = props => {
                               {item.product?.name}
                             </h4>
                           </Link>
-                          <div className="d-flex align-items-center justify-content-between">
+                          {/* <div className="d-flex align-items-center justify-content-between">
                             <span className="price">
                               {item.purchasePrice || item.product.price} đ
                             </span>
-                          </div>
+                          </div> */}
                         </>
                       ) : (
                         <h4>Không có</h4>
@@ -130,8 +130,8 @@ const OrderItems = props => {
                     </div>
                     <div className="d-flex justify-content-between flex-wrap d-md-none mt-1">
                       <p className="mb-1 mr-4">
-                        Trạng thái
-                        <span className="order-label order-status">{` ${item.status}`}</span>
+                        Đơn giá
+                        <span className="order-label order-status">{` ${item.price}`}</span>
                       </p>
                       <p className="mb-1 mr-4">
                         Số lượng
@@ -148,20 +148,20 @@ const OrderItems = props => {
                 <div className="d-none d-md-flex justify-content-between align-items-center box">
                   <div className="text-center">
                     <p className="order-label order-status">
-                      {statusMap.get(item.status)}
+                      {item.purchasePrice}đ
                     </p>
-                    <p>Trạng thái</p>
+                    {/* <p>Đơn giá</p> */}
                   </div>
 
                   <div className="text-center">
-                    <p className="order-label">{` ${item.quantity}`}</p>
-                    <p>Số lượng</p>
+                    <p className="order-label">{`x${item.quantity}`}</p>
+                    {/* <p>Số lượng</p> */}
                   </div>
 
                   <div className="text-center">
                     <p className="order-label">{`${item.totalPrice}đ`}</p>
 
-                    <p>Thành tiền</p>
+                    {/* <p>Thành tiền</p> */}
                   </div>
                 </div>
               </div>
