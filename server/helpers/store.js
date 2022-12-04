@@ -16,7 +16,7 @@ exports.disableProducts = products => {
 
 // calculate order tax amount
 exports.caculateTaxAmount = order => {
-  const taxRate = taxConfig.stateTaxRate;
+  const taxRate = 0;
 
   order.totalTax = 0;
   if (order.products && order.products.length > 0) {
