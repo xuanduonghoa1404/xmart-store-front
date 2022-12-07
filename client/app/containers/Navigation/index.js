@@ -40,6 +40,7 @@
      this.props.fetchStoreBrands();
      this.props.fetchStoreCategories();
      this.props.fetchLocator();
+     this.props.fetchMarketing();
    }
  
    toggleBrand() {
@@ -143,19 +144,19 @@
              <Row>
                <Col md="4" className="text-center d-none d-md-block">
                  <i className="fa fa-truck" />
-                 <span>Free Shipping</span>
+                 <span>Miễn phí vận chuyển</span>
                </Col>
                <Col md="4" className="text-center d-none d-md-block">
                  <i className="fa fa-credit-card" />
-                 <span>Payment Methods</span>
+                 <span>Thanh toán</span>
                </Col>
                <Col md="4" className="text-center d-none d-md-block">
                  <i className="fa fa-phone" />
-                 <span>Call us 951-999-9999</span>
+                 <span>Liên hệ 0963-220-676</span>
                </Col>
                <Col xs="12" className="text-center d-block d-md-none">
                  <i className="fa fa-phone" />
-                 <span> Need advice? Call us 951-999-9999</span>
+                 <span> Liên hệ 0963-220-676</span>
                </Col>
              </Row>
            </Container>
@@ -241,27 +242,6 @@
                    onClick={toggleCart}
                  />
                  <Nav navbar>
-                   {brands && brands.length > 0 && (
-                     <Dropdown
-                       nav
-                       inNavbar
-                       toggle={() => this.toggleBrand()}
-                       isOpen={isBrandOpen}
-                     >
-                       <DropdownToggle nav>
-                         Brands
-                         <span className="fa fa-chevron-down dropdown-caret"></span>
-                       </DropdownToggle>
-                       <DropdownMenu right className="nav-brand-dropdown">
-                         <div className="mini-brand">
-                           <MiniBrand
-                             brands={brands}
-                             toggleBrand={() => this.toggleBrand()}
-                           />
-                         </div>
-                       </DropdownMenu>
-                     </Dropdown>
-                   )}
                    <NavItem>
                      <NavLink
                        tag={ActiveLink}
@@ -280,10 +260,26 @@
                        <DropdownMenu right>
                          <DropdownItem
                            onClick={() => history.push("/dashboard")}
+                           className="dropdown-account"
                          >
                            Tài khoản
                          </DropdownItem>
-                         <DropdownItem onClick={signOut}>
+                         <DropdownItem
+                           onClick={() => history.push("/dashboard/address")}
+                           className="dropdown-address"
+                         >
+                           Địa chỉ
+                         </DropdownItem>
+                         <DropdownItem
+                           onClick={() => history.push("/dashboard/orders")}
+                           className="dropdown-order"
+                         >
+                           Đơn hàng
+                         </DropdownItem>
+                         <DropdownItem
+                           onClick={signOut}
+                           className="dropdown-signout"
+                         >
                            Đăng xuất
                          </DropdownItem>
                        </DropdownMenu>

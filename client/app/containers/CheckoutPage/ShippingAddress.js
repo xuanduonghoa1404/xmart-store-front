@@ -13,13 +13,14 @@ const ShippingAddress = (props) => {
     updateAddress,
     locators,
     formErrors,
-    addressChange,
     shippingAddressChange,
+    shippingAddress,
     selectAddress,
     placeOrder,
   } = props;
   const { name, phone, email, _id, address } = user;
   const defaultAddress = address?.find((a) => a.isDefault === true);
+
   const mapCheckoutRef = useRef();
   const apiKey = process.env.REACT_APP_GEOCODER_API_KEY;
   // "AAPKb10821df102a46a4b930958d7a6a06593sdla7i0cMWoosp7XXlYflDTAxsZMUq-oKvVOaom9B8CokPvJFd-sE88vOQ2B_rC";
@@ -35,12 +36,10 @@ const ShippingAddress = (props) => {
     let a = { value: addr._id, label: addr.address };
     addressSelect.push(a);
   });
-  console.log(addressSelect);
 
   useEffect(() => {
     const map = mapCheckoutRef?.current?.leafletElement;
 
-    console.log(mapCheckoutRef);
     const searchControl = new ELG.geosearch({
       useMapBounds: false,
       position: "topleft",
@@ -98,22 +97,22 @@ const ShippingAddress = (props) => {
           setZipcode(result.address.Postal);
           setLat(Math.round(result.latlng.lat * 100000) / 100000);
           setLng(Math.round(result.latlng.lng * 100000) / 100000);
-          addressChange(
+          shippingAddressChange(
             "lat",
             Math.round(result.latlng.lat * 100000) / 100000 || 0
           );
-          addressChange(
+          shippingAddressChange(
             "lng",
             Math.round(result.latlng.lng * 100000) / 100000 || 0
           );
-          addressChange("city", result.address.City || "");
-          addressChange("country", result.address.CntryName || "");
-          addressChange(
+          shippingAddressChange("city", result.address.City || "");
+          shippingAddressChange("country", result.address.CntryName || "");
+          shippingAddressChange(
             "address",
             `${result.address.Address} ${result.address.Neighborhood}` || ""
           );
-          addressChange("state", result.address.District || "");
-          addressChange("zipCode", result.address.Postal || "");
+          shippingAddressChange("state", result.address.District || "");
+          shippingAddressChange("zipCode", result.address.Postal || "");
           marker.openPopup();
         });
     });
@@ -167,10 +166,32 @@ const ShippingAddress = (props) => {
       <form onSubmit={handleSubmit} noValidate>
         {mapComponent}
         <SelectOption
-          value={defaultAddress?._id || ""}
+          value={addressSelect.value}
           options={addressSelect}
           handleSelectChange={(value) => {
             selectAddress("id", value);
+            let addressSelected = address.filter(
+              (item) => item._id == value.value
+            );
+            addressSelected = addressSelected[0];
+            console.log("addaddressSelectedress", addressSelected);
+
+            shippingAddressChange(
+              "lat",
+              Math.round(addressSelected.lat * 100000) / 100000 || 0
+            );
+            shippingAddressChange(
+              "lng",
+              Math.round(addressSelected.lng * 100000) / 100000 || 0
+            );
+            shippingAddressChange("city", addressSelected.city || "");
+            shippingAddressChange("country", addressSelected.country || "");
+            shippingAddressChange(
+              "address",
+              `${addressSelected.address}` || ""
+            );
+            shippingAddressChange("state", addressSelected.state || "");
+            shippingAddressChange("zipCode", addressSelected.zipCode || "");
           }}
           label={"Chọn địa chỉ của bạn"}
         ></SelectOption>
@@ -182,7 +203,7 @@ const ShippingAddress = (props) => {
               label={"Người nhận"}
               name={"name"}
               placeholder={"Người nhận"}
-              value={name || ""}
+              value={shippingAddress.name}
               onInputChange={(name, value) => {
                 shippingAddressChange(name, value);
               }}
@@ -195,9 +216,9 @@ const ShippingAddress = (props) => {
               label={"Số điện thoại"}
               name={"phone"}
               placeholder={"Số điện thoại"}
-              value={phone || ""}
+              value={shippingAddress.phone}
               onInputChange={(name, value) => {
-                addressChange(name, value);
+                shippingAddressChange(name, value);
               }}
             />
           </Col>
@@ -208,9 +229,9 @@ const ShippingAddress = (props) => {
               label={"Địa chỉ"}
               name={"address"}
               placeholder={"Số nhà, Phố Phường"}
-              value={addressMap ? addressMap : address?.address || ""}
+              value={addressMap ? addressMap : shippingAddress.address || ""}
               onInputChange={(name, value) => {
-                addressChange(name, value);
+                shippingAddressChange(name, value);
               }}
             />
           </Col>
@@ -221,9 +242,9 @@ const ShippingAddress = (props) => {
               label={"Quận/Huyện"}
               name={"state"}
               placeholder={"Quận Hai Bà Trưng"}
-              value={state ? state : address.state}
+              value={state ? state : shippingAddress.state}
               onInputChange={(name, value) => {
-                addressChange(name, value);
+                shippingAddressChange(name, value);
               }}
             />
           </Col>
@@ -234,9 +255,9 @@ const ShippingAddress = (props) => {
               label={"Thành phố"}
               name={"city"}
               placeholder={"Hà Nội"}
-              value={city ? city : address.city}
+              value={city ? city : shippingAddress.city}
               onInputChange={(name, value) => {
-                addressChange(name, value);
+                shippingAddressChange(name, value);
               }}
             />
           </Col>
@@ -248,9 +269,9 @@ const ShippingAddress = (props) => {
               label={"Quốc gia"}
               name={"country"}
               placeholder={"Việt Nam"}
-              value={country ? country : address.country}
+              value={country ? country : shippingAddress.country}
               onInputChange={(name, value) => {
-                addressChange(name, value);
+                shippingAddressChange(name, value);
               }}
             />
           </Col>
@@ -261,9 +282,9 @@ const ShippingAddress = (props) => {
               label={"Mã bưu điện"}
               name={"zipCode"}
               placeholder={"VD: 10000"}
-              value={zipcode ? zipcode : address.zipCode}
+              value={zipcode ? zipcode : shippingAddress.zipCode}
               onInputChange={(name, value) => {
-                addressChange(name, value);
+                shippingAddressChange(name, value);
               }}
             />
           </Col>
@@ -273,9 +294,9 @@ const ShippingAddress = (props) => {
               label={"Lat"}
               // error={formErrors["lat"]}
               name={"lat"}
-              value={lat ? lat : address.lat}
+              value={lat ? lat : shippingAddress.lat}
               onInputChange={(name, value) => {
-                addressChange(name, value);
+                shippingAddressChange(name, value);
               }}
             />
           </Col>
@@ -285,9 +306,9 @@ const ShippingAddress = (props) => {
               // error={formErrors["lng"]}
               label={"Lng"}
               name={"lng"}
-              value={lng ? lng : address.lng}
+              value={lng ? lng : shippingAddress.lng}
               onInputChange={(name, value) => {
-                addressChange(name, value);
+                shippingAddressChange(name, value);
               }}
             />
           </Col>
@@ -325,7 +346,7 @@ const ShippingAddress = (props) => {
               placeholder={"Người nhận"}
               value={name}
               onInputChange={(name, value) => {
-                shippingAddressChange(name, value);
+                shippingshippingAddressChange(name, value);
               }}
             />
           </Col>
@@ -338,7 +359,7 @@ const ShippingAddress = (props) => {
               placeholder={"Số điện thoại"}
               value={phone}
               onInputChange={(name, value) => {
-                addressChange(name, value);
+                shippingAddressChange(name, value);
               }}
             />
           </Col>
@@ -351,7 +372,7 @@ const ShippingAddress = (props) => {
               placeholder={"Số nhà, Phố Phường"}
               value={address || ""}
               onInputChange={(name, value) => {
-                addressChange(name, value);
+                shippingAddressChange(name, value);
               }}
             />
           </Col>
@@ -364,7 +385,7 @@ const ShippingAddress = (props) => {
               placeholder={"Quận Hai Bà Trưng"}
               value={state || ""}
               onInputChange={(name, value) => {
-                addressChange(name, value);
+                shippingAddressChange(name, value);
               }}
             />
           </Col>
@@ -377,7 +398,7 @@ const ShippingAddress = (props) => {
               placeholder={"Hà Nội"}
               value={city}
               onInputChange={(name, value) => {
-                addressChange(name, value);
+                shippingAddressChange(name, value);
               }}
             />
           </Col>
@@ -391,7 +412,7 @@ const ShippingAddress = (props) => {
               placeholder={"Việt Nam"}
               value={country}
               onInputChange={(name, value) => {
-                addressChange(name, value);
+                shippingAddressChange(name, value);
               }}
             />
           </Col>
@@ -404,7 +425,7 @@ const ShippingAddress = (props) => {
               placeholder={"VD: 10000"}
               value={zipcode}
               onInputChange={(name, value) => {
-                addressChange(name, value);
+                shippingAddressChange(name, value);
               }}
             />
           </Col>
@@ -416,7 +437,7 @@ const ShippingAddress = (props) => {
               name={"lat"}
               value={lat}
               onInputChange={(name, value) => {
-                addressChange(name, value);
+                shippingAddressChange(name, value);
               }}
             />
           </Col>
@@ -428,7 +449,7 @@ const ShippingAddress = (props) => {
               name={"lng"}
               value={lng}
               onInputChange={(name, value) => {
-                addressChange(name, value);
+                shippingAddressChange(name, value);
               }}
             />
           </Col>

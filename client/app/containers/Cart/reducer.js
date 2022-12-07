@@ -28,7 +28,7 @@ const cartReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_TO_CART:
       let itemId = state.cartItems.findIndex(
-        x => x._id == action.payload._id
+        (x) => x._id == action.payload._id
       );
       if (itemId === -1) {
         newState = {
@@ -37,51 +37,60 @@ const cartReducer = (state = initialState, action) => {
           itemsInCart: [...state.itemsInCart, action.payload._id],
         };
       } else {
+        let itemAdd = state.cartItems[itemId];
+        let priceNew = itemAdd?.final_price || itemAdd.price;
+        let newItemAdd = {
+          ...itemAdd,
+          quantity: itemAdd.quantity + action.payload.quantity,
+          totalPrice: (itemAdd.quantity + action.payload.quantity) * priceNew,
+        };
+        state.cartItems[itemId] = newItemAdd;
+        state.itemsInCart[itemId] = newItemAdd;
+        newState = {
+          ...state,
+          cartItems: [...state.cartItems],
+          itemsInCart: [...state.cartItems],
+        };
       }
-    newState = {
-      ...state,
-      cartItems: [...state.cartItems, action.payload],
-      itemsInCart: [...state.itemsInCart, action.payload._id]
-    };
-      localStorage.setItem('cart_items', JSON.stringify(newState.cartItems));
+      localStorage.setItem("cart_items", JSON.stringify(newState.cartItems));
       localStorage.setItem(
-        'items_in_cart',
+        "items_in_cart",
         JSON.stringify(newState.itemsInCart)
       );
       return newState;
     case REMOVE_FROM_CART:
       let itemIndex = state.cartItems.findIndex(
-        x => x._id == action.payload._id
+        (x) => x._id == action.payload._id
       );
       newState = {
         ...state,
         cartItems: [
           ...state.cartItems.slice(0, itemIndex),
-          ...state.cartItems.slice(itemIndex + 1)
+          ...state.cartItems.slice(itemIndex + 1),
         ],
         itemsInCart: [
           ...state.itemsInCart.slice(0, itemIndex),
-          ...state.itemsInCart.slice(itemIndex + 1)
-        ]
+          ...state.itemsInCart.slice(itemIndex + 1),
+        ],
       };
 
-      localStorage.setItem('cart_items', JSON.stringify(newState.cartItems));
+      localStorage.setItem("cart_items", JSON.stringify(newState.cartItems));
       localStorage.setItem(
-        'items_in_cart',
+        "items_in_cart",
         JSON.stringify(newState.itemsInCart)
       );
       return newState;
     case HANDLE_CART_TOTAL:
       newState = {
         ...state,
-        cartTotal: action.payload
+        cartTotal: action.payload,
       };
 
-      localStorage.setItem('cart_total', newState.cartTotal);
+      localStorage.setItem("cart_total", newState.cartTotal);
       return newState;
     case INCREASE_QTY:
       let itemIdex = state.cartItems.findIndex(
-        x => x._id == action.payload._id
+        (x) => x._id == action.payload._id
       );
       let item = state.cartItems[itemIdex];
       let price = item?.final_price || item.price;
@@ -93,24 +102,20 @@ const cartReducer = (state = initialState, action) => {
       state.cartItems[itemIdex] = newItem;
       newState = {
         ...state,
-        cartItems: [
-          ...state.cartItems
-        ],
-        itemsInCart: [
-          ...state.cartItems
-        ]
+        cartItems: [...state.cartItems],
+        itemsInCart: [...state.cartItems],
       };
 
-      localStorage.setItem('cart_items', JSON.stringify(newState.cartItems));
+      localStorage.setItem("cart_items", JSON.stringify(newState.cartItems));
       localStorage.setItem(
-        'items_in_cart',
+        "items_in_cart",
         JSON.stringify(newState.itemsInCart)
       );
       return newState;
     case DECREASE_QTY:
-        let itemIde = state.cartItems.findIndex(
-          x => x._id == action.payload._id
-        );
+      let itemIde = state.cartItems.findIndex(
+        (x) => x._id == action.payload._id
+      );
       let itemDecrease = state.cartItems[itemIde];
       let priceItem = itemDecrease?.final_price || itemDecrease.price;
       let newItemDecrease = {
@@ -118,38 +123,34 @@ const cartReducer = (state = initialState, action) => {
         quantity: itemDecrease.quantity - 1,
         totalPrice: (itemDecrease.quantity - 1) * priceItem,
       };
-        state.cartItems[itemIde] = newItemDecrease;
-        newState = {
-          ...state,
-          cartItems: [
-            ...state.cartItems
-          ],
-          itemsInCart: [
-            ...state.cartItems
-          ]
-        };
-  
-        localStorage.setItem('cart_items', JSON.stringify(newState.cartItems));
-        localStorage.setItem(
-          'items_in_cart',
-          JSON.stringify(newState.itemsInCart)
-        );
-        return newState;
+      state.cartItems[itemIde] = newItemDecrease;
+      newState = {
+        ...state,
+        cartItems: [...state.cartItems],
+        itemsInCart: [...state.cartItems],
+      };
+
+      localStorage.setItem("cart_items", JSON.stringify(newState.cartItems));
+      localStorage.setItem(
+        "items_in_cart",
+        JSON.stringify(newState.itemsInCart)
+      );
+      return newState;
     case HANDLE_CART:
       newState = {
         ...state,
         cartItems: action.payload.cartItems,
         itemsInCart: action.payload.itemsInCart,
         cartTotal: action.payload.cartTotal,
-        cartId: action.payload.cartId
+        cartId: action.payload.cartId,
       };
       return newState;
     case SET_CART_ID:
       newState = {
         ...state,
-        cartId: action.payload
+        cartId: action.payload,
       };
-      localStorage.setItem('cart_id', newState.cartId);
+      localStorage.setItem("cart_id", newState.cartId);
       return newState;
     case CLEAR_CART:
       newState = {
@@ -157,7 +158,7 @@ const cartReducer = (state = initialState, action) => {
         cartItems: [],
         itemsInCart: [],
         cartTotal: 0,
-        cartId: ''
+        cartId: "",
       };
       return newState;
 

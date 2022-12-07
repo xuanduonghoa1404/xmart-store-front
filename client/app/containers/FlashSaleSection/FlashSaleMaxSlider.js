@@ -7,20 +7,22 @@ import SwiperContainer from "../../components/Common/SwiperContainer/SwiperConta
 
 const FlashSaleMaxSlider = () => {
   const imgsArr = [
-    "https://res.cloudinary.com/hoaduonghx/image/upload/v1669905023/image/banner2_fqxbal.png",
+    "https://res.cloudinary.com/hoaduonghx/image/upload/v1670163421/image/banner2_1_l9zpcl.png",
     "https://res.cloudinary.com/hoaduonghx/image/upload/v1669905017/image/banner3_khvtdi.png",
-    "https://res.cloudinary.com/hoaduonghx/image/upload/v1669905031/image/banner1_oub4ra.png",
+    "https://res.cloudinary.com/hoaduonghx/image/upload/v1670163414/image/banner1_1_jf4iuz.png",
   ];
 
   const imgRender = () =>
     imgsArr.map((img, idx) => (
-      <img
-        className="hoverEffect"
-        key={idx}
-        width="100%"
-        src={img}
-        alt={`img${idx}`}
-      />
+      <a href="/">
+        <img
+          className="hoverEffect"
+          key={idx}
+          width="100%"
+          src={img}
+          alt={`img${idx}`}
+        />
+      </a>
     ));
 
   const responsive = {

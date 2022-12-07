@@ -12,14 +12,15 @@ import {
   SUGGESTIONS_FETCH_REQUEST,
   SUGGESTIONS_CLEAR_REQUEST,
   FETCH_LOCATOR,
+  FETCH_MARKETING,
 } from "./constants";
 
 const initialState = {
   isMenuOpen: false,
   isCartOpen: false,
   isBrandOpen: false,
-  searchValue: '',
-  searchSuggestions: []
+  searchValue: "",
+  searchSuggestions: [],
 };
 
 const navigationReducer = (state = initialState, action) => {
@@ -60,6 +61,11 @@ const navigationReducer = (state = initialState, action) => {
       return {
         ...state,
         locators: action.payload,
+      };
+    case FETCH_MARKETING:
+      return {
+        ...state,
+        marketing: action.payload,
       };
     default:
       return state;

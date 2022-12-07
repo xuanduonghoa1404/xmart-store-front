@@ -62,7 +62,6 @@ const EditAddress = (props) => {
     searchControl.on("results", function (data) {
       results.clearLayers();
       for (let i = data.results.length - 1; i >= 0; i--) {
-        console.log("data.results[i].latlng", data.results[i].latlng);
         results.addLayer(L.marker(data.results[i].latlng));
       }
     });
@@ -157,32 +156,6 @@ const EditAddress = (props) => {
   };
   const handleSelectPosition = useCallback((e) => {
     console.log("hhehehe click ne", e.latlng);
-    // const map = mapRef?.current?.leafletElement;
-    // const layerGroup = new L.LayerGroup().addTo(map);
-    // ELG.reverseGeocode({
-    //   apikey: apiKey,
-    // })
-    //   .latlng(e.latlng)
-
-    //   .run(function (error, result) {
-    //     if (error) {
-    //       return;
-    //     }
-    //     console.log("result", result);
-
-    //     layerGroup.clearLayers();
-
-    //     let marker = L.marker(result.latlng).addTo(layerGroup);
-
-    //     const lngLatString = `${
-    //       Math.round(result.latlng.lng * 100000) / 100000
-    //     }, ${Math.round(result.latlng.lat * 100000) / 100000}`;
-
-    //     marker.bindPopup(
-    //       `<b>${lngLatString}</b><p>${result.address.Match_addr}</p>`
-    //     );
-    //     marker.openPopup();
-    //   });
   }, []);
 
   return (
@@ -191,7 +164,7 @@ const EditAddress = (props) => {
         <Row map style={{ height: 300, with: 600 }}>
           <Map
             style={{ height: "100%", width: "100%" }}
-            zoom={13}
+            zoom={15}
             center={[
               address.lat || locators[0].lat,
               address.lng || locators[0].lng,
@@ -204,20 +177,14 @@ const EditAddress = (props) => {
               attribution=""
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {/* <Marker
-              position={[
-                address.latitude || 21.028511,
-                address.longitude || 105.804817,
-              ]}
-            ></Marker> */}
             {locators?.map((locator, index) => {
               return (
                 <Marker
                   position={[locator.lat, locator.lng]}
                   icon={L.icon({
                     iconUrl:
-                      "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
-                    iconSize: [25, 41],
+                      "https://res.cloudinary.com/hoaduonghx/image/upload/v1669541451/image/wsf2f8vtuxfdcuzpmxpg.png",
+                    iconSize: [41, 41],
                     iconAnchor: [12, 41],
                     popupAnchor: [1, -34],
                     shadowSize: [41, 41],

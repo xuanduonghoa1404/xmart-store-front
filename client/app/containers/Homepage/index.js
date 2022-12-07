@@ -15,21 +15,28 @@ import CarouselSlider from '../../components/Common/CarouselSlider';
 import { responsiveOneItemCarousel } from '../../components/Common/CarouselSlider/helpers';
 import ShopByCategory from '../FlashSaleSection/ShopByCategory';
 import FlashSaleMaxSlider from '../FlashSaleSection/FlashSaleMaxSlider';
+import HomeBannerSlider from "../FlashSaleSection/HomeBannerSlider";
 
 class Homepage extends React.PureComponent {
   componentDidMount() {
     this.props.fetchStoreCategories();
+    this.props.fetchMarketing();
+    console.log("props", "fetchMarketing");
   }
 
   render() {
-    console.log("props", this.props)
-    const {
-      categories,
-    } = this.props;
+    console.log("props", this.props);
+    const { categories } = this.props;
     return (
       <div className="homepage">
+        <Row className="flex-row mb-3">
+          <HomeBannerSlider />
+          <br />
+          <ShopByCategory categories={categories} />
+        </Row>
+
         <Row className="flex-row">
-          <Col xs="12" lg="6" className="order-lg-2 mb-3 px-3 px-md-2">
+          {/* <Col xs="12" lg="6" className="order-lg-2 mb-3 px-3 px-md-2">
             <div className="home-carousel">
               <CarouselSlider
                 swipeable={true}
@@ -44,16 +51,16 @@ class Homepage extends React.PureComponent {
                 ))}
               </CarouselSlider>
             </div>
-          </Col>
-          <Col xs="12" lg="3" className="order-lg-1 mb-3 px-3 px-md-2">
+          </Col> */}
+          <Col xs="12" lg="6" className="order-lg-1 mb-3 px-3 px-md-2">
             <div className="d-flex flex-column h-100 justify-content-between">
-              <img src="/images/banners/banner-2.jpg" className="mb-3" />
+              {/* <img src="/images/banners/banner-2.jpg" className="mb-3" /> */}
               <img src="https://res.cloudinary.com/hoaduonghx/image/upload/v1669905041/image/banner4_dtzphj.png" />
             </div>
           </Col>
-          <Col xs="12" lg="3" className="order-lg-3 mb-3 px-3 px-md-2">
+          <Col xs="12" lg="6" className="order-lg-3 mb-3 px-3 px-md-2">
             <div className="d-flex flex-column h-100 justify-content-between">
-              <img src="/images/banners/banner-2.jpg" className="mb-3" />
+              {/* <img src="/images/banners/banner-2.jpg" className="mb-3" /> */}
               <img src="https://res.cloudinary.com/hoaduonghx/image/upload/v1669905052/image/banner5_wswdsl.png" />
             </div>
           </Col>
@@ -79,8 +86,6 @@ class Homepage extends React.PureComponent {
         </Row> */}
         <Row>
           <FlashSaleMaxSlider />
-          <br />
-          <ShopByCategory categories={categories} />
         </Row>
       </div>
     );

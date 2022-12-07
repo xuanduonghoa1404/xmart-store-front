@@ -57,20 +57,21 @@ class ProductPage extends React.PureComponent {
     } = this.props;
 
     return (
-      <div className='product-shop'>
+      <div className="product-shop">
         {isLoading ? (
           <LoadingIndicator />
         ) : Object.keys(product).length > 0 ? (
           <>
-            <Row className='flex-row'>
-              <Col xs='12' md='5' lg='5' className='mb-3 px-3 px-md-2'>
-                <div className='position-relative'>
+            <Row className="flex-row">
+              <Col xs="12" md="5" lg="5" className="mb-3 px-3 px-md-2">
+                <div className="position-relative">
                   <img
-                    className='item-image'
-                    src={`${product.photo
+                    className="item-image"
+                    src={`${
+                      product.photo
                         ? product.photo
-                        : '/images/placeholder-image.png'
-                      }`}
+                        : "/images/placeholder-image.png"
+                    }`}
                   />
                   {/* {product.inventory <= 0 && !shopFormErrors['quantity'] ? (
                     <p className='stock out-of-stock'>Out of stock</p>
@@ -79,46 +80,49 @@ class ProductPage extends React.PureComponent {
                   )} */}
                 </div>
               </Col>
-              <Col xs='12' md='7' lg='7' className='mb-3 px-3 px-md-2'>
-                <div className='product-container'>
-                  <div className='item-box'>
-                    <div className='item-details'>
-                      <h1 className='item-name one-line-ellipsis'>
+              <Col xs="12" md="7" lg="7" className="mb-3 px-3 px-md-2">
+                <div className="product-container">
+                  <div className="item-box">
+                    <div className="item-details">
+                      <h1 className="item-name one-line-ellipsis">
                         {product.name}
                       </h1>
-                      <p className='sku'>{product.sku}</p>
+                      <p className="sku">{product.sku}</p>
                       <hr />
-                      {product.brand && (
-                        <p className='by'>
-                          see more from{' '}
-                          <Link
-                            to={`/shop/brand/${product.brand.slug}`}
-                            className='default-link'
-                          >
-                            {product.brand.name}
-                          </Link>
+                      <p className="item-desc">{product.description}</p>
+                      {product.final_price ? (
+                        <>
+                          <p className="special-price mb-0">
+                            {product.final_price} ₫
+                          </p>
+                          <p className="old-price mb-0">{product.price} ₫</p>
+                        </>
+                      ) : (
+                        <p className="price mb-0">{product.price} ₫</p>
+                      )}
+                      {product.inventory <= 0 && !shopFormErrors["quantity"] ? (
+                        <p className="stock mt-3">
+                          Tình trạng:{" "}
+                          <span className="outOfStock">Hết hàng</span>
+                        </p>
+                      ) : (
+                        <p className="stock mt-3">
+                          Tình trạng: <span className="inStock">Còn hàng</span>
                         </p>
                       )}
-                      <p className='item-desc'>{product.description}</p>
-                      <p className='price'>{product.price} ₫</p>
-                      {product.inventory <= 0 && !shopFormErrors['quantity'] ? (
-                        <p className='stock'>Tình trạng: <span className='outOfStock'>Hết hàng</span></p>
-                      ) : (
-                        <p className='stock'>Tình trạng: <span className='inStock'>Còn hàng</span></p>
-                      )}
                     </div>
-                    <div className='item-customize'>
+                    <div className="item-customize">
                       <Input
-                        type={'number'}
-                        error={shopFormErrors['quantity']}
-                        label={'Số lượng'}
-                        name={'quantity'}
+                        type={"number"}
+                        error={shopFormErrors["quantity"]}
+                        label={"Số lượng"}
+                        name={"quantity"}
                         decimals={false}
                         min={1}
                         max={product.inventory}
-                        placeholder={'Số lượng'}
+                        placeholder={"Số lượng"}
                         disabled={
-                          product.inventory <= 0 && !shopFormErrors['quantity']
+                          product.inventory <= 0 && !shopFormErrors["quantity"]
                         }
                         value={productShopData.quantity}
                         onInputChange={(name, value) => {
@@ -126,32 +130,18 @@ class ProductPage extends React.PureComponent {
                         }}
                       />
                     </div>
-                    
-                    <div className='item-actions'>
-                      {itemsInCart.includes(product._id) ? (
-                        <Button
-                          variant='primary'
-                          disabled={
-                            product.inventory <= 0 &&
-                            !shopFormErrors['quantity']
-                          }
-                          text='Xóa khỏi giỏ hàng'
-                          className='bag-btn'
-                          icon={<BagIcon />}
-                          onClick={() => handleRemoveFromCart(product)}
-                        />
-                      ) : (
-                        <Button
-                          variant='primary'
-                          disabled={
-                            product.quantity <= 0 && !shopFormErrors['quantity']
-                          }
-                          text='Thêm vào giỏ hàng'
-                          className='bag-btn'
-                          icon={<BagIcon />}
-                          onClick={() => handleAddToCart(product)}
-                        />
-                      )}
+
+                    <div className="item-actions">
+                      <Button
+                        variant="primary"
+                        disabled={
+                          product.quantity <= 0 && !shopFormErrors["quantity"]
+                        }
+                        text="Thêm vào giỏ hàng"
+                        className="bag-btn"
+                        icon={<BagIcon />}
+                        onClick={() => handleAddToCart(product)}
+                      />
                     </div>
                     {/* <div className='my-4 item-share'>
                       <SocialShare product={product} />
@@ -170,7 +160,7 @@ class ProductPage extends React.PureComponent {
             /> */}
           </>
         ) : (
-          <NotFound message='no product found.' />
+          <NotFound message="no product found." />
         )}
       </div>
     );

@@ -43,8 +43,13 @@ router.get("/item/:slug", async (req, res) => {
       });
     }
 
+    const marketings = await Marketing.find({ status: true }).sort({
+      createdAt: -1,
+    });
+    let product = getProductAfterDiscount(productDoc, marketings);
+
     res.status(200).json({
-      product: productDoc,
+      product: product,
     });
   } catch (error) {
     res.status(400).json({

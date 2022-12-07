@@ -21,11 +21,12 @@ const YourOrders = (props) => {
           <p className="mb-0 me-2 d-flex" style={{ flexDirection: "column" }}>
             <span>{product.name}</span>
             <span>
-              {product.price}₫ x {product.quantity}
+              {product.final_price ? product.final_price : product.price}₫ x{" "}
+              {product.quantity}
             </span>
           </p>
         </div>
-        <div className="right ms-5">{+product.price * product.quantity}₫</div>
+        <div className="right ms-5">{+product.totalPrice}₫</div>
       </div>
     ));
 
