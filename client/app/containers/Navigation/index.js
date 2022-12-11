@@ -80,25 +80,36 @@
  
      return (
        <Link to={`/product/${suggestion.slug}`}>
-         <div className='d-flex'>
+         <div className="d-flex">
            <img
-             className='item-image'
+             className="item-image"
              src={`${
                suggestion.photo
                  ? suggestion.photo
-                 : '/images/placeholder-image.png'
+                 : "/images/placeholder-image.png"
              }`}
            />
            <div>
              <Container>
                <Row>
                  <Col>
-                   <span className='name'>{BoldName(suggestion, query)}</span>
+                   <span className="name">{BoldName(suggestion, query)}</span>
                  </Col>
                </Row>
                <Row>
                  <Col>
-                   <span className='price'>${suggestion.price}</span>
+                   {suggestion.final_price ? (
+                     <>
+                       <span className="special-price mb-0">
+                         {suggestion.final_price} ₫
+                       </span>
+                       <span className="old-price mb-0">
+                         {suggestion.price} ₫
+                       </span>
+                     </>
+                   ) : (
+                     <span className="price mb-0">{suggestion.price} ₫</span>
+                   )}
                  </Col>
                </Row>
              </Container>
@@ -254,7 +265,12 @@
                    {authenticated ? (
                      <UncontrolledDropdown nav inNavbar>
                        <DropdownToggle nav>
-                         {user.firstName ? user.firstName : "Tài khoản"}
+                         {user.name
+                           ? `Xin chào, ${user.name
+                               .toString()
+                               .split(" ")
+                               .pop()}`
+                           : "Tài khoản"}
                          <span className="fa fa-chevron-down dropdown-caret"></span>
                        </DropdownToggle>
                        <DropdownMenu right>

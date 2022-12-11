@@ -73,6 +73,16 @@ class ProductPage extends React.PureComponent {
                         : "/images/placeholder-image.png"
                     }`}
                   />
+                  {product.final_price ? (
+                    <p className="discount-price">
+                      -
+                      {((product.price - product.final_price) * 100) /
+                        product.price}
+                      %
+                    </p>
+                  ) : (
+                    <></>
+                  )}
                   {/* {product.inventory <= 0 && !shopFormErrors['quantity'] ? (
                     <p className='stock out-of-stock'>Out of stock</p>
                   ) : (

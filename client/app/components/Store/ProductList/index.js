@@ -44,16 +44,27 @@ const ProductList = props => {
                             : "/images/placeholder-image.png"
                         }`}
                       />
+                      {product.final_price ? (
+                        <p className="discount-price">
+                          -
+                          {((product.price - product.final_price) * 100) /
+                            product.price}
+                          %
+                        </p>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                   </div>
                   <div className="item-body">
                     <div className="item-details p-3">
                       <h1 className="item-name">{product.name}</h1>
-                      {product.brand && Object.keys(product.brand).length > 0 && (
-                        <p className="by">
-                          By <span>{product.brand.name}</span>
-                        </p>
-                      )}
+                      {product.brand &&
+                        Object.keys(product.brand).length > 0 && (
+                          <p className="by">
+                            By <span>{product.brand.name}</span>
+                          </p>
+                        )}
                       <p className="item-desc mb-0">ĐVT: {product.uom}</p>
                     </div>
                   </div>

@@ -143,51 +143,52 @@ router.get('/search', auth, async (req, res) => {
 });
 
 // fetch orders api
-router.get('/', auth, async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
     const user = req.user._id;
 
     let ordersDoc = await Order.find({ user }).populate({
-      path: 'cart',
+      path: "cart",
       populate: {
-        path: 'products.product',
+        path: "products.product",
         populate: {
-          path: 'brand'
-        }
-      }
+          path: "brand",
+        },
+      },
     });
 
-    ordersDoc = ordersDoc.filter(order => order.cart);
+    ordersDoc = ordersDoc.filter((order) => order.cart);
 
     if (ordersDoc.length > 0) {
-      const newOrders = ordersDoc.map(o => {
+      const newOrders = ordersDoc.map((o) => {
         return {
           _id: o._id,
           total: parseFloat(Number(o.total.toFixed(2))),
           created: o.created,
-          products: o.cart?.products
+          products: o.cart?.products,
+          status: o.status,
         };
       });
 
-      let orders = newOrders.map(o => store.caculateTaxAmount(o));
+      let orders = newOrders.map((o) => store.caculateTaxAmount(o));
       orders.sort((a, b) => b.created - a.created);
       res.status(200).json({
-        orders
+        orders,
       });
     } else {
       res.status(200).json({
-        orders: []
+        orders: [],
       });
     }
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again.",
     });
   }
 });
 
 // fetch order api
-router.get('/:orderId', auth, async (req, res) => {
+router.get("/:orderId", auth, async (req, res) => {
   try {
     const orderId = req.params.orderId;
 
@@ -195,30 +196,30 @@ router.get('/:orderId', auth, async (req, res) => {
 
     if (req.user.role === role.ROLES.Admin) {
       orderDoc = await Order.findOne({ _id: orderId }).populate({
-        path: 'cart',
+        path: "cart",
         populate: {
-          path: 'products.product',
+          path: "products.product",
           populate: {
-            path: 'brand'
-          }
-        }
+            path: "brand",
+          },
+        },
       });
     } else {
       const user = req.user._id;
       orderDoc = await Order.findOne({ _id: orderId, user }).populate({
-        path: 'cart',
+        path: "cart",
         populate: {
-          path: 'products.product',
+          path: "products.product",
           populate: {
-            path: 'brand'
-          }
-        }
+            path: "brand",
+          },
+        },
       });
     }
 
     if (!orderDoc || !orderDoc.cart) {
       return res.status(404).json({
-        message: `Cannot find order with the id: ${orderId}.`
+        message: `Cannot find order with the id: ${orderId}.`,
       });
     }
 
@@ -238,16 +239,17 @@ router.get('/:orderId', auth, async (req, res) => {
       zipCode: orderDoc.zipCode,
       lng: orderDoc.lng,
       lat: orderDoc.lat,
+      status: orderDoc.status,
     };
 
     order = store.caculateTaxAmount(order);
 
     res.status(200).json({
-      order
+      order,
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again.",
     });
   }
 });

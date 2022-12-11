@@ -90,10 +90,10 @@ router.get("/list/search/:name", async (req, res) => {
   try {
     const name = req.params.name;
 
-    const productDoc = await Product.find(
-      { name: { $regex: new RegExp(name), $options: "is" }, isActive: true },
-      { name: 1, slug: 1, imageUrl: 1, price: 1, _id: 0 }
-    );
+    const productDoc = await Product.find({
+      name: { $regex: new RegExp(name), $options: "is" },
+      status: true,
+    });
 
     if (productDoc.length < 0) {
       return res.status(404).json({
@@ -103,9 +103,14 @@ router.get("/list/search/:name", async (req, res) => {
     const marketings = await Marketing.find({ status: true }).sort({
       createdAt: -1,
     });
-    const product = getProductAfterDiscount(productDoc, marketings);
+    let productList = [];
+    for (let item of productDoc) {
+      productList.push(getProductAfterDiscount(item, marketings));
+    }
+
+    let a = productList && productList.length ? productList : productDoc;
     res.status(200).json({
-      products: product,
+      products: a,
     });
   } catch (error) {
     res.status(400).json({
