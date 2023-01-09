@@ -126,6 +126,27 @@ export const filterProducts = (n, v) => {
   };
 };
 
+export const updateProductAfterFlashSale = (productId) => {
+  return async (dispatch, getState) => {
+    try {
+      let storeProducts = getState().product.storeProducts;
+      console.log("storeProducts 1", storeProducts, productId);
+      storeProducts.map((item) => {
+        if (item._id === productId.toString()) {
+          item.final_price = item.price;
+        }
+      });
+      console.log("storeProducts 2", storeProducts);
+      dispatch({
+        type: FETCH_STORE_PRODUCTS,
+        payload: storeProducts,
+      });
+    } catch (error) {
+      handleError(error, dispatch);
+    }
+  };
+};
+
 // fetch product api
 export const fetchProduct = id => {
   return async (dispatch, getState) => {

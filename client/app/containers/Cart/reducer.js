@@ -11,15 +11,16 @@ import {
   INCREASE_QTY,
   DECREASE_QTY,
   HANDLE_CART_TOTAL,
+  UPDATE_CART,
   SET_CART_ID,
-  CLEAR_CART
-} from './constants';
+  CLEAR_CART,
+} from "./constants";
 
 const initialState = {
   cartItems: [],
   itemsInCart: [],
   cartTotal: 0,
-  cartId: ''
+  cartId: "",
 };
 
 const cartReducer = (state = initialState, action) => {
@@ -34,7 +35,7 @@ const cartReducer = (state = initialState, action) => {
         newState = {
           ...state,
           cartItems: [...state.cartItems, action.payload],
-          itemsInCart: [...state.itemsInCart, action.payload._id],
+          itemsInCart: [...state.itemsInCart, action.payload],
         };
       } else {
         let itemAdd = state.cartItems[itemId];
@@ -57,6 +58,15 @@ const cartReducer = (state = initialState, action) => {
         "items_in_cart",
         JSON.stringify(newState.itemsInCart)
       );
+      return newState;
+    case UPDATE_CART:
+      newState = {
+        ...state,
+        cartItems: action.payload.cartItems,
+        itemsInCart: action.payload.itemsInCart,
+        cartTotal: action.payload.cartTotal,
+        cartId: action.payload.cartId,
+      };
       return newState;
     case REMOVE_FROM_CART:
       let itemIndex = state.cartItems.findIndex(

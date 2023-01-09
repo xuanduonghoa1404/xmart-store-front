@@ -46,8 +46,8 @@ router.get("/item/:slug", async (req, res) => {
     const marketings = await Marketing.find({ status: true }).sort({
       createdAt: -1,
     });
-    let product = getProductAfterDiscount(productDoc, marketings);
-
+    let productAfterDiscount = getProductAfterDiscount(productDoc, marketings);
+    let product = getProductWithInventory(productAfterDiscount._doc);
     res.status(200).json({
       product: product,
     });
@@ -105,7 +105,8 @@ router.get("/list/search/:name", async (req, res) => {
     });
     let productList = [];
     for (let item of productDoc) {
-      productList.push(getProductAfterDiscount(item, marketings));
+      let productAfterDiscount = getProductAfterDiscount(item, marketings);
+      productList.push(getProductWithInventory(productAfterDiscount));
     }
 
     let a = productList && productList.length ? productList : productDoc;
@@ -175,7 +176,8 @@ router.post("/list", async (req, res) => {
     });
     let productList = [];
     for (let item of products) {
-      productList.push(getProductAfterDiscount(item, marketings));
+      let productAfterDiscount = getProductAfterDiscount(item, marketings);
+      productList.push(getProductWithInventory(productAfterDiscount));
     }
 
     let a = productList && productList.length ? productList : products;
@@ -793,12 +795,39 @@ async function getProductById(req, res, next) {
 
   next();
 }
-
+function getProductWithInventory(item) {
+  let quantity = 0;
+  if (!item.inventory.length) {
+    quantity = 0;
+  } else {
+    item?.inventory?.forEach((i) => {
+      i?.imports?.forEach((j) => {
+        quantity += j.quantity;
+      });
+    });
+  }
+  return {
+    ...item,
+    quantity: quantity,
+  };
+}
 // function return product after discount in marketing
 function getProductAfterDiscount(item, marketings) {
+  let today = new Date().getTime();
   if (marketings.length > 0) {
     let priceAfterDiscount = item.price;
     for (let marketing of marketings) {
+      let startDay = marketing.dateFrom
+        ? new Date(marketing.dateFrom).getTime()
+        : null;
+      let endDay = marketing.dateTo
+        ? new Date(marketing.dateTo).getTime()
+        : null;
+      let isValid =
+        startDay && today > startDay && (!endDay || (endDay && today < endDay));
+      if (!isValid) {
+        return item;
+      }
       if (marketing.apply === "ALL") {
         if (marketing.discount_type === "PERCENT") {
           priceAfterDiscount =
@@ -810,6 +839,9 @@ function getProductAfterDiscount(item, marketings) {
             priceAfterDiscount = marketing.value;
           }
         }
+        item.date_from = marketing.dateFrom;
+        item.date_to = marketing.dateTo;
+        item.flash_sale = marketing.isFlashSale;
         item.final_price = priceAfterDiscount;
         return item;
       } else if (marketing.apply === "TYPE") {
@@ -827,6 +859,9 @@ function getProductAfterDiscount(item, marketings) {
               priceAfterDiscount = marketing.value;
             }
           }
+          item.date_from = marketing.dateFrom;
+          item.date_to = marketing.dateTo;
+          item.flash_sale = marketing.isFlashSale;
           item.final_price = priceAfterDiscount;
           return item;
         }
@@ -844,6 +879,9 @@ function getProductAfterDiscount(item, marketings) {
               priceAfterDiscount = marketing.value;
             }
           }
+          item.date_from = marketing.dateFrom;
+          item.date_to = marketing.dateTo;
+          item.flash_sale = marketing.isFlashSale;
           item.final_price = priceAfterDiscount;
           return item;
         }

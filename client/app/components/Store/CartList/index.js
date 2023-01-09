@@ -14,7 +14,6 @@ import "./CartSection.css";
 const CartList = props => {
   const { cartItems, handleRemoveFromCart, increaseQtyItemFromCart, decreaseQtyItemFromCart } = props;
 
-  console.log(cartItems);
   const handleProductClick = () => {
     props.toggleCart();
   };
