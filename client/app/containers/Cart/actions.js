@@ -12,21 +12,22 @@ import {
   HANDLE_CART,
   ADD_TO_CART,
   REMOVE_FROM_CART,
-  INCREASE_QTY ,
-  DECREASE_QTY ,
+  INCREASE_QTY,
+  DECREASE_QTY,
   HANDLE_CART_TOTAL,
   SET_CART_ID,
-  CLEAR_CART
-} from './constants';
+  CLEAR_CART,
+  UPDATE_CART,
+} from "./constants";
 
 import {
   SET_PRODUCT_SHOP_FORM_ERRORS,
-  RESET_PRODUCT_SHOP
-} from '../Product/constants';
+  RESET_PRODUCT_SHOP,
+} from "../Product/constants";
 
-import handleError from '../../utils/error';
-import { allFieldsValidation } from '../../utils/validation';
-import { toggleCart } from '../Navigation/actions';
+import handleError from "../../utils/error";
+import { allFieldsValidation } from "../../utils/validation";
+import { toggleCart } from "../Navigation/actions";
 
 // Handle Add To Cart
 export const handleAddToCart = (product) => {
@@ -122,7 +123,80 @@ export const calculateCartTotal = () => {
     });
   };
 };
+export const updateCartQuery = () => {
+  const cart = {
+    cartItems: JSON.parse(localStorage.getItem("cart_items")),
+    itemsInCart: JSON.parse(localStorage.getItem("items_in_cart")),
+    cartTotal: localStorage.getItem("cart_total"),
+    cartId: localStorage.getItem("cart_id"),
+  };
+  return async (dispatch, getState) => {
+    const newCart = await axios.post(`/api/cart/update`, { cart });
+    let newCartData = newCart.data.cart;
+    localStorage.setItem("cart_items", JSON.stringify(newCartData.cartItems));
+    localStorage.setItem(
+      "items_in_cart",
+      JSON.stringify(newCartData.itemsInCart)
+    );
+    localStorage.setItem("cart_total", newCartData.cartTotal);
+    dispatch({
+      type: UPDATE_CART,
+      payload: newCartData,
+    });
+    dispatch(calculateCartTotal());
+  };
+};
+export const updateCart = () => {
+  const cart = {
+    cartItems: JSON.parse(localStorage.getItem("cart_items")),
+    itemsInCart: JSON.parse(localStorage.getItem("items_in_cart")),
+    cartTotal: localStorage.getItem("cart_total"),
+    cartId: localStorage.getItem("cart_id"),
+  };
 
+  return (dispatch, getState) => {
+    if (cart.cartItems != undefined || cart.itemsInCart != undefined) {
+      if (!cart.cartItems || !cart.itemsInCart) {
+        return;
+      }
+      let storeProducts = getState().product.storeProducts;
+      cart.cartItems.map((item, index) => {
+        let id = item._id;
+        let itemId = storeProducts.findIndex(
+          (product) => product._id.toString() == id.toString()
+        );
+
+        if (itemId !== -1) {
+          let price =
+            storeProducts[itemId].final_price || storeProducts[itemId].price;
+          cart.cartItems[index].final_price = price;
+          console.log("price", price);
+          cart.cartItems[index].totalPrice =
+            price * storeProducts[itemId].quantity;
+        }
+      });
+      cart.itemsInCart.map((item, index) => {
+        let id = item._id;
+        let itemId = storeProducts.findIndex(
+          (product) => product._id.toString() === id
+        );
+        if (itemId !== -1) {
+          let price =
+            storeProducts[itemId].final_price || storeProducts[itemId].price;
+          cart.itemsInCart[index].final_price = price;
+          cart.itemsInCart[index].totalPrice =
+            price * storeProducts[itemId].quantity;
+        }
+      });
+
+      dispatch({
+        type: UPDATE_CART,
+        payload: cart,
+      });
+      dispatch(calculateCartTotal());
+    }
+  };
+};
 // set cart store from cookie
 export const handleCart = () => {
   const cart = {
@@ -159,7 +233,7 @@ export const handleCheckout = () => {
 // Continue shopping use case
 export const handleShopping = () => {
   return (dispatch, getState) => {
-    dispatch(push('/shop'));
+    dispatch(push("/shop"));
     dispatch(toggleCart());
   };
 };
@@ -181,10 +255,9 @@ export const redirectCheckoutPage = () => {
 export const getCartId = () => {
   return async (dispatch, getState) => {
     try {
-      const cartId = localStorage.getItem('cart_id');
+      const cartId = localStorage.getItem("cart_id");
       const cartItems = getState().cart.cartItems;
       const products = getCartItems(cartItems);
-      console.log('cartId', cartId);
       // create cart id if there is no one
       if (!cartId) {
         const response = await axios.post(`/api/cart/add`, { products });

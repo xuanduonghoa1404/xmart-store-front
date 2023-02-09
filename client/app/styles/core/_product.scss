@@ -76,7 +76,22 @@
       .item-image-container {
         overflow: hidden;
         position: relative;
-
+        .discount-price {
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            width: 45px;
+            height: 26px;
+            padding: 3px;
+            border-radius: 13px;
+            background-color: #e82230;
+            justify-content: center;
+            position: absolute;
+            top: 13px;
+            right: 13px;
+          }
         .item-image-box {
           padding-bottom: 100%;
           position: relative;
@@ -161,6 +176,22 @@
   .outOfStock {
     color: $red;
   }
+        .discount-price {
+          color: #fff;
+          font-weight: 600;
+          font-size: 14px;
+          display: flex;
+          align-items: center;
+          width: 45px;
+          height: 26px;
+          padding: 3px;
+          border-radius: 13px;
+          background-color: #e82230;
+          justify-content: center;
+          position: absolute;
+          top: 13px;
+          right: 13px;
+        }
   .product-container {
     background-color: $white;
     padding: 20px;

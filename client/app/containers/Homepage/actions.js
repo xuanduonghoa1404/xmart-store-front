@@ -4,11 +4,15 @@
  *
  */
 
-import { DEFAULT_ACTION, FETCH_STORE_CATEGORIES } from './constants';
+import {
+  DEFAULT_ACTION,
+  FETCH_STORE_CATEGORIES,
+  FETCH_MARKETING,
+} from "./constants";
 
 export const defaultAction = () => {
   return {
-    type: DEFAULT_ACTION
+    type: DEFAULT_ACTION,
   };
 };
 
@@ -17,11 +21,26 @@ export const fetchStoreCategories = () => {
   return async (dispatch, getState) => {
     try {
       const response = await axios.get(`/api/product/list/select`);
-      console.log('response', response);
 
       dispatch({
         type: FETCH_STORE_CATEGORIES,
-        payload: response.data.products
+        payload: response.data.products,
+      });
+    } catch (error) {
+      handleError(error, dispatch);
+    }
+  };
+};
+
+// fetch store categories api
+export const fetchMarketing = () => {
+  return async (dispatch, getState) => {
+    try {
+      const response = await axios.get(`/api/marketing`);
+
+      dispatch({
+        type: FETCH_MARKETING,
+        payload: response.data,
       });
     } catch (error) {
       handleError(error, dispatch);

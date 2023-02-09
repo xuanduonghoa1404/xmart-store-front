@@ -8,26 +8,29 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 
-import AddToWishList from '../AddToWishList';
-import Button from '../../../components/Common/Button';
-import Input from '../../../components/Common/Input';
-import { BagIcon } from '../../../components/Common/Icon';
-const ProductList = props => {
-  const { products, updateWishlist, authenticated, handleAddToCart, productShopChange} = props;
-
+import FlashSaleItem from "../FlashSale";
+import Button from "../../../components/Common/Button";
+import Input from "../../../components/Common/Input";
+import { BagIcon } from "../../../components/Common/Icon";
+const ProductList = (props) => {
+  const {
+    products,
+    updateWishlist,
+    authenticated,
+    handleAddToCart,
+    productShopChange,
+    completedCountDown,
+  } = props;
+  // function completedCountDown() {
+  //   console.log("completedCountDown", new Date());
+  // }
   return (
     <div className="product-list">
       {products.map((product, index) => (
         <div key={index} className="mb-3 mb-md-0">
           <div className="product-container">
             <div className="item-box">
-              <div className="add-wishlist-box">
-                <AddToWishList
-                  product={product}
-                  updateWishlist={updateWishlist}
-                  authenticated={authenticated}
-                />
-              </div>
+              <div className="add-wishlist-box"></div>
 
               <div className="item-link">
                 <Link
@@ -44,16 +47,26 @@ const ProductList = props => {
                             : "/images/placeholder-image.png"
                         }`}
                       />
+                      {product.final_price ? (
+                        <p className="discount-price">
+                          -
+                          {((product.price - product.final_price) * 100) /
+                            product.price}
+                          %
+                        </p>
+                      ) : (
+                        <></>
+                      )}
                     </div>
                   </div>
                   <div className="item-body">
                     <div className="item-details p-3">
+                      <FlashSaleItem
+                        product={product}
+                        completedCountDown={completedCountDown}
+                      />
                       <h1 className="item-name">{product.name}</h1>
-                      {product.brand && Object.keys(product.brand).length > 0 && (
-                        <p className="by">
-                          By <span>{product.brand.name}</span>
-                        </p>
-                      )}
+
                       <p className="item-desc mb-0">ĐVT: {product.uom}</p>
                     </div>
                   </div>

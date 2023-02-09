@@ -46,6 +46,7 @@ class CheckoutPage extends React.PureComponent {
       defaultChange,
       updateAddress,
       selectAddress,
+      shippingAddress,
       placeOrder,
     } = this.props;
 
@@ -67,6 +68,7 @@ class CheckoutPage extends React.PureComponent {
                     formErrors={formErrors}
                     addressChange={addressEditChange}
                     shippingAddressChange={shippingAddressChange}
+                    shippingAddress={shippingAddress}
                     selectAddress={selectAddress}
                     placeOrder={placeOrder}
                   />
@@ -91,6 +93,7 @@ const mapStateToProps = (state) => {
     cart: state.cart,
     isLoading: state.order.isLoading,
     locators: state.locator.locators,
+    shippingAddress: state.address.shippingAddress,
   };
 };
 

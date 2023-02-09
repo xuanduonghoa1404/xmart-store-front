@@ -16,6 +16,11 @@ import { BagIcon, CloseIcon } from '../../components/Common/Icon';
 import Button from '../../components/Common/Button';
 
 class Cart extends React.PureComponent {
+  componentDidMount() {
+    this.props.filterProducts();
+    this.props.updateCartQuery();
+  }
+
   render() {
     const {
       isCartOpen,

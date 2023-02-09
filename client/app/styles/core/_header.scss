@@ -112,7 +112,22 @@
         color: $white !important;
       }
     }
+.dropdown.nav-item {
+  a {
+    display: flex;
+  }
 
+a:before {
+  background-image: $foodpromarts_background_image_icon;
+  background-size: $foodpromarts_background_image_size;
+  background-position: -167px -850px;
+  width: 22px;
+  height: 22px;
+  display: block;
+  content: '';
+    margin-right: 5px;
+}
+}
     a,
     span {
       &:hover {

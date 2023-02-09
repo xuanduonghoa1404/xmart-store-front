@@ -20,9 +20,11 @@ class Add extends React.PureComponent {
       addressFormData,
       formErrors,
       addressChange,
-      addAddress
+      addAddress,
+      user,
+      locators,
     } = this.props;
-
+    console.log("locatorszzzz", locators);
     return (
       <SubPage
         title="Thêm địa chỉ"
@@ -34,16 +36,20 @@ class Add extends React.PureComponent {
           formErrors={formErrors}
           addressChange={addressChange}
           addAddress={addAddress}
+          user={user}
+          locators={locators}
         />
       </SubPage>
     );
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     addressFormData: state.address.addressFormData,
-    formErrors: state.address.formErrors
+    formErrors: state.address.formErrors,
+    user: state.account.user,
+    locators: state.locator.locators,
   };
 };
 

@@ -50,13 +50,13 @@ class List extends React.PureComponent {
       : orders;
 
     return (
-      <div className='order-dashboard'>
+      <div className="order-dashboard">
         <SubPage
-          title='Lịch sử đơn hàng'
-          actionTitle={user.role === 'ROLE_ADMIN' && 'Customer Orders'}
+          title="Lịch sử đơn hàng"
+          actionTitle={user.role === "ROLE_ADMIN" && "Customer Orders"}
           handleAction={() =>
-            user.role === 'ROLE_ADMIN' &&
-            history.push('/dashboard/orders/customers')
+            user.role === "ROLE_ADMIN" &&
+            history.push("/dashboard/orders/customers")
           }
         >
           {/* <OrderSearch
@@ -69,7 +69,7 @@ class List extends React.PureComponent {
           ) : orders.length > 0 ? (
             <OrderList orders={filteredOrders} />
           ) : (
-            <NotFound message='you have no orders yet!' />
+            <NotFound message="Bạn chưa có đơn hàng nào!" />
           )}
         </SubPage>
       </div>

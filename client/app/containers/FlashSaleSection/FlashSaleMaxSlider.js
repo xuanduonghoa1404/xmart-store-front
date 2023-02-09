@@ -5,22 +5,20 @@ import img2 from "./Imgs/lg-img-2.jpg";
 import img3 from "./Imgs/lg-img-3.jpg";
 import SwiperContainer from "../../components/Common/SwiperContainer/SwiperContainer";
 
-const FlashSaleMaxSlider = () => {
-  const imgsArr = [
-    "https://res.cloudinary.com/hoaduonghx/image/upload/v1669905023/image/banner2_fqxbal.png",
-    "https://res.cloudinary.com/hoaduonghx/image/upload/v1669905017/image/banner3_khvtdi.png",
-    "https://res.cloudinary.com/hoaduonghx/image/upload/v1669905031/image/banner1_oub4ra.png",
-  ];
+const FlashSaleMaxSlider = (props) => {
+  const imgsArr = props.marketing;
 
   const imgRender = () =>
-    imgsArr.map((img, idx) => (
-      <img
-        className="hoverEffect"
-        key={idx}
-        width="100%"
-        src={img}
-        alt={`img${idx}`}
-      />
+    imgsArr?.map((marketing) => (
+      <a href="/">
+        <img
+          className="hoverEffect"
+          key={marketing._id}
+          width="100%"
+          src={marketing.photo}
+          alt={marketing.name}
+        />
+      </a>
     ));
 
   const responsive = {

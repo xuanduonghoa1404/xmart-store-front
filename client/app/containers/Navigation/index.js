@@ -40,6 +40,7 @@
      this.props.fetchStoreBrands();
      this.props.fetchStoreCategories();
      this.props.fetchLocator();
+     this.props.fetchMarketing();
    }
  
    toggleBrand() {
@@ -79,25 +80,36 @@
  
      return (
        <Link to={`/product/${suggestion.slug}`}>
-         <div className='d-flex'>
+         <div className="d-flex">
            <img
-             className='item-image'
+             className="item-image"
              src={`${
                suggestion.photo
                  ? suggestion.photo
-                 : '/images/placeholder-image.png'
+                 : "/images/placeholder-image.png"
              }`}
            />
            <div>
              <Container>
                <Row>
                  <Col>
-                   <span className='name'>{BoldName(suggestion, query)}</span>
+                   <span className="name">{BoldName(suggestion, query)}</span>
                  </Col>
                </Row>
                <Row>
                  <Col>
-                   <span className='price'>${suggestion.price}</span>
+                   {suggestion.final_price ? (
+                     <>
+                       <span className="special-price mb-0">
+                         {suggestion.final_price} ₫
+                       </span>
+                       <span className="old-price mb-0">
+                         {suggestion.price} ₫
+                       </span>
+                     </>
+                   ) : (
+                     <span className="price mb-0">{suggestion.price} ₫</span>
+                   )}
                  </Col>
                </Row>
              </Container>
@@ -143,19 +155,19 @@
              <Row>
                <Col md="4" className="text-center d-none d-md-block">
                  <i className="fa fa-truck" />
-                 <span>Free Shipping</span>
+                 <span>Miễn phí vận chuyển</span>
                </Col>
                <Col md="4" className="text-center d-none d-md-block">
                  <i className="fa fa-credit-card" />
-                 <span>Payment Methods</span>
+                 <span>Thanh toán</span>
                </Col>
                <Col md="4" className="text-center d-none d-md-block">
                  <i className="fa fa-phone" />
-                 <span>Call us 951-999-9999</span>
+                 <span>Liên hệ 0963-220-676</span>
                </Col>
                <Col xs="12" className="text-center d-block d-md-none">
                  <i className="fa fa-phone" />
-                 <span> Need advice? Call us 951-999-9999</span>
+                 <span> Liên hệ 0963-220-676</span>
                </Col>
              </Row>
            </Container>
@@ -241,27 +253,6 @@
                    onClick={toggleCart}
                  />
                  <Nav navbar>
-                   {brands && brands.length > 0 && (
-                     <Dropdown
-                       nav
-                       inNavbar
-                       toggle={() => this.toggleBrand()}
-                       isOpen={isBrandOpen}
-                     >
-                       <DropdownToggle nav>
-                         Brands
-                         <span className="fa fa-chevron-down dropdown-caret"></span>
-                       </DropdownToggle>
-                       <DropdownMenu right className="nav-brand-dropdown">
-                         <div className="mini-brand">
-                           <MiniBrand
-                             brands={brands}
-                             toggleBrand={() => this.toggleBrand()}
-                           />
-                         </div>
-                       </DropdownMenu>
-                     </Dropdown>
-                   )}
                    <NavItem>
                      <NavLink
                        tag={ActiveLink}
@@ -274,16 +265,37 @@
                    {authenticated ? (
                      <UncontrolledDropdown nav inNavbar>
                        <DropdownToggle nav>
-                         {user.firstName ? user.firstName : "Tài khoản"}
+                         {user.name
+                           ? `Xin chào, ${user.name
+                               .toString()
+                               .split(" ")
+                               .pop()}`
+                           : "Tài khoản"}
                          <span className="fa fa-chevron-down dropdown-caret"></span>
                        </DropdownToggle>
                        <DropdownMenu right>
                          <DropdownItem
                            onClick={() => history.push("/dashboard")}
+                           className="dropdown-account"
                          >
                            Tài khoản
                          </DropdownItem>
-                         <DropdownItem onClick={signOut}>
+                         <DropdownItem
+                           onClick={() => history.push("/dashboard/address")}
+                           className="dropdown-address"
+                         >
+                           Địa chỉ
+                         </DropdownItem>
+                         <DropdownItem
+                           onClick={() => history.push("/dashboard/orders")}
+                           className="dropdown-order"
+                         >
+                           Đơn hàng
+                         </DropdownItem>
+                         <DropdownItem
+                           onClick={signOut}
+                           className="dropdown-signout"
+                         >
                            Đăng xuất
                          </DropdownItem>
                        </DropdownMenu>

@@ -9,6 +9,65 @@
   }
 }
 
+.dropdown-item.dropdown-account {
+  display: flex;
+}
+
+.dropdown-item.dropdown-address {
+  display: flex;
+}
+
+.dropdown-item.dropdown-order {
+  display: flex;
+}
+
+.dropdown-item.dropdown-signout {
+  display: flex;
+}
+
+.dropdown-item.dropdown-account::before {
+  background-image: $foodpromarts_background_image_icon;
+  background-size: $foodpromarts_background_image_size;
+  background-position: -167px -850px;
+  width: 22px;
+  height: 22px;
+  display: block;
+  content: '';
+  margin-right: 5px;
+}
+
+.dropdown-item.dropdown-signout::before {
+  background-image: $foodpromarts_background_image_icon;
+  background-size: $foodpromarts_background_image_size;
+  background-position: -407px -850px;
+  width: 22px;
+  height: 22px;
+  display: block;
+  content: '';
+  margin-right: 5px;
+}
+
+.dropdown-item.dropdown-order::before {
+  background-image: $foodpromarts_background_image_icon;
+  background-size: $foodpromarts_background_image_size;
+  background-position: -287px -848px;
+  width: 23px;
+  height: 23px;
+  display: block;
+  content: '';
+  margin-right: 5px;
+}
+
+.dropdown-item.dropdown-address::before {
+  background-image: $foodpromarts_background_image_icon;
+  background-size: $foodpromarts_background_image_size;
+  background-position: -247px -850px;
+  width: 22px;
+  height: 22px;
+  display: block;
+  content: '';
+  margin-right: 5px;
+}
 .dropdown-item {
   font-weight: $font-weight-normal !important;
   padding: 12px;

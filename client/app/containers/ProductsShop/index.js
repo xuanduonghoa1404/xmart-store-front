@@ -21,10 +21,18 @@ class ProductsShop extends React.PureComponent {
   }
 
   render() {
-    const { products, isLoading, authenticated, updateWishlist, handleAddToCart, productShopChange } = this.props;
+    const {
+      products,
+      isLoading,
+      authenticated,
+      updateWishlist,
+      handleAddToCart,
+      productShopChange,
+      updateProductAfterFlashSale,
+    } = this.props;
 
     return (
-      <div className='products-shop'>
+      <div className="products-shop">
         {isLoading && <LoadingIndicator />}
         {products && products.length > 0 && (
           <ProductList
@@ -33,10 +41,11 @@ class ProductsShop extends React.PureComponent {
             updateWishlist={updateWishlist}
             handleAddToCart={handleAddToCart}
             productShopChange={productShopChange}
+            completedCountDown={updateProductAfterFlashSale}
           />
         )}
         {!isLoading && products && products.length <= 0 && (
-          <NotFound message='Không tìm thấy sản phẩm.' />
+          <NotFound message="Không tìm thấy sản phẩm." />
         )}
       </div>
     );

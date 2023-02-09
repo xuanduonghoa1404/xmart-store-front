@@ -74,6 +74,17 @@
     height: 50px;
     border-radius: $border-radius-primary;
   }
+.special-price {
+  font-size: 15px;
+  font-weight: $font-weight-bold-two;
+  color: $price_special-color;
+}
+
+.old-price {
+  font-size: 13px;
+  color: $price_old-color;
+  margin-left: 5px;
+}
 }
 
 /* end autosuggest styles */

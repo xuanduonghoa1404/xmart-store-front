@@ -4,10 +4,15 @@
  *
  */
 
-import { DEFAULT_ACTION, FETCH_STORE_CATEGORIES } from './constants';
+import {
+  DEFAULT_ACTION,
+  FETCH_STORE_CATEGORIES,
+  FETCH_MARKETING,
+} from "./constants";
 
 const initialState = {
   categories: [],
+  marketing: [],
   storeCategories: [],
 };
 
@@ -17,10 +22,15 @@ const homepageReducer = (state = initialState, action) => {
     case DEFAULT_ACTION:
       return newState;
     case FETCH_STORE_CATEGORIES:
-        return {
-          ...state,
-          categories: action.payload
-        };
+      return {
+        ...state,
+        categories: action.payload,
+      };
+    case FETCH_MARKETING:
+      return {
+        ...state,
+        marketing: action.payload,
+      };
     default:
       return state;
   }
