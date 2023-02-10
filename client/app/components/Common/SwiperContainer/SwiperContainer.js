@@ -3,10 +3,6 @@ import React, { Children } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper/core";
 
-import "swiper/swiper.min.css";
-import "swiper/components/navigation/navigation.min.css";
-import "swiper/components/pagination/pagination.min.css";
-
 import "./SwiperContainer.css";
 
 SwiperCore.use([Autoplay, Navigation, Pagination]);
