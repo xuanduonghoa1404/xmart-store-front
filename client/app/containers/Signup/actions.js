@@ -41,20 +41,20 @@ export const signUp = () => {
   return async (dispatch, getState) => {
     try {
       const rules = {
-        email: 'required|email',
-        password: 'required|min:6',
-        firstName: 'required',
-        lastName: 'required'
+        email: "required|email",
+        password: "required|min:6",
+        name: "required",
+        phone: "required",
       };
 
       const newUser = getState().signup.signupFormData;
       const isSubscribed = getState().signup.isSubscribed;
 
       const { isValid, errors } = allFieldsValidation(newUser, rules, {
-        'required.email': 'Email is required.',
-        'required.password': 'Password is required.',
-        'required.firstName': 'First Name is required.',
-        'required.lastName': 'Last Name is required.'
+        "required.email": "Vui lòng điền email.",
+        "required.password": "Vui lòng điền mật khẩu.",
+        "required.firstName": "Vui lòng điền tên đăng nhập.",
+        "required.lastName": "Vui lòng điền số điện thoại.",
       });
 
       if (!isValid) {

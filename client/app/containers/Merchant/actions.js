@@ -52,24 +52,24 @@ export const sellWithUs = () => {
       const phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 
       const rules = {
-        name: 'required',
-        email: 'required|email',
-        phoneNumber: ['required', `regex:${phoneno}`],
-        brand: 'required',
-        business: 'required|min:10'
+        name: "required",
+        email: "required|email",
+        phone: ["required", `regex:${phoneno}`],
+        brand: "required",
+        business: "required|min:10",
       };
 
       const merchant = getState().merchant.sellFormData;
 
       const { isValid, errors } = allFieldsValidation(merchant, rules, {
-        'required.name': 'Name is required.',
-        'required.email': 'Email is required.',
-        'email.email': 'Email format is invalid.',
-        'required.phoneNumber': 'Phone number is required.',
-        'regex.phoneNumber': 'Phone number format is invalid.',
-        'required.brand': 'Brand is required.',
-        'required.business': 'Business is required.',
-        'min.business': 'Business must be at least 10 characters.'
+        "required.name": "Name is required.",
+        "required.email": "Email is required.",
+        "email.email": "Email format is invalid.",
+        "required.phone": "Phone number is required.",
+        "regex.phone": "Phone number format is invalid.",
+        "required.brand": "Brand is required.",
+        "required.business": "Business is required.",
+        "min.business": "Business must be at least 10 characters.",
       });
 
       if (!isValid) {

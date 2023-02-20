@@ -75,44 +75,31 @@ router.post('/login', async (req, res) => {
 
 router.post('/register', async (req, res) => {
   try {
-    const { email, firstName, lastName, password, isSubscribed } = req.body;
+    const { email, name, phone, password } = req.body;
 
     if (!email) {
-      return res
-        .status(400)
-        .json({ error: 'You must enter an email address.' });
+      return res.status(400).json({ error: "Bạn phải điền email." });
     }
 
-    if (!firstName || !lastName) {
-      return res.status(400).json({ error: 'You must enter your full name.' });
+    if (!name) {
+      return res.status(400).json({ error: "Bạn phải điền tên." });
     }
 
     if (!password) {
-      return res.status(400).json({ error: 'You must enter a password.' });
+      return res.status(400).json({ error: "Bạn phải điền mật khẩu." });
     }
 
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      return res
-        .status(400)
-        .json({ error: 'That email address is already in use.' });
-    }
-
-    let subscribed = false;
-    if (isSubscribed) {
-      const result = await mailchimp.subscribeToNewsletter(email);
-
-      if (result.status === 'subscribed') {
-        subscribed = true;
-      }
+      return res.status(400).json({ error: "Địa chỉ email đã tồn tại." });
     }
 
     const user = new User({
       email,
       password,
-      firstName,
-      lastName
+      name,
+      phone,
     });
 
     const salt = await bcrypt.genSalt(10);
@@ -122,29 +109,22 @@ router.post('/register', async (req, res) => {
     const registeredUser = await user.save();
 
     const payload = {
-      id: registeredUser.id
+      id: registeredUser.id,
     };
-
-    await mailgun.sendEmail(
-      registeredUser.email,
-      'signup',
-      null,
-      registeredUser
-    );
 
     const token = jwt.sign(payload, secret, { expiresIn: tokenLife });
 
     res.status(200).json({
       success: true,
-      subscribed,
+      subscribed: false,
       token: `Bearer ${token}`,
       user: {
         id: registeredUser.id,
-        firstName: registeredUser.firstName,
-        lastName: registeredUser.lastName,
+        name: registeredUser.name,
+        phone: registeredUser.phone,
         email: registeredUser.email,
-        role: registeredUser.role
-      }
+        role: registeredUser.role,
+      },
     });
   } catch (error) {
     res.status(400).json({

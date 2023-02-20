@@ -15,15 +15,15 @@ import {
 
 const initialState = {
   signupFormData: {
-    email: '',
-    firstName: '',
-    lastName: '',
-    password: ''
+    email: "",
+    name: "",
+    phone: "",
+    password: "",
   },
   formErrors: {},
   isSubmitting: false,
   isLoading: false,
-  isSubscribed: false
+  isSubscribed: false,
 };
 
 const signupReducer = (state = initialState, action) => {

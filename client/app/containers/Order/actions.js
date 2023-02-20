@@ -162,6 +162,7 @@ export const addOrder = () => {
       const total = getState().cart.cartTotal;
       const auth = getState().authentication.authenticated;
       let shippingAddress = getState().address.shippingAddress;
+      let locatorIds = getState().checkout.locatorIds;
       if (auth) {
         if (shippingAddress.name === "") {
           shippingAddress = getState().account.user.address?.find(
@@ -176,6 +177,7 @@ export const addOrder = () => {
           cartId,
           total,
           shippingAddress,
+          locatorIds,
         });
 
         dispatch(push(`/order/success/${response.data.order._id}`));

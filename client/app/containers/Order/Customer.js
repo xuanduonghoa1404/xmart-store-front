@@ -25,12 +25,12 @@ class Customer extends React.PureComponent {
     const { history, user, orders, isLoading, searchOrders } = this.props;
 
     return (
-      <div className='order-dashboard'>
+      <div className="order-dashboard">
         <SubPage
-          title='Customer Orders'
-          actionTitle='My Orders'
+          title="Customer Orders"
+          actionTitle="My Orders"
           handleAction={() =>
-            user.role === 'ROLE_ADMIN' && history.push('/dashboard/orders')
+            user.role === "admin" && history.push("/dashboard/orders")
           }
         >
           {/* <OrderSearch onSearchSubmit={searchOrders} /> */}
@@ -39,7 +39,7 @@ class Customer extends React.PureComponent {
           ) : orders.length > 0 ? (
             <OrderList orders={orders} />
           ) : (
-            <NotFound message='No orders found.' />
+            <NotFound message="No orders found." />
           )}
         </SubPage>
       </div>

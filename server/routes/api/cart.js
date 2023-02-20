@@ -17,16 +17,16 @@ router.post('/add', auth, async (req, res) => {
 
     const cart = new Cart({
       user,
-      products
+      products,
     });
 
     const cartDoc = await cart.save();
 
-    decreaseQuantity(products);
+    // decreaseQuantity(products);
 
     res.status(200).json({
       success: true,
-      cartId: cartDoc.id
+      cartId: cartDoc.id,
     });
   } catch (error) {
     res.status(400).json({

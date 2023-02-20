@@ -15,7 +15,7 @@ router.post('/seller-request', async (req, res) => {
   try {
     const name = req.body.name;
     const business = req.body.business;
-    const phoneNumber = req.body.phoneNumber;
+    const phone = req.body.phone;
     const email = req.body.email;
     const brand = req.body.brand;
 
@@ -31,10 +31,10 @@ router.post('/seller-request', async (req, res) => {
         .json({ error: 'You must enter a business description.' });
     }
 
-    if (!phoneNumber || !email) {
+    if (!phone || !email) {
       return res
         .status(400)
-        .json({ error: 'You must enter a phone number and an email address.' });
+        .json({ error: "You must enter a phone number and an email address." });
     }
 
     const existingMerchant = await Merchant.findOne({ email });
@@ -49,8 +49,8 @@ router.post('/seller-request', async (req, res) => {
       name,
       email,
       business,
-      phoneNumber,
-      brand
+      phone,
+      brand,
     });
 
     const merchantDoc = await merchant.save();
@@ -59,8 +59,8 @@ router.post('/seller-request', async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: `We received your request! we will reach you on your phone number ${phoneNumber}!`,
-      merchant: merchantDoc
+      message: `We received your request! we will reach you on your phone number ${phone}!`,
+      merchant: merchantDoc,
     });
   } catch (error) {
     return res.status(400).json({

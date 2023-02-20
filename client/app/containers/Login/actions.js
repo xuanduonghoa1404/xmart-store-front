@@ -61,9 +61,9 @@ export const login = () => {
       const firstName = response.data.user.firstName;
 
       const successfulOptions = {
-        title: `Hey${firstName ? ` ${firstName}` : ''}, Welcome Back!`,
-        position: 'tr',
-        autoDismiss: 1
+        title: `Xin chào${firstName ? ` ${firstName}` : ""}`,
+        position: "tr",
+        autoDismiss: 1,
       };
 
       localStorage.setItem('token', response.data.token);
@@ -75,7 +75,7 @@ export const login = () => {
 
       dispatch({ type: LOGIN_RESET });
     } catch (error) {
-      const title = `Please try to login again!`;
+      const title = `Vui lòng đăng nhập lại!`;
       handleError(error, dispatch, title);
     } finally {
       dispatch({ type: SET_LOGIN_SUBMITTING, payload: false });
@@ -87,9 +87,9 @@ export const login = () => {
 export const signOut = () => {
   return (dispatch, getState) => {
     const successfulOptions = {
-      title: `You have signed out!`,
-      position: 'tr',
-      autoDismiss: 1
+      title: `Bạn đã đăng xuất!`,
+      position: "tr",
+      autoDismiss: 1,
     };
 
     dispatch(clearAuth());

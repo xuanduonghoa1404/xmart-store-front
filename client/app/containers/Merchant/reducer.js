@@ -21,23 +21,23 @@ import {
 const initialState = {
   merchants: [],
   sellFormData: {
-    name: '',
-    email: '',
-    phoneNumber: '',
-    brand: '',
-    business: ''
+    name: "",
+    email: "",
+    phone: "",
+    brand: "",
+    business: "",
   },
   formErrors: {},
   signupFormData: {
-    email: '',
-    firstName: '',
-    lastName: '',
-    password: ''
+    email: "",
+    firstName: "",
+    lastName: "",
+    password: "",
   },
   signupFormErrors: {},
   isLoading: false,
   isSellSubmitting: false,
-  isSellLoading: false
+  isSellLoading: false,
 };
 
 const merchantReducer = (state = initialState, action) => {
@@ -70,13 +70,13 @@ const merchantReducer = (state = initialState, action) => {
       return {
         ...state,
         sellFormData: {
-          name: '',
-          email: '',
-          phoneNumber: '',
-          brand: '',
-          business: ''
+          name: "",
+          email: "",
+          phone: "",
+          brand: "",
+          business: "",
         },
-        formErrors: {}
+        formErrors: {},
       };
     case SIGNUP_CHANGE:
       return {

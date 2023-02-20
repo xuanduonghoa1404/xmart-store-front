@@ -179,7 +179,6 @@ router.post("/list", async (req, res) => {
       let productAfterDiscount = getProductAfterDiscount(item, marketings);
       productList.push(getProductWithInventory(productAfterDiscount));
     }
-
     let a = productList && productList.length ? productList : products;
     res.status(200).json({
       products: a,
@@ -817,14 +816,51 @@ function getProductAfterDiscount(item, marketings) {
   if (marketings.length > 0) {
     let priceAfterDiscount = item.price;
     for (let marketing of marketings) {
-      let startDay = marketing.dateFrom
-        ? new Date(marketing.dateFrom).getTime()
-        : null;
-      let endDay = marketing.dateTo
-        ? new Date(marketing.dateTo).getTime()
-        : null;
-      let isValid =
-        startDay && today > startDay && (!endDay || (endDay && today < endDay));
+      let isValid = false;
+      item = getProductWithDateRemain(item, new Date());
+      let condition = marketing.condition;
+      let condition_value = marketing.condition_value;
+      if (condition === "ALL") {
+        let startDay = marketing.dateFrom
+          ? new Date(marketing.dateFrom).getTime()
+          : null;
+        let endDay = marketing.dateTo
+          ? new Date(marketing.dateTo).getTime()
+          : null;
+        isValid =
+          startDay &&
+          today > startDay &&
+          (!endDay || (endDay && today < endDay));
+        // if (!isValid) {
+        //   return item;
+        // }
+      } else if (condition === "DATE") {
+        item.remain.map((remain) => {
+          if (remain.quantity > 0 && condition_value >= remain.dateRemain) {
+            isValid = true;
+          }
+        });
+      } else if (condition === "QTY_GREATER") {
+        let totalQuantity = 0;
+        item.remain.map((remain) => {
+          if (remain.quantity > 0) {
+            totalQuantity += remain.quantity;
+          }
+        });
+        if (totalQuantity >= condition_value) {
+          isValid = true;
+        }
+      } else if (condition === "QTY_LESS") {
+        let totalQuantity = 0;
+        item.remain.map((remain) => {
+          if (remain.quantity > 0) {
+            totalQuantity += remain.quantity;
+          }
+        });
+        if (totalQuantity < condition_value) {
+          isValid = true;
+        }
+      }
       if (!isValid) {
         return item;
       }
@@ -891,4 +927,71 @@ function getProductAfterDiscount(item, marketings) {
   return item;
 }
 
+function getProductInventoryWithLocator(item, locatorId) {
+  let quantity = 0;
+  if (!item.inventory.length) {
+    quantity = 0;
+  } else {
+    item?.inventory?.forEach((i) => {
+      if (i.locator == locatorId) {
+        i.imports?.forEach((j) => {
+          quantity += j.quantity;
+        });
+      }
+    });
+  }
+  return {
+    ...item,
+    quantity: quantity,
+  };
+}
+
+function getProductWithDateRemain(item, date) {
+  let remain = [];
+  date = new Date(new Date(date).setHours(0, 0, 0));
+  if (item.inventory.length) {
+    item?.inventory?.forEach((i) => {
+      i?.imports?.forEach((j) => {
+        if (j.quantity > 0) {
+          let date_expiration = new Date(
+            new Date(j.date_expiration).setHours(0, 0, 0)
+          );
+          let dateRemain = Number.parseInt(
+            (date_expiration.getTime() - date.getTime()) / (24 * 60 * 60 * 1000)
+          );
+          remain.push({
+            date: j.date_expiration,
+            dateRemain: dateRemain,
+            quantity: j.quantity,
+          });
+        }
+      });
+    });
+  }
+
+  return {
+    ...item,
+    remain: remain,
+  };
+}
+
+async function checkAvailableInventoryLocatorWithCart(locatorId, cartId) {
+  let checkAvailable = true;
+  let cart = await Cart.findById(cartId).populate({
+    path: "products.product",
+  });
+  for (let cartItem of cart.products) {
+    let product = cartItem.product;
+    let quantity = cartItem.quantity;
+    let quantityInventory = getProductInventoryWithLocator(
+      product,
+      locatorId
+    ).quantity;
+    if (quantity > quantityInventory) {
+      checkAvailable = false;
+      return false;
+    }
+  }
+  return checkAvailable;
+}
 module.exports = router;

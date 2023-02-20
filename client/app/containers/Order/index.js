@@ -20,17 +20,17 @@ class Order extends React.PureComponent {
     const { user } = this.props;
 
     return (
-      <div className='product-dashboard'>
+      <div className="product-dashboard">
         <Switch>
-          <Route exact path='/dashboard/orders' component={List} />
-          {user.role === 'ROLE_ADMIN' && (
+          <Route exact path="/dashboard/orders" component={List} />
+          {user.role === "admin" && (
             <Route
               exact
-              path='/dashboard/orders/customers'
+              path="/dashboard/orders/customers"
               component={Customer}
             />
           )}
-          <Route path='*' component={Page404} />
+          <Route path="*" component={Page404} />
         </Switch>
       </div>
     );

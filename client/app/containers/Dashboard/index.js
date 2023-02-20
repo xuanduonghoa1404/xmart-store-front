@@ -30,22 +30,22 @@ class Dashboard extends React.PureComponent {
       <>
         {isLoading ? (
           <LoadingIndicator inline />
-        ) : user.role === 'ROLE_ADMIN' ? (
+        ) : user.role === "admin" ? (
           <Admin
             isMenuOpen={isMenuOpen}
-            links={dashboardLinks['ROLE_ADMIN']}
+            links={dashboardLinks["admin"]}
             toggleMenu={toggleDashboardMenu}
           />
-        ) : user.role === 'ROLE_MERCHANT' && user.merchant ? (
+        ) : user.role === "ROLE_MERCHANT" && user.merchant ? (
           <Merchant
             isMenuOpen={isMenuOpen}
-            links={dashboardLinks['ROLE_MERCHANT']}
+            links={dashboardLinks["ROLE_MERCHANT"]}
             toggleMenu={toggleDashboardMenu}
           />
         ) : (
           <Customer
             isMenuOpen={isMenuOpen}
-            links={dashboardLinks['ROLE_MEMBER']}
+            links={dashboardLinks["customer"]}
             toggleMenu={toggleDashboardMenu}
           />
         )}

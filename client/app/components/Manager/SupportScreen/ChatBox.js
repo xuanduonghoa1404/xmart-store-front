@@ -25,10 +25,10 @@ export default function ChatBox(props) {
       });
     }
     if (socket) {
-      socket.emit('connected', {
+      socket.emit("connected", {
         _id: userInfo._id,
-        name: userInfo.firstName + ' ' + userInfo.lastName,
-        isAdmin: userInfo.role == 'ROLE_ADMIN' ? true : false,
+        name: userInfo.firstName + " " + userInfo.lastName,
+        isAdmin: userInfo.role == "admin" ? true : false,
       });
       socket.on('message', (data) => {
         setMessages([...messages, { body: data.body, name: data.name }]);
@@ -49,10 +49,10 @@ export default function ChatBox(props) {
       setMessages([...messages, { body: messageBody, name: userInfo.firstName + ' ' + userInfo.lastName }]);
       setMessageBody('');
       setTimeout(() => {
-        socket.emit('onMessage', {
+        socket.emit("onMessage", {
           body: messageBody,
-          name: userInfo.firstName + ' ' + userInfo.lastName,
-          isAdmin: userInfo.role == 'ROLE_ADMIN' ? true : false,
+          name: userInfo.firstName + " " + userInfo.lastName,
+          isAdmin: userInfo.role == "admin" ? true : false,
           _id: userInfo._id,
         });
       }, 1000);

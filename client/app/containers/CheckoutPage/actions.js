@@ -13,6 +13,7 @@ import {
   FETCH_ADDRESSES,
   ADDRESS_CHANGE,
   SHIPPING_ADDRESS_CHANGE,
+  LOCATOR_ID_CHANGE,
   ADDRESS_EDIT_CHANGE,
   SET_ADDRESS_FORM_ERRORS,
   SET_ADDRESS_FORM_EDIT_ERRORS,
@@ -23,8 +24,8 @@ import {
   ADDRESS_SELECT,
   FETCH_ADDRESSES_SELECT,
 } from "./constants";
-import handleError from '../../utils/error';
-import { allFieldsValidation } from '../../utils/validation';
+import handleError from "../../utils/error";
+import { allFieldsValidation } from "../../utils/validation";
 
 export const addressChange = (name, value) => {
   let formData = {};
@@ -32,7 +33,7 @@ export const addressChange = (name, value) => {
 
   return {
     type: ADDRESS_CHANGE,
-    payload: formData
+    payload: formData,
   };
 };
 export const shippingAddressChange = (name, value) => {
@@ -42,6 +43,13 @@ export const shippingAddressChange = (name, value) => {
   return {
     type: SHIPPING_ADDRESS_CHANGE,
     payload: formData,
+  };
+};
+export const locatorChange = (value) => {
+  console.log("locatorChange", value);
+  return {
+    type: LOCATOR_ID_CHANGE,
+    payload: value,
   };
 };
 
