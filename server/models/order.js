@@ -47,6 +47,10 @@ const OrderSchema = new Schema({
     enum: ["Not processed", "Processing", "Shipped", "Delivered", "Cancelled"],
     default: "Not processed",
   },
+  locator: {
+    type: Schema.Types.ObjectId,
+    ref: "Locator",
+  },
   updated: Date,
   created: {
     type: Date,

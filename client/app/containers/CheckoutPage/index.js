@@ -43,6 +43,7 @@ class CheckoutPage extends React.PureComponent {
       formErrors,
       addressEditChange,
       shippingAddressChange,
+      locatorChange,
       defaultChange,
       updateAddress,
       selectAddress,
@@ -68,6 +69,7 @@ class CheckoutPage extends React.PureComponent {
                     formErrors={formErrors}
                     addressChange={addressEditChange}
                     shippingAddressChange={shippingAddressChange}
+                    locatorChange={locatorChange}
                     shippingAddress={shippingAddress}
                     selectAddress={selectAddress}
                     placeOrder={placeOrder}

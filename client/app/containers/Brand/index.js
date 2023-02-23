@@ -21,14 +21,14 @@ class Brand extends React.PureComponent {
     const { user } = this.props;
 
     return (
-      <div className='brand-dashboard'>
+      <div className="brand-dashboard">
         <Switch>
-          <Route exact path='/dashboard/brand' component={List} />
-          <Route exact path='/dashboard/brand/edit/:id' component={Edit} />
-          {user.role === 'ROLE_ADMIN' && (
-            <Route exact path='/dashboard/brand/add' component={Add} />
+          <Route exact path="/dashboard/brand" component={List} />
+          <Route exact path="/dashboard/brand/edit/:id" component={Edit} />
+          {user.role === "admin" && (
+            <Route exact path="/dashboard/brand/add" component={Add} />
           )}
-          <Route path='*' component={Page404} />
+          <Route path="*" component={Page404} />
         </Switch>
       </div>
     );

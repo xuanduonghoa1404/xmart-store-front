@@ -24,15 +24,7 @@ const AccountDetails = props => {
     <div className="account-details">
       <div className="info">
         <div className="desc">
-          <p className="one-line-ellipsis mr-3">
-            {user.provider === "email" ? (
-              user.email
-            ) : (
-              <span className="provider-email">
-                Logged in With {user.provider}
-              </span>
-            )}
-          </p>
+          <p className="one-line-ellipsis mr-3">{user.email}</p>
           <UserRole user={user} />
         </div>
       </div>

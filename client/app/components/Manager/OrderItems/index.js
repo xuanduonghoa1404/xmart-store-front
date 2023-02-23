@@ -46,7 +46,7 @@ const OrderItems = props => {
   };
 
   const renderItemsAction = item => {
-    const isAdmin = user.role === 'ROLE_ADMIN';
+    const isAdmin = user.role === "admin";
 
     if (item.status === 'Delivered') {
       return (

@@ -33,10 +33,13 @@ export default function SupportScreen(props) {
     if (!socket) {
       const sk = socketIOClient(ENDPOINT);
       setSocket(sk);
-      sk.emit('connected', {
+      sk.emit("connected", {
         _id: userInfo._id,
-        name:  userInfo.role == 'ROLE_ADMIN' ? 'Admin' : userInfo.firstName + ' ' + userInfo.lastName,
-        isAdmin: userInfo.role == 'ROLE_ADMIN' ? true : false,
+        name:
+          userInfo.role == "admin"
+            ? "Admin"
+            : userInfo.firstName + " " + userInfo.lastName,
+        isAdmin: userInfo.role == "admin" ? true : false,
       });
       sk.on('message', (data) => {
         if (allSelectedUser._id === data._id) {
@@ -95,15 +98,24 @@ export default function SupportScreen(props) {
     } else {
       allMessages = [
         ...allMessages,
-        { body: messageBody, name:  userInfo.role == 'ROLE_ADMIN' ? 'Admin' : userInfo.firstName + ' ' + userInfo.lastName },
+        {
+          body: messageBody,
+          name:
+            userInfo.role == "admin"
+              ? "Admin"
+              : userInfo.firstName + " " + userInfo.lastName,
+        },
       ];
       setMessages(allMessages);
       setMessageBody('');
       setTimeout(() => {
-        socket.emit('onMessage', {
+        socket.emit("onMessage", {
           body: messageBody,
-          name:  userInfo.role == 'ROLE_ADMIN' ? 'Admin' : userInfo.firstName + ' ' + userInfo.lastName,
-          isAdmin: userInfo.role == 'ROLE_ADMIN' ? true : false,
+          name:
+            userInfo.role == "admin"
+              ? "Admin"
+              : userInfo.firstName + " " + userInfo.lastName,
+          isAdmin: userInfo.role == "admin" ? true : false,
           _id: selectedUser._id,
         });
       }, 1000);

@@ -5,35 +5,35 @@ const { Schema } = Mongoose;
 const MerchantSchema = new Schema({
   name: {
     type: String,
-    trim: true
+    trim: true,
   },
   email: {
-    type: String
+    type: String,
   },
-  phoneNumber: {
-    type: String
+  phone: {
+    type: String,
   },
   brand: {
-    type: String
+    type: String,
   },
   business: {
     type: String,
-    trim: true
+    trim: true,
   },
   isActive: {
     type: Boolean,
-    default: false
+    default: false,
   },
   status: {
     type: String,
-    default: 'Waiting Approval',
-    enum: ['Waiting Approval', 'Rejected', 'Approved']
+    default: "Waiting Approval",
+    enum: ["Waiting Approval", "Rejected", "Approved"],
   },
   updated: Date,
   created: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 module.exports = Mongoose.model('Merchant', MerchantSchema);

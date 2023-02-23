@@ -21,14 +21,14 @@ class Category extends React.PureComponent {
     const { user } = this.props;
 
     return (
-      <div className='category-dashboard'>
+      <div className="category-dashboard">
         <Switch>
-          <Route exact path='/dashboard/category' component={List} />
-          <Route exact path='/dashboard/category/edit/:id' component={Edit} />
-          {/* {user.role === 'ROLE_ADMIN' && ( */}
-          <Route exact path='/dashboard/category/add' component={Add} />
+          <Route exact path="/dashboard/category" component={List} />
+          <Route exact path="/dashboard/category/edit/:id" component={Edit} />
+          {/* {user.role === 'admin' && ( */}
+          <Route exact path="/dashboard/category/add" component={Add} />
           {/* )} */}
-          <Route path='*' component={Page404} />
+          <Route path="*" component={Page404} />
         </Switch>
       </div>
     );

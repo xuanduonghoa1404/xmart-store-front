@@ -36,113 +36,113 @@ const EditProduct = props => {
   };
 
   return (
-    <div className='edit-product'>
+    <div className="edit-product">
       <form onSubmit={handleSubmit} noValidate>
         <Row>
-          <Col xs='12'>
+          <Col xs="12">
             <Input
-              type={'text'}
-              error={formErrors['name']}
-              label={'Name'}
-              name={'name'}
-              placeholder={'Product Name'}
+              type={"text"}
+              error={formErrors["name"]}
+              label={"Name"}
+              name={"name"}
+              placeholder={"Product Name"}
               value={product.name}
               onInputChange={(name, value) => {
                 productChange(name, value);
               }}
             />
           </Col>
-          <Col xs='12' md='12'>
+          <Col xs="12" md="12">
             <Input
-              type={'textarea'}
-              error={formErrors['description']}
-              label={'Description'}
-              name={'description'}
-              placeholder={'Product Description'}
+              type={"textarea"}
+              error={formErrors["description"]}
+              label={"Description"}
+              name={"description"}
+              placeholder={"Product Description"}
               value={product.description}
               onInputChange={(name, value) => {
                 productChange(name, value);
               }}
             />
           </Col>
-          <Col xs='12' lg='6'>
+          <Col xs="12" lg="6">
             <Input
-              type={'number'}
-              error={formErrors['quantity']}
-              label={'Quantity'}
-              name={'quantity'}
+              type={"number"}
+              error={formErrors["quantity"]}
+              label={"Quantity"}
+              name={"quantity"}
               decimals={false}
-              placeholder={'Product Quantity'}
+              placeholder={"Product Quantity"}
               value={product.quantity}
               onInputChange={(name, value) => {
                 productChange(name, value);
               }}
             />
           </Col>
-          <Col xs='12' lg='6'>
+          <Col xs="12" lg="6">
             <Input
-              type={'number'}
-              error={formErrors['price']}
-              label={'Price'}
-              name={'price'}
+              type={"number"}
+              error={formErrors["price"]}
+              label={"Price"}
+              name={"price"}
               min={1}
-              placeholder={'Product Price'}
+              placeholder={"Product Price"}
               value={product.price}
               onInputChange={(name, value) => {
                 productChange(name, value);
               }}
             />
           </Col>
-          <Col xs='12' md='12'>
+          <Col xs="12" md="12">
             <SelectOption
-              error={formErrors['taxable']}
-              label={'Taxable'}
+              error={formErrors["taxable"]}
+              label={"Taxable"}
               multi={false}
-              name={'taxable'}
+              name={"taxable"}
               value={[product.taxable ? taxableSelect[0] : taxableSelect[1]]}
               options={taxableSelect}
-              handleSelectChange={value => {
-                productChange('taxable', value.value);
+              handleSelectChange={(value) => {
+                productChange("taxable", value.value);
               }}
             />
           </Col>
-          {user.role === 'ROLE_ADMIN' && (
-            <Col xs='12' md='12'>
+          {user.role === "admin" && (
+            <Col xs="12" md="12">
               <SelectOption
-                error={formErrors['brand']}
-                label={'Select Brand'}
+                error={formErrors["brand"]}
+                label={"Select Brand"}
                 multi={false}
                 value={product.brand}
                 options={brands}
-                handleSelectChange={value => {
-                  productChange('brand', value);
+                handleSelectChange={(value) => {
+                  productChange("brand", value);
                 }}
               />
             </Col>
           )}
-          <Col xs='12' md='12' className='mt-3 mb-2'>
+          <Col xs="12" md="12" className="mt-3 mb-2">
             <Switch
               id={`enable-product-${product._id}`}
-              name={'isActive'}
-              label={'Active?'}
+              name={"isActive"}
+              label={"Active?"}
               checked={product?.isActive}
-              toggleCheckboxChange={value => {
-                productChange('isActive', value);
+              toggleCheckboxChange={(value) => {
+                productChange("isActive", value);
                 activateProduct(product._id, value);
               }}
             />
           </Col>
         </Row>
         <hr />
-        <div className='d-flex flex-column flex-md-row'>
+        <div className="d-flex flex-column flex-md-row">
           <Button
-            type='submit'
-            text='Save'
-            className='mb-3 mb-md-0 mr-0 mr-md-3'
+            type="submit"
+            text="Save"
+            className="mb-3 mb-md-0 mr-0 mr-md-3"
           />
           <Button
-            variant='danger'
-            text='Delete'
+            variant="danger"
+            text="Delete"
             onClick={() => deleteProduct(product._id)}
           />
         </div>

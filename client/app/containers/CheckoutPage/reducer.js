@@ -9,6 +9,7 @@ import {
   FETCH_ADDRESSES,
   ADDRESS_CHANGE,
   SHIPPING_ADDRESS_CHANGE,
+  LOCATOR_ID_CHANGE,
   ADDRESS_EDIT_CHANGE,
   SET_ADDRESS_FORM_ERRORS,
   SET_ADDRESS_FORM_EDIT_ERRORS,
@@ -37,7 +38,7 @@ const initialState = {
     isDefault: false,
   },
   cart: {
-    _id: ""
+    _id: "",
   },
   shippingAddress: {
     name: "",
@@ -48,6 +49,7 @@ const initialState = {
     country: "",
     zipCode: "",
   },
+  locatorIds: [],
   formErrors: {},
   editFormErrors: {},
 };
@@ -94,6 +96,11 @@ const checkoutReducer = (state = initialState, action) => {
           ...state.shippingAddress,
           ...action.payload,
         },
+      };
+    case LOCATOR_ID_CHANGE:
+      return {
+        ...state,
+        locatorIds: action.payload,
       };
     case ADDRESS_EDIT_CHANGE:
       return {

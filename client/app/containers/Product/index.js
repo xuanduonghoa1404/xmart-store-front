@@ -21,14 +21,14 @@ class Product extends React.PureComponent {
     const { user } = this.props;
 
     return (
-      <div className='product-dashboard'>
+      <div className="product-dashboard">
         <Switch>
-          <Route exact path='/dashboard/product' component={List} />
-          <Route exact path='/dashboard/product/edit/:id' component={Edit} />
-          {/* {user.role === 'ROLE_ADMIN' && ( */}
-          <Route exact path='/dashboard/product/add' component={Add} />
+          <Route exact path="/dashboard/product" component={List} />
+          <Route exact path="/dashboard/product/edit/:id" component={Edit} />
+          {/* {user.role === 'admin' && ( */}
+          <Route exact path="/dashboard/product/add" component={Add} />
           {/* )} */}
-          <Route path='*' component={Page404} />
+          <Route path="*" component={Page404} />
         </Switch>
       </div>
     );

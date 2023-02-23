@@ -26,16 +26,16 @@ class List extends React.PureComponent {
     return (
       <>
         <SubPage
-          title={user.role === 'ROLE_ADMIN' ? 'Brands' : 'Brand'}
-          actionTitle={user.role === 'ROLE_ADMIN' && 'Add'}
-          handleAction={() => history.push('/dashboard/brand/add')}
+          title={user.role === "admin" ? "Brands" : "Brand"}
+          actionTitle={user.role === "admin" && "Add"}
+          handleAction={() => history.push("/dashboard/brand/add")}
         >
           {isLoading ? (
             <LoadingIndicator inline />
           ) : brands.length > 0 ? (
             <BrandList brands={brands} user={user} />
           ) : (
-            <NotFound message='no brands found.' />
+            <NotFound message="no brands found." />
           )}
         </SubPage>
       </>

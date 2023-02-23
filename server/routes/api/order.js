@@ -11,8 +11,9 @@ const role = require('../../middleware/role');
 const mailgun = require('../../services/mailgun');
 const store = require('../../helpers/store');
 
-router.post('/add', auth, async (req, res) => {
+router.post("/add", auth, async (req, res) => {
   try {
+    const locatorIds = req.body.locatorIds;
     const cart = req.body.cartId;
     const total = req.body.total;
     const user = req.user._id;
@@ -25,61 +26,84 @@ router.post('/add', auth, async (req, res) => {
     const zipCode = req.body.shippingAddress.zipCode;
     const lng = Number(req.body.shippingAddress.lng);
     const lat = Number(req.body.shippingAddress.lat);
+    let locator = null;
+    console.log("locatorIds", locatorIds);
 
-    const order = new Order({
-      cart,
-      user,
-      total,
-      name,
-      address,
-      city,
-      phone,
-      state,
-      country,
-      zipCode,
-      lng,
-      lat,
-    });
+    for (let index = 0; index < locatorIds.length; index++) {
+      let check = await checkAvailableInventoryLocatorWithCart(
+        locatorIds[index],
+        cart
+      );
+      if (check) {
+        locator = locatorIds[index];
+        break;
+      }
+    }
+    console.log("locator", locator);
+    if (locator) {
+      let status = "Processing";
+      const order = new Order({
+        cart,
+        user,
+        total,
+        name,
+        address,
+        city,
+        phone,
+        state,
+        country,
+        zipCode,
+        lng,
+        lat,
+        locator,
+        status,
+      });
 
-    console.log("order", order);
-    const orderDoc = await order.save();
-    // const cartDoc = await Cart.findById(orderDoc.cart._id).populate({
-    //   path: 'products.product',
-    //   populate: {
-    //     path: 'brand'
-    //   }
-    // });
+      const orderDoc = await order.save();
+      res.status(200).json({
+        success: true,
+        message: `Đơn hàng đã được đặt thành công!`,
+        order: { _id: orderDoc._id },
+      });
+    } else {
+      const order = new Order({
+        cart,
+        user,
+        total,
+        name,
+        address,
+        city,
+        phone,
+        state,
+        country,
+        zipCode,
+        lng,
+        lat,
+        locator,
+      });
 
-    // const newOrder = {
-    //   _id: orderDoc._id,
-    //   created: orderDoc.created,
-    //   user: orderDoc.user,
-    //   total: orderDoc.total,
-    //   products: cartDoc.products
-    // };
-
-    // await mailgun.sendEmail(order.user.email, 'order-confirmation', newOrder);
-
-    res.status(200).json({
-      success: true,
-      message: `Your order has been placed successfully!`,
-      order: { _id: orderDoc._id },
-    });
+      const orderDoc = await order.save();
+      res.status(200).json({
+        success: true,
+        message: `Đơn hàng đã được đặt thành công! Chưa tìm được chi nhánh cửa hàng phù hợp!`,
+        order: { _id: orderDoc._id },
+      });
+    }
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again.",
     });
   }
 });
 
 // search orders api
-router.get('/search', auth, async (req, res) => {
+router.get("/search", auth, async (req, res) => {
   try {
     const { search } = req.query;
 
     if (!Mongoose.Types.ObjectId.isValid(search)) {
       return res.status(200).json({
-        orders: []
+        orders: [],
       });
     }
 
@@ -87,57 +111,57 @@ router.get('/search', auth, async (req, res) => {
 
     if (req.user.role === role.ROLES.Admin) {
       ordersDoc = await Order.find({
-        _id: Mongoose.Types.ObjectId(search)
+        _id: Mongoose.Types.ObjectId(search),
       }).populate({
-        path: 'cart',
+        path: "cart",
         populate: {
-          path: 'products.product',
+          path: "products.product",
           populate: {
-            path: 'brand'
-          }
-        }
+            path: "brand",
+          },
+        },
       });
     } else {
       const user = req.user._id;
       ordersDoc = await Order.find({
         _id: Mongoose.Types.ObjectId(search),
-        user
+        user,
       }).populate({
-        path: 'cart',
+        path: "cart",
         populate: {
-          path: 'products.product',
+          path: "products.product",
           populate: {
-            path: 'brand'
-          }
-        }
+            path: "brand",
+          },
+        },
       });
     }
 
-    ordersDoc = ordersDoc.filter(order => order.cart);
+    ordersDoc = ordersDoc.filter((order) => order.cart);
 
     if (ordersDoc.length > 0) {
-      const newOrders = ordersDoc.map(o => {
+      const newOrders = ordersDoc.map((o) => {
         return {
           _id: o._id,
           total: parseFloat(Number(o.total.toFixed(2))),
           created: o.created,
-          products: o.cart?.products
+          products: o.cart?.products,
         };
       });
 
-      let orders = newOrders.map(o => store.caculateTaxAmount(o));
+      let orders = newOrders.map((o) => store.caculateTaxAmount(o));
       orders.sort((a, b) => b.created - a.created);
       res.status(200).json({
-        orders
+        orders,
       });
     } else {
       res.status(200).json({
-        orders: []
+        orders: [],
       });
     }
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again.",
     });
   }
 });
@@ -254,7 +278,7 @@ router.get("/:orderId", auth, async (req, res) => {
   }
 });
 
-router.delete('/cancel/:orderId', auth, async (req, res) => {
+router.delete("/cancel/:orderId", auth, async (req, res) => {
   try {
     const orderId = req.params.orderId;
 
@@ -267,40 +291,40 @@ router.delete('/cancel/:orderId', auth, async (req, res) => {
     await Cart.deleteOne({ _id: order.cart });
 
     res.status(200).json({
-      success: true
+      success: true,
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again.",
     });
   }
 });
 
-router.put('/status/item/:itemId', auth, async (req, res) => {
+router.put("/status/item/:itemId", auth, async (req, res) => {
   try {
     const itemId = req.params.itemId;
     const orderId = req.body.orderId;
     const cartId = req.body.cartId;
-    const status = req.body.status || 'Cancelled';
+    const status = req.body.status || "Cancelled";
 
-    const foundCart = await Cart.findOne({ 'products._id': itemId });
-    const foundCartProduct = foundCart.products.find(p => p._id == itemId);
+    const foundCart = await Cart.findOne({ "products._id": itemId });
+    const foundCartProduct = foundCart.products.find((p) => p._id == itemId);
 
     await Cart.updateOne(
-      { 'products._id': itemId },
+      { "products._id": itemId },
       {
-        'products.$.status': status
+        "products.$.status": status,
       }
     );
 
-    if (status === 'Cancelled') {
+    if (status === "Cancelled") {
       await Product.updateOne(
         { _id: foundCartProduct.product },
         { $inc: { quantity: foundCartProduct.quantity } }
       );
 
       const cart = await Cart.findOne({ _id: cartId });
-      const items = cart.products.filter(item => item.status === 'Cancelled');
+      const items = cart.products.filter((item) => item.status === "Cancelled");
 
       // All items are cancelled => Cancel order
       if (cart.products.length === items.length) {
@@ -311,39 +335,87 @@ router.put('/status/item/:itemId', auth, async (req, res) => {
           success: true,
           orderCancelled: true,
           message: `${
-            req.user.role === role.ROLES.Admin ? 'Order' : 'Your order'
-          } has been cancelled successfully`
+            req.user.role === role.ROLES.Admin ? "Order" : "Your order"
+          } has been cancelled successfully`,
         });
       }
 
       return res.status(200).json({
         success: true,
-        message: 'Item has been cancelled successfully!'
+        message: "Item has been cancelled successfully!",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: 'Item status has been updated successfully!'
+      message: "Item status has been updated successfully!",
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again.",
     });
   }
 });
 
-const increaseQuantity = products => {
-  let bulkOptions = products.map(item => {
+const increaseQuantity = (products) => {
+  let bulkOptions = products.map((item) => {
     return {
       updateOne: {
         filter: { _id: item.product },
-        update: { $inc: { quantity: item.quantity } }
-      }
+        update: { $inc: { quantity: item.quantity } },
+      },
     };
   });
 
   Product.bulkWrite(bulkOptions);
 };
+
+function getProductInventoryWithLocator(item, locatorId) {
+  let quantity = 0;
+  if (!item.inventory.length) {
+    quantity = 0;
+  } else {
+    item?.inventory?.forEach((i) => {
+      if (i.locator == locatorId) {
+        i.imports?.forEach((j) => {
+          quantity += j.quantity;
+        });
+      }
+    });
+  }
+  return {
+    ...item,
+    quantity: quantity,
+  };
+}
+
+async function checkAvailableInventoryLocatorWithCart(locatorId, cartId) {
+  let checkAvailable = true;
+  let cart = await Cart.findById(cartId).populate({
+    path: "products.product",
+  });
+  console.log("cart", cart);
+  for (let cartItem of cart.products) {
+    let product = cartItem.product;
+    let quantity = cartItem.quantity;
+    console.log("cartItem.product", product);
+    let quantityInventory = getProductInventoryWithLocator(
+      product,
+      locatorId
+    ).quantity;
+    console.log(
+      "quantity",
+      locatorId,
+      quantity,
+      quantityInventory,
+      quantity > quantityInventory
+    );
+    if (quantity > quantityInventory) {
+      checkAvailable = false;
+      return false;
+    }
+  }
+  return checkAvailable;
+}
 
 module.exports = router;

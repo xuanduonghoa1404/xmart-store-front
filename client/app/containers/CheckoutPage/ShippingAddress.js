@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Map, Marker, TileLayer, Tooltip as TooltipMap } from "react-leaflet";
 import L from "leaflet";
+import leafletKnn from "leaflet-knn";
 import * as ELG from "esri-leaflet-geocoder";
 import { Row, Col } from "reactstrap";
 import Input from "../../components/Common/Input";
@@ -14,6 +15,7 @@ const ShippingAddress = (props) => {
     locators,
     formErrors,
     shippingAddressChange,
+    locatorChange,
     shippingAddress,
     selectAddress,
     placeOrder,
@@ -113,10 +115,60 @@ const ShippingAddress = (props) => {
           );
           shippingAddressChange("state", result.address.District || "");
           shippingAddressChange("zipCode", result.address.Postal || "");
+          let locatorSorted = handleSelectLocatorByDistance(
+            Math.round(result.latlng.lat * 100000) / 100000,
+            Math.round(result.latlng.lng * 100000) / 100000
+          );
+          // locatorSorted = locatorSorted?.map((locator) => {
+          //   return {
+          //     lat: locator.lat,
+          //     lng: locator.lon,
+          //   };
+          // });
+          // console.log("locatorSorted", locatorSorted);
+          locatorChange(locatorSorted);
           marker.openPopup();
         });
     });
   }, []);
+
+  const convertLngLatToObjectJSON = (lng, lat) => {
+    return {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [lng, lat],
+      },
+    };
+  };
+  const handleSelectLocatorByDistance = (lat, lng) => {
+    const listLocatorsFeature = {
+      type: "FeatureCollection",
+      features: [],
+    };
+    locators.map((locator) => {
+      listLocatorsFeature.features.push(
+        convertLngLatToObjectJSON(locator?.lng || 0, locator?.lat || 0)
+      );
+    });
+    console.log("locators", locators);
+
+    let gj = L.geoJson(listLocatorsFeature);
+    let nearest = leafletKnn(gj).nearest(L.latLng(lat, lng), locators.length);
+    let locatorSorted = [];
+    nearest.map((item) => {
+      let selected = locators.find(
+        (locator) =>
+          locator?.lat?.toString() == item?.lat?.toString() &&
+          locator?.lng?.toString() == item?.lon?.toString()
+      );
+      locatorSorted.push(selected._id);
+    });
+    console.log("locatorSorted", locatorSorted);
+
+    return locatorSorted;
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     updateAddress();
@@ -174,8 +226,8 @@ const ShippingAddress = (props) => {
               (item) => item._id == value.value
             );
             addressSelected = addressSelected[0];
-            console.log("addaddressSelectedress", addressSelected);
-
+            setLat(Math.round(addressSelected.lat * 100000) / 100000 || 0);
+            setLng(Math.round(addressSelected.lat * 100000) / 100000 || 0);
             shippingAddressChange(
               "lat",
               Math.round(addressSelected.lat * 100000) / 100000 || 0
@@ -192,6 +244,8 @@ const ShippingAddress = (props) => {
             );
             shippingAddressChange("state", addressSelected.state || "");
             shippingAddressChange("zipCode", addressSelected.zipCode || "");
+            shippingAddressChange("name", addressSelected.name || "");
+            shippingAddressChange("phone", addressSelected.phone || "");
           }}
           label={"Chọn địa chỉ của bạn"}
         ></SelectOption>

@@ -1,5 +1,5 @@
 {
-  "ROLE_ADMIN": [
+  "admin": [
     { "to": "", "name": "Account Details" },
     { "to": "/security", "name": "Account Security" },
     { "to": "/address", "name": "Address" },
@@ -24,7 +24,7 @@
     { "to": "/wishlist", "name": "WishList" },
     { "to": "/support", "name": "Support" }
   ],
-  "ROLE_MEMBER": [
+  "customer": [
     { "to": "", "name": "Cập nhật tài khoản" },
     { "to": "/address", "name": "Địa chỉ" },
     { "to": "/orders", "name": "Đơn hàng" }
