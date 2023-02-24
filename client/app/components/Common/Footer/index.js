@@ -93,7 +93,11 @@ const Footer = () => {
         </div>
         <ul className="footer-social-item">
           <li>
-            <a href="/#facebook" rel="noreferrer noopener" target="_blank">
+            <a
+              href="https://www.facebook.com/xuanduong.hoa.9"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
               <span className="facebook-icon" />
             </a>
           </li>

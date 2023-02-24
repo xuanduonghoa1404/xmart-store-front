@@ -2,7 +2,9 @@
 .header-info {
   padding: 10px 0px;
   background-color: $theme-light-black;
-
+@include media-breakpoint-down(sm) {
+    display: none;
+  }
   .fa,
   span {
     color: $white;
@@ -37,7 +39,9 @@
   // margin-bottom: 10px;
   // height: 95px;
   padding: 16px 0px;
-
+@include media-breakpoint-down(sm) {
+    padding: 0px 0px 5px;
+  }
   @include media-breakpoint-up(lg) {
     // height: 60px;
 
@@ -57,6 +61,14 @@
     &:hover {
       opacity: 0.5;
     }
+                                                                                                                                                                                                                                                                .cart-bag {
+                                                                                                                                                                                                                                                                  background-image: url(/images/icon/icon.png);
+                                                                                                                                                                                                                                                                  background-size: 1350px;
+                                                                                                                                                                                                                                                                  background-position: -281px -163px;
+                                                                                                                                                                                                                                                                  width: 26px;
+                                                                                                                                                                                                                                                                  height: 26px;
+                                                                                                                                                                                                                                                                  display: block;
+                                                                                                                                                                                                                                                                }
   }
 
   .fa {
@@ -107,14 +119,22 @@
     .nav-link {
       padding-top: 0;
       padding-bottom: 0;
-
+@include media-breakpoint-down(sm) {
+    display: none;
+  }
       &.active {
         color: $white !important;
       }
     }
 .dropdown.nav-item {
+  @include media-breakpoint-down(sm) {
+      right: -25px;
+    }
   a {
     display: flex;
+    @include media-breakpoint-down(sm) {
+        font-size: 0;
+      }
   }
 
 a:before {
@@ -123,6 +143,11 @@ a:before {
   background-position: -167px -850px;
   width: 22px;
   height: 22px;
+  @include media-breakpoint-down(sm) {
+      background-position: -44px -847px;
+      width: 27px;
+      height: 27px;
+    }
   display: block;
   content: '';
     margin-right: 5px;
@@ -153,6 +178,9 @@ a:before {
       position: relative;
       @include media-breakpoint-down(sm) {
         margin-right: 15px;
+        position: absolute;
+          top: -30px;
+          right: 30px;
       }
     }
   }
@@ -196,7 +224,14 @@ a:before {
     @include flex();
     flex-wrap: wrap;
     justify-content: space-between;
-  }
+    .header-links-cart {
+        .btn-icon {
+          position: absolute;
+          top: -1px;
+          right: 62px;
+        }
+      }
+}
 }
 
 // mini brand
