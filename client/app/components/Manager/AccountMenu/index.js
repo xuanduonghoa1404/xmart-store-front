@@ -17,7 +17,7 @@ const AccountMenu = props => {
   return (
     <div className="panel-sidebar">
       <Button
-        text="Menu"
+        text="Tài khoản"
         className={`${isMenuOpen ? "menu-panel" : "menu-panel collapse"}`}
         ariaExpanded={isMenuOpen ? "true" : "false"}
         // ariaLabel={isMenuOpen ? 'dashboard menu expanded' : 'dashboard menu collapse'}

@@ -47,7 +47,11 @@ router.get("/item/:slug", async (req, res) => {
       createdAt: -1,
     });
     let productAfterDiscount = getProductAfterDiscount(productDoc, marketings);
-    let product = getProductWithInventory(productAfterDiscount._doc);
+    let product = getProductWithInventory(
+      productAfterDiscount._doc
+        ? productAfterDiscount._doc
+        : productAfterDiscount
+    );
     res.status(200).json({
       product: product,
     });
@@ -795,6 +799,7 @@ async function getProductById(req, res, next) {
   next();
 }
 function getProductWithInventory(item) {
+  console.log("getProductWithInventory", item);
   let quantity = 0;
   if (!item.inventory.length) {
     quantity = 0;
@@ -842,7 +847,8 @@ function getProductAfterDiscount(item, marketings) {
         });
       } else if (condition === "QTY_GREATER") {
         let totalQuantity = 0;
-        item.remain.map((remain) => {
+        console.log("QTY_GREATER item", item);
+        item?.remain?.map((remain) => {
           if (remain.quantity > 0) {
             totalQuantity += remain.quantity;
           }
@@ -968,9 +974,9 @@ function getProductWithDateRemain(item, date) {
       });
     });
   }
-
+  let i = item._doc ? item._doc : item;
   return {
-    ...item,
+    ...i,
     remain: remain,
   };
 }

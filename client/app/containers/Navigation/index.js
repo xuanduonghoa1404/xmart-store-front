@@ -236,7 +236,9 @@
                    icon={<BarsIcon />}
                    onClick={() => this.toggleMenu()}
                  />
-                 <CartIcon cartItems={cartItems} onClick={toggleCart} />
+                 <div className="header-links-cart">
+                   <CartIcon cartItems={cartItems} onClick={toggleCart} />
+                 </div>
                </div>
              </Col>
              <Col

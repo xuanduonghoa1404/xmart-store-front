@@ -119,6 +119,9 @@
       margin-left: 5px;
       -webkit-transition: $layout-transition-speed;
       transition: $layout-transition-speed;
+      @include media-breakpoint-down(sm) {
+          display: none;
+        }
     }
   }
 }
