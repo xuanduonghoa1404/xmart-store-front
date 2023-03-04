@@ -47,13 +47,13 @@ class Pagination extends React.Component {
     }
 
     return (
-      <RPagination className='pagination'>
+      <RPagination className="pagination">
         <PaginationItem>
           {prev === 0 ? (
-            <PaginationLink disabled>Prev</PaginationLink>
+            <PaginationLink disabled>Trước</PaginationLink>
           ) : (
             <PaginationLink onClick={this.handleClick} id={prev} href={prev}>
-              Prev
+              Trước
             </PaginationLink>
           )}
         </PaginationItem>
@@ -76,14 +76,14 @@ class Pagination extends React.Component {
 
         <PaginationItem>
           {currentPage === last ? (
-            <PaginationLink disabled>Next</PaginationLink>
+            <PaginationLink disabled>Sau</PaginationLink>
           ) : (
             <PaginationLink
               onClick={this.handleClick}
               id={pageNumbers[currentPage]}
               href={pageNumbers[currentPage]}
             >
-              Next
+              Sau
             </PaginationLink>
           )}
         </PaginationItem>
