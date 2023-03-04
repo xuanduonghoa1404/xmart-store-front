@@ -11,6 +11,7 @@ const orderRoutes = require("./order");
 const typeRoutes = require("./type");
 const locatorRoutes = require("./locator");
 const marketingRoutes = require("./marketing");
+const shopRoutes = require("./shop");
 
 // auth routes
 router.use("/auth", authRoutes);
@@ -42,7 +43,10 @@ router.use("/order", orderRoutes);
 // locator routes
 router.use("/locator", locatorRoutes);
 
-// locator routes
+// marketing routes
 router.use("/marketing", marketingRoutes);
+
+// shop routes
+router.use("/shop", shopRoutes);
 
 module.exports = router;

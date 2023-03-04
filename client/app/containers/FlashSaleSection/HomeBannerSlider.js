@@ -2,13 +2,20 @@ import React from "react";
 
 import SwiperContainer from "../../components/Common/SwiperContainer/SwiperContainer";
 
-const HomeBannerSlider = () => {
-  const imgsArr = [
-    "https://res.cloudinary.com/hoaduonghx/image/upload/v1670163364/image/Banner6_pi5vpd.png",
-    "https://res.cloudinary.com/hoaduonghx/image/upload/v1670420289/image/banner9_wvgkqt.png",
-    "https://res.cloudinary.com/hoaduonghx/image/upload/v1670163364/image/Banner6_pi5vpd.png",
-    "https://res.cloudinary.com/hoaduonghx/image/upload/v1670420289/image/banner9_wvgkqt.png",
-  ];
+const HomeBannerSlider = (props) => {
+  console.log("props", props);
+  const shop = props?.shop;
+  const imageBanner = shop?.imageBanner ? shop.imageBanner.split("\n") : [];
+  console.log("imageBanner", imageBanner, imageBanner && imageBanner.length);
+  const imgsArr =
+    imageBanner && imageBanner.length
+      ? imageBanner
+      : [
+          "https://res.cloudinary.com/hoaduonghx/image/upload/v1670163364/image/Banner6_pi5vpd.png",
+          "https://res.cloudinary.com/hoaduonghx/image/upload/v1670420289/image/banner9_wvgkqt.png",
+          "https://res.cloudinary.com/hoaduonghx/image/upload/v1670163364/image/Banner6_pi5vpd.png",
+          "https://res.cloudinary.com/hoaduonghx/image/upload/v1670420289/image/banner9_wvgkqt.png",
+        ];
 
   const imgRender = () =>
     imgsArr.map((img, idx) => (

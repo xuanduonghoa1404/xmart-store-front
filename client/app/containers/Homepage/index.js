@@ -19,15 +19,17 @@ import HomeBannerSlider from "../FlashSaleSection/HomeBannerSlider";
 
 class Homepage extends React.PureComponent {
   componentDidMount() {
+    console.log("componentDidMount Homepage");
     this.props.fetchStoreCategories();
+    this.props.fetchShop();
   }
 
   render() {
-    const { categories, marketing } = this.props;
+    const { categories, marketing, shop } = this.props;
     return (
       <div className="homepage">
         <Row className="flex-row mb-3">
-          <HomeBannerSlider />
+          <HomeBannerSlider shop={shop} />
           <br />
           <ShopByCategory categories={categories} />
         </Row>
@@ -92,6 +94,7 @@ class Homepage extends React.PureComponent {
 const mapStateToProps = (state) => {
   return {
     categories: state.homepage.categories,
+    shop: state.homepage.shop,
     marketing: state.navigation.marketing,
   };
 };
