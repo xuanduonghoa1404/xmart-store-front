@@ -11,9 +11,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import actions from '../../actions';
 
-import List from './List';
-import Add from './Add';
-import Edit from './Edit';
+import List from "./List";
 import Page404 from '../../components/Common/Page404';
 
 class Category extends React.PureComponent {
@@ -24,10 +22,6 @@ class Category extends React.PureComponent {
       <div className="category-dashboard">
         <Switch>
           <Route exact path="/dashboard/category" component={List} />
-          <Route exact path="/dashboard/category/edit/:id" component={Edit} />
-          {/* {user.role === 'admin' && ( */}
-          <Route exact path="/dashboard/category/add" component={Add} />
-          {/* )} */}
           <Route path="*" component={Page404} />
         </Switch>
       </div>

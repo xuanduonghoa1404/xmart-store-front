@@ -14,23 +14,20 @@ import actions from '../../actions';
 
 // routes
 import Login from '../Login';
-import Signup from '../Signup';
-import MerchantSignup from '../MerchantSignup';
-import HomePage from '../Homepage';
-import Dashboard from '../Dashboard';
-import Navigation from '../Navigation';
-import Authentication from '../Authentication';
-import Notification from '../Notification';
-import ForgotPassword from '../ForgotPassword';
-import ResetPassword from '../ResetPassword';
-import Shop from '../Shop';
-import BrandsPage from '../BrandsPage';
-import ProductPage from '../ProductPage';
-import Sell from '../Sell';
-import Contact from '../Contact';
-import OrderSuccess from '../OrderSuccess';
-import OrderPage from '../OrderPage';
-import CheckoutPage from '../CheckoutPage';
+import Signup from "../Signup";
+import HomePage from "../Homepage";
+import Dashboard from "../Dashboard";
+import Navigation from "../Navigation";
+import Authentication from "../Authentication";
+import Notification from "../Notification";
+import ForgotPassword from "../ForgotPassword";
+import ResetPassword from "../ResetPassword";
+import Shop from "../Shop";
+import ProductPage from "../ProductPage";
+import Contact from "../Contact";
+import OrderSuccess from "../OrderSuccess";
+import OrderPage from "../OrderPage";
+import CheckoutPage from "../CheckoutPage";
 import Locator from "../Locator";
 import AuthSuccess from "../AuthSuccess";
 
@@ -73,9 +70,7 @@ class Application extends React.PureComponent {
               <Switch>
                 <Route exact path="/" component={HomePage} />
                 <Route path="/shop" component={Shop} />
-                <Route path="/sell" component={Sell} />
                 <Route path="/contact" component={Contact} />
-                <Route path="/brands" component={BrandsPage} />
                 <Route path="/product/:slug" component={ProductPage} />
                 <Route path="/order/success/:id" component={OrderSuccess} />
                 <Route path="/order/:id" component={OrderPage} />
@@ -83,10 +78,6 @@ class Application extends React.PureComponent {
                 <Route path="/login" component={Login} />
                 <Route path="/locator" component={Locator} />
                 <Route path="/register" component={Signup} />
-                <Route
-                  path="/merchant-signup/:token"
-                  component={MerchantSignup}
-                />
                 <Route path="/forgot-password" component={ForgotPassword} />
                 <Route
                   path="/reset-password/:token"

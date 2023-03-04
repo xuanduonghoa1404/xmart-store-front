@@ -30,43 +30,36 @@
  
  import Button from '../../components/Common/Button';
  import CartIcon from '../../components/Common/CartIcon';
- import { BarsIcon } from '../../components/Common/Icon';
- import MiniBrand from '../../components/Store//MiniBrand';
+ import { BarsIcon } from "../../components/Common/Icon";
  import Menu from '../NavigationMenu';
  import Cart from '../Cart';
  
  class Navigation extends React.PureComponent {
    componentDidMount() {
-     this.props.fetchStoreBrands();
      this.props.fetchStoreCategories();
      this.props.fetchLocator();
      this.props.fetchMarketing();
    }
- 
-   toggleBrand() {
-     this.props.fetchStoreBrands();
-     this.props.toggleBrand();
-   }
- 
+
    toggleMenu() {
      this.props.fetchStoreCategories();
      this.props.toggleMenu();
    }
- 
+
    getSuggestionValue(suggestion) {
      return suggestion.name;
    }
- 
+
    renderSuggestion(suggestion, { query, isHighlighted }) {
      const BoldName = (suggestion, query) => {
        const matches = AutosuggestHighlightMatch(suggestion.name, query);
        const parts = AutosuggestHighlightParse(suggestion.name, matches);
- 
+
        return (
          <div>
            {parts.map((part, index) => {
              const className = part.highlight
-               ? 'react-autosuggest__suggestion-match'
+               ? "react-autosuggest__suggestion-match"
                : null;
              return (
                <span className={className} key={index}>
@@ -77,7 +70,7 @@
          </div>
        );
      };
- 
+
      return (
        <Link to={`/product/${suggestion.slug}`}>
          <div className="d-flex">
@@ -118,7 +111,7 @@
        </Link>
      );
    }
- 
+
    render() {
      const {
        history,
@@ -137,17 +130,17 @@
        suggestions,
        onSearch,
        onSuggestionsFetchRequested,
-       onSuggestionsClearRequested
+       onSuggestionsClearRequested,
      } = this.props;
- 
+
      const inputProps = {
-       placeholder: 'Tìm kiếm sản phẩm',
+       placeholder: "Tìm kiếm sản phẩm",
        value: searchValue,
        onChange: (_, { newValue }) => {
          onSearch(newValue);
-       }
+       },
      };
- 
+
      return (
        <header className="header fixed-mobile-header">
          <div className="header-info">
@@ -361,19 +354,18 @@
      );
    }
  }
- 
- const mapStateToProps = state => {
+
+ const mapStateToProps = (state) => {
    return {
      isMenuOpen: state.navigation.isMenuOpen,
      isCartOpen: state.navigation.isCartOpen,
      isBrandOpen: state.navigation.isBrandOpen,
      cartItems: state.cart.cartItems,
-     brands: state.brand.storeBrands,
      categories: state.category.storeCategories,
      authenticated: state.authentication.authenticated,
      user: state.account.user,
      searchValue: state.navigation.searchValue,
-     suggestions: state.navigation.searchSuggestions
+     suggestions: state.navigation.searchSuggestions,
    };
  };
  

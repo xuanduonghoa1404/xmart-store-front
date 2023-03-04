@@ -5,23 +5,9 @@
     { "to": "/address", "name": "Address" },
     { "to": "/product", "name": "Products" },
     { "to": "/category", "name": "Categories" },
-    { "to": "/brand", "name": "Brands" },
     { "to": "/users", "name": "Users" },
-    { "to": "/merchants", "name": "Merchants" },
     { "to": "/orders", "name": "Orders" },
-    { "to": "/review", "name": "Reviews" },
     { "to": "/locator", "name": "Locator" },
-    { "to": "/wishlist", "name": "WishList" },
-    { "to": "/support", "name": "Support" }
-  ],
-  "ROLE_MERCHANT": [
-    { "to": "", "name": "Account Details" },
-    { "to": "/security", "name": "Account Security" },
-    { "to": "/address", "name": "Address" },
-    { "to": "/brand", "name": "Brand" },
-    { "to": "/product", "name": "Products" },
-    { "to": "/orders", "name": "Orders" },
-    { "to": "/wishlist", "name": "WishList" },
     { "to": "/support", "name": "Support" }
   ],
   "customer": [

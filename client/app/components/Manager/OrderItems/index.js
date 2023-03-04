@@ -9,8 +9,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, DropdownItem } from 'reactstrap';
 
-import Button from '../../Common/Button';
-import DropdownConfirm from '../../Common/DropdownConfirm';
+import Button from "../../Common/Button";
 
 const statusMap = new Map();
 statusMap.set("Not processed", "Chưa xử lý");
@@ -21,21 +20,21 @@ statusMap.set("Cancelled", "Đã hủy");
 const OrderItems = props => {
   const { order, user, updateOrderItemStatus } = props;
 
-  const renderPopoverContent = item => {
+  const renderPopoverContent = (item) => {
     const statuses = [
-      'Not processed',
-      'Processing',
-      'Shipped',
-      'Delivered',
-      'Cancelled'
+      "Not processed",
+      "Processing",
+      "Shipped",
+      "Delivered",
+      "Cancelled",
     ];
 
     return (
-      <div className='d-flex flex-column align-items-center justify-content-center'>
+      <div className="d-flex flex-column align-items-center justify-content-center">
         {statuses.map((s, i) => (
           <DropdownItem
             key={`${s}-${i}`}
-            className={s === item?.status ? 'active' : ''}
+            className={s === item?.status ? "active" : ""}
             onClick={() => updateOrderItemStatus(item._id, s)}
           >
             {s}
@@ -43,50 +42,6 @@ const OrderItems = props => {
         ))}
       </div>
     );
-  };
-
-  const renderItemsAction = item => {
-    const isAdmin = user.role === "admin";
-
-    if (item.status === 'Delivered') {
-      return (
-        <Link
-          to={`/product/${item.product.slug}`}
-          className='btn-link text-center py-2 fs-12'
-          style={{ minWidth: 120 }}
-        >
-          Reivew Product
-        </Link>
-      );
-    } else if (item.status !== 'Cancelled') {
-      if (!isAdmin) {
-        return (
-          <DropdownConfirm label='Cancel'>
-            <div className='d-flex flex-column align-items-center justify-content-center p-2'>
-              <p className='text-center mb-2'>{`Are you sure you want to cancel ${item.product?.name}.`}</p>
-              <Button
-                variant='danger'
-                id='CancelOrderItemPopover'
-                size='sm'
-                text='Confirm Cancel'
-                role='menuitem'
-                className='cancel-order-btn'
-                onClick={() => updateOrderItemStatus(item._id, 'Cancelled')}
-              />
-            </div>
-          </DropdownConfirm>
-        );
-      } else {
-        return (
-          <DropdownConfirm
-            label={item.product && item.status}
-            className={isAdmin ? 'admin' : ''}
-          >
-            {renderPopoverContent(item)}
-          </DropdownConfirm>
-        );
-      }
-    }
   };
 
   return (
@@ -165,11 +120,6 @@ const OrderItems = props => {
                   </div>
                 </div>
               </div>
-              {/* {item.product && (
-                <div className="text-right mt-2 mt-md-0">
-                  {renderItemsAction(item)}
-                </div>
-              )} */}
             </div>
           </Col>
         ))}

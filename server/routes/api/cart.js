@@ -35,7 +35,7 @@ router.post('/add', auth, async (req, res) => {
   }
 });
 
-router.post("/update", auth, async (req, res) => {
+router.post("/update", async (req, res) => {
   try {
     const cart = req.body.cart;
     const cartItems = cart.cartItems;
