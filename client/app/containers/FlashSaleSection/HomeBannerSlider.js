@@ -3,10 +3,8 @@ import React from "react";
 import SwiperContainer from "../../components/Common/SwiperContainer/SwiperContainer";
 
 const HomeBannerSlider = (props) => {
-  console.log("props", props);
   const shop = props?.shop;
   const imageBanner = shop?.imageBanner ? shop.imageBanner.split("\n") : [];
-  console.log("imageBanner", imageBanner, imageBanner && imageBanner.length);
   const imgsArr =
     imageBanner && imageBanner.length
       ? imageBanner

@@ -1,8 +1,5 @@
 import React from "react";
 
-import img1 from "./Imgs/lg-img-1.jpg";
-import img2 from "./Imgs/lg-img-2.jpg";
-import img3 from "./Imgs/lg-img-3.jpg";
 import SwiperContainer from "../../components/Common/SwiperContainer/SwiperContainer";
 
 const FlashSaleMaxSlider = (props) => {
@@ -44,7 +41,7 @@ const FlashSaleMaxSlider = (props) => {
       center={false}
       responsive={responsive}
       autoplay={{
-        delay: 2700,
+        delay: 3000,
         disableOnInteraction: false,
       }}
       loop={true}
