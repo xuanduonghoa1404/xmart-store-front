@@ -7,9 +7,8 @@ const Order = require('../../models/order');
 const Cart = require('../../models/cart');
 const Product = require('../../models/product');
 const auth = require('../../middleware/auth');
-const role = require('../../middleware/role');
-const mailgun = require('../../services/mailgun');
-const store = require('../../helpers/store');
+const role = require("../../middleware/role");
+const store = require("../../helpers/store");
 
 router.post("/add", auth, async (req, res) => {
   try {
@@ -27,8 +26,8 @@ router.post("/add", auth, async (req, res) => {
     const lng = Number(req.body.shippingAddress.lng);
     const lat = Number(req.body.shippingAddress.lat);
     let locator = null;
-    console.log("locatorIds", locatorIds);
-
+    let products = await Product.find({ status: true });
+    let carts = await Cart.findOne({ _id: cart });
     for (let index = 0; index < locatorIds.length; index++) {
       let check = await checkAvailableInventoryLocatorWithCart(
         locatorIds[index],
@@ -39,7 +38,7 @@ router.post("/add", auth, async (req, res) => {
         break;
       }
     }
-    console.log("locator", locator);
+    decreaseQuantity(carts.products, locator, products);
     if (locator) {
       let status = "Processing";
       const order = new Order({
@@ -363,6 +362,42 @@ const increaseQuantity = (products) => {
       updateOne: {
         filter: { _id: item.product },
         update: { $inc: { quantity: item.quantity } },
+      },
+    };
+  });
+
+  Product.bulkWrite(bulkOptions);
+};
+
+const decreaseQuantity = (products, locatorIds, listProducts) => {
+  let bulkOptions = products.map((item) => {
+    let product = listProducts.find(
+      (p) => p._id.toString() === item.product.toString()
+    );
+    let quantityPurchase = item.quantity;
+    let inventory = product.inventory;
+    let newInventory = inventory.filter((imports) => {
+      if (imports.locator.toString() === locatorIds.toString()) {
+        let importList = imports.imports.sort(
+          (a, b) => a.date_expiration - b.date_expiration
+        );
+        let newImport = importList.filter((imp) => {
+          if (quantityPurchase > 0) {
+            if (imp.quantity >= quantityPurchase) {
+              imp.quantity = imp.quantity - quantityPurchase;
+              quantityPurchase = 0;
+            } else {
+              imp.quantity = 0;
+              quantityPurchase = quantityPurchase - imp.quantity;
+            }
+          }
+        });
+      }
+    });
+    return {
+      updateOne: {
+        filter: { _id: item.product },
+        update: { $set: { inventory: inventory } },
       },
     };
   });

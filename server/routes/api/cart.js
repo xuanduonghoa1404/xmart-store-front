@@ -8,12 +8,12 @@ const auth = require('../../middleware/auth');
 const store = require('../../helpers/store');
 const Marketing = require("../../models/Marketing");
 
-router.post('/add', auth, async (req, res) => {
+router.post("/add", auth, async (req, res) => {
   try {
     const user = req.user._id;
     const items = req.body.products;
 
-    const products = store.caculateItemsSalesTax(items);
+    const products = store.caculateItemsSales(items);
 
     const cart = new Cart({
       user,
@@ -30,7 +30,7 @@ router.post('/add', auth, async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again.",
     });
   }
 });
@@ -48,11 +48,16 @@ router.post("/update", async (req, res) => {
       cartId: null,
     };
     let newCartTotal = 0;
-    if (cartItems.length === 0 || itemsInCart.length === 0) {
-      res.status(200).json({
-        success: true,
-        cart: cart,
+    if (
+      !cartItems ||
+      !itemsInCart ||
+      cartItems.length === 0 ||
+      itemsInCart.length === 0
+    ) {
+      res.status(400).json({
+        error: "Your request could not be processed. Please try again.",
       });
+      return;
     }
 
     let products = await Product.find({ status: true });

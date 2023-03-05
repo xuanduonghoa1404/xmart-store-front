@@ -75,14 +75,9 @@ exports.caculateOrderTotal = order => {
 };
 
 // calculate order tax amount
-exports.caculateItemsSalesTax = items => {
-  const taxRate = 0;
-
-  const products = items.map(item => {
-    item.priceWithTax = 0;
+exports.caculateItemsSales = (items) => {
+  const products = items.map((item) => {
     item.totalPrice = 0;
-    item.totalTax = 0;
-    console.log("item", item);
     item.purchasePrice =
       item.final_price && item.final_price !== item.price
         ? item.final_price
@@ -91,15 +86,6 @@ exports.caculateItemsSalesTax = items => {
     const price = item.purchasePrice;
     const quantity = item.quantity;
     item.totalPrice = parseFloat(Number((price * quantity).toFixed(2)));
-
-    if (item.taxable) {
-      const taxAmount = price * (taxRate / 100) * 100;
-
-      item.totalTax = parseFloat(Number((taxAmount * quantity).toFixed(2)));
-      item.priceWithTax = parseFloat(
-        Number((item.totalPrice + item.totalTax).toFixed(2))
-      );
-    }
 
     return item;
   });

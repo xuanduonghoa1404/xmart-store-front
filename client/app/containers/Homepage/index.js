@@ -19,7 +19,6 @@ import HomeBannerSlider from "../FlashSaleSection/HomeBannerSlider";
 
 class Homepage extends React.PureComponent {
   componentDidMount() {
-    console.log("componentDidMount Homepage");
     this.props.fetchStoreCategories();
     this.props.fetchShop();
   }

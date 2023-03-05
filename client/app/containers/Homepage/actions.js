@@ -39,7 +39,6 @@ export const fetchStoreCategories = () => {
 
 // fetch store categories api
 export const fetchShop = () => {
-  console.log("fetchShop");
   return async (dispatch, getState) => {
     try {
       const response = await axios.get(`/api/shop/shop`);

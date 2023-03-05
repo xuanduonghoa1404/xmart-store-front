@@ -13,18 +13,18 @@ const CartIcon = props => {
   const { className, onClick, cartItems } = props;
 
   const Icon = (
-    <span className='cart-icon'>
+    <span className="cart-icon">
       {/* <BagIcon /> */}
-      <span className='cart-bag'></span>
-      {cartItems.length > 0 && (
-        <span className='cart-badge'>
-          {cartItems.length >= 99 ? '99+' : cartItems.length}
+      <span className="cart-bag"></span>
+      {cartItems?.length > 0 && (
+        <span className="cart-badge">
+          {cartItems?.length >= 99 ? "99+" : cartItems.length}
         </span>
       )}
     </span>
   );
 
-  const items = cartItems.length;
+  const items = cartItems?.length;
 
   return (
     <Button

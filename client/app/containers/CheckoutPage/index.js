@@ -50,7 +50,34 @@ class CheckoutPage extends React.PureComponent {
       shippingAddress,
       placeOrder,
     } = this.props;
-
+    console.log("CheckoutPage locators", locators);
+    let newLocators = [
+      {
+        status: true,
+        _id: "62933b3fe744ac34445c4fc0",
+        name: "37 Lê Thanh Nghị",
+        address: "37 Lê Thanh Nghị, Bách Khoa, Hai Bà Trưng HN",
+        storeID: "HN1",
+        createdAt: "2022-05-29T09:22:07.297Z",
+        updatedAt: "2022-12-24T03:47:15.953Z",
+        __v: 0,
+        lat: 21.00146,
+        lng: 105.84651,
+      },
+      {
+        status: true,
+        _id: "62933e07c224b41fc48a1182",
+        name: "350 Giải Phóng",
+        address:
+          "350 Đường Giải Phóng, Phường Phương Liệt, Quận Thanh Xuân, Hà Nội",
+        storeID: "HN2",
+        createdAt: "2022-05-29T09:33:59.562Z",
+        updatedAt: "2022-05-29T09:33:59.562Z",
+        __v: 0,
+        lat: 20.98853,
+        lng: 105.84075,
+      },
+    ];
     return (
       <div className="order-page">
         {isLoading ? (
@@ -65,7 +92,7 @@ class CheckoutPage extends React.PureComponent {
                 <div className="col-12 col-lg-5 col-xl-6 form mb-5 mb-lg-0">
                   <ShippingAddress
                     user={user}
-                    locators={locators}
+                    locators={locators.length ? locators : newLocators}
                     formErrors={formErrors}
                     addressChange={addressEditChange}
                     shippingAddressChange={shippingAddressChange}
