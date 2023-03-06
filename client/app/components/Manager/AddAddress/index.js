@@ -59,10 +59,40 @@ const AddAddress = (props) => {
     // results.addLayer(
     //   L.marker({ lat: addressFormData.lat, lng: addressFormData.lng })
     // );
+    console.log("search ne");
     searchControl.on("results", function (data) {
       results.clearLayers();
+      console.log("search control", data);
       for (let i = data.results.length - 1; i >= 0; i--) {
+        console.log("data.results[i]", data.results[i]);
         results.addLayer(L.marker(data.results[i].latlng));
+        let result = data.results[i];
+        setCity(result.properties.City);
+        setCountry(result.properties.CntryName);
+        setAddressMap(
+          `${result.properties.Address} ${result.properties.Neighborhood}`
+        );
+
+        setState(result.properties.District);
+        setZipcode(result.properties.Postal);
+        setLat(Math.round(result.latlng.lat * 100000) / 100000);
+        setLng(Math.round(result.latlng.lng * 100000) / 100000);
+        addressChange(
+          "lat",
+          Math.round(result.latlng.lat * 100000) / 100000 || 0
+        );
+        addressChange(
+          "lng",
+          Math.round(result.latlng.lng * 100000) / 100000 || 0
+        );
+        addressChange("city", result.properties.City || "");
+        addressChange("country", result.properties.CntryName || "");
+        addressChange(
+          "address",
+          `${result.address.Address} ${result.properties.Neighborhood}` || ""
+        );
+        addressChange("state", result.properties.District || "");
+        addressChange("zipCode", result.properties.Postal || "");
       }
     });
     map.on("click", function (e) {
@@ -119,6 +149,17 @@ const AddAddress = (props) => {
           marker.openPopup();
         });
     });
+    function onLocationFound(e) {
+      var radius = e.accuracy;
+
+      L.marker(e.latlng)
+        .addTo(map)
+        .bindPopup("You are within " + radius + " meters from this point")
+        .openPopup();
+
+      L.circle(e.latlng, radius).addTo(map);
+    }
+    map.on("locationfound", onLocationFound);
   }, []);
 
   const listLocatorsFeature = {

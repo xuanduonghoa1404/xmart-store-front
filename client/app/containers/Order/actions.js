@@ -191,7 +191,7 @@ export const addOrder = () => {
 
 export const placeOrder = () => {
   return (dispatch, getState) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     const cartItems = getState().cart.cartItems;
 
@@ -201,7 +201,7 @@ export const placeOrder = () => {
       });
     }
 
-    dispatch(toggleCart());
+    // dispatch(toggleCart());
   };
 };
 

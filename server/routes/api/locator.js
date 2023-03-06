@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Locator = require("../../models/Locator");
+const Locator = require("../../models/locator");
 //Getting All
 router.get("/", async (req, res) => {
   try {

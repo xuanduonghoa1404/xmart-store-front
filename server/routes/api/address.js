@@ -5,7 +5,7 @@ const router = express.Router();
 const Address = require('../../models/address');
 const auth = require('../../middleware/auth');
 
-router.post('/add', auth, (req, res) => {
+router.post("/add", auth, (req, res) => {
   const user = req.user;
 
   const address = new Address(Object.assign(req.body, { user: user._id }));
@@ -13,34 +13,34 @@ router.post('/add', auth, (req, res) => {
   address.save((err, data) => {
     if (err) {
       return res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Vui lòng thử lại",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: `Address has been added successfully!`,
-      address: data
+      message: `Thêm địa chỉ thành công!`,
+      address: data,
     });
   });
 });
 
 // fetch all addresses api
-router.get('/', auth, (req, res) => {
+router.get("/", auth, (req, res) => {
   Address.find({ user: req.user._id }, (err, data) => {
     if (err) {
       return res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Vui lòng thử lại",
       });
     }
 
     res.status(200).json({
-      addresses: data
+      addresses: data,
     });
   });
 });
 
-router.get('/:id', async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const addressId = req.params.id;
 
@@ -48,37 +48,37 @@ router.get('/:id', async (req, res) => {
 
     if (!addressDoc) {
       res.status(404).json({
-        message: `Cannot find Address with the id: ${addressId}.`
+        message: `Không tìm thấy địa chỉ: ${addressId}.`,
       });
     }
 
     res.status(200).json({
-      address: addressDoc
+      address: addressDoc,
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Vui lòng thử lại",
     });
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const addressId = req.params.id;
     const update = req.body;
     const query = { _id: addressId };
 
     await Address.findOneAndUpdate(query, update, {
-      new: true
+      new: true,
     });
 
     res.status(200).json({
       success: true,
-      message: 'Address has been updated successfully!'
+      message: "Cập nhật mật khẩu thành công!",
     });
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Vui lòng thử lại",
     });
   }
 });
@@ -87,14 +87,14 @@ router.delete('/delete/:id', (req, res) => {
   Address.deleteOne({ _id: req.params.id }, (err, data) => {
     if (err) {
       return res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Vui lòng thử lại",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: `Address has been deleted successfully!`,
-      address: data
+      message: `Xóa địa chỉ thành công!`,
+      address: data,
     });
   });
 });

@@ -13,8 +13,7 @@ const helmet = require('helmet');
 
 const keys = require('./config/keys');
 const webpackConfig = require('../webpack.config');
-const routes = require('./routes');
-const socket = require('./socket');
+const routes = require("./routes");
 
 const { database, port } = keys;
 const app = express();
@@ -88,4 +87,3 @@ const server = app.listen(port, () => {
   );
 });
 
-socket(server);

@@ -15,23 +15,18 @@ import { BagIcon } from "../../../components/Common/Icon";
 const ProductList = (props) => {
   const {
     products,
-    updateWishlist,
     authenticated,
     handleAddToCart,
     productShopChange,
     completedCountDown,
   } = props;
-  // function completedCountDown() {
-  //   console.log("completedCountDown", new Date());
-  // }
+
   return (
     <div className="product-list">
       {products.map((product, index) => (
         <div key={index} className="mb-3 mb-md-0">
           <div className="product-container">
             <div className="item-box">
-              <div className="add-wishlist-box"></div>
-
               <div className="item-link">
                 <Link
                   to={`/product/${product.slug}`}

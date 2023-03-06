@@ -1,7 +1,7 @@
 {
-  "name": "mern-ecommerce",
+  "name": "xmart",
   "version": "1.0.0",
-  "description": "MERN Ecommerce",
+  "description": "X Mart",
   "main": "server/index.js",
   "scripts": {
     "build": "npm run build:clean && cross-env NODE_ENV=production webpack --progress --colors",
@@ -25,12 +25,8 @@
     "redux-thunk",
     "webpack"
   ],
-  "author": "Mohamed Samara (https://github.com/mohamedsamara)",
+  "author": "DuongHX (https://github.com/xuanduonghoa1404)",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/mohamedsamara/mern-ecommerce/issues"
-  },
-  "homepage": "https://github.com/mohamedsamara/mern-ecommerce#readme",
   "dependencies": {
     "autosuggest-highlight": "^3.1.1",
     "aws-sdk": "^2.799.0",

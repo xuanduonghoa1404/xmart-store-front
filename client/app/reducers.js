@@ -21,18 +21,13 @@ import newsletterReducer from './containers/Newsletter/reducer';
 import dashboardReducer from './containers/Dashboard/reducer';
 import accountReducer from './containers/Account/reducer';
 import addressReducer from './containers/Address/reducer';
-import resetPasswordReducer from './containers/ResetPassword/reducer';
-import usersReducer from './containers/Users/reducer';
+import resetPasswordReducer from "./containers/ResetPassword/reducer";
 import productReducer from './containers/Product/reducer';
-import categoryReducer from './containers/Category/reducer';
-import brandReducer from './containers/Brand/reducer';
-import navigationMenuReducer from './containers/NavigationMenu/reducer';
-import shopReducer from './containers/Shop/reducer';
-import merchantReducer from './containers/Merchant/reducer';
-import contactReducer from './containers/Contact/reducer';
-import orderReducer from './containers/Order/reducer';
-import reviewReducer from './containers/Review/reducer';
-import wishListReducer from './containers/WishList/reducer';
+import categoryReducer from "./containers/Category/reducer";
+import navigationMenuReducer from "./containers/NavigationMenu/reducer";
+import shopReducer from "./containers/Shop/reducer";
+import contactReducer from "./containers/Contact/reducer";
+import orderReducer from "./containers/Order/reducer";
 import locatorReducer from "./containers/Locator/reducer";
 import checkoutReducer from "./containers/CheckoutPage/reducer";
 
@@ -53,18 +48,13 @@ const createReducer = (history) =>
     account: accountReducer,
     address: addressReducer,
     resetPassword: resetPasswordReducer,
-    users: usersReducer,
     product: productReducer,
     category: categoryReducer,
-    brand: brandReducer,
     menu: navigationMenuReducer,
     shop: shopReducer,
-    merchant: merchantReducer,
     contact: contactReducer,
     order: orderReducer,
-    review: reviewReducer,
     locator: locatorReducer,
-    wishlist: wishListReducer,
     checkout: checkoutReducer,
   });
 

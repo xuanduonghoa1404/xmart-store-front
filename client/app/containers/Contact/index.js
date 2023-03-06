@@ -29,44 +29,44 @@ class Contact extends React.PureComponent {
     };
 
     return (
-      <div className='contact'>
-        <h2>Contact Information</h2>
+      <div className="contact">
+        <h2>Liên hệ</h2>
         <hr />
         <form onSubmit={handleSubmit}>
           <Row>
-            <Col xs='12' md='6'>
+            <Col xs="12" md="6">
               <Input
-                type={'text'}
-                error={formErrors['name']}
-                label={'Name'}
-                name={'name'}
-                placeholder={'You Full Name'}
+                type={"text"}
+                error={formErrors["name"]}
+                label={"Họ tên"}
+                name={"name"}
+                placeholder={"Nguyễn Văn A"}
                 value={contactFormData.name}
                 onInputChange={(name, value) => {
                   contactFormChange(name, value);
                 }}
               />
             </Col>
-            <Col xs='12' md='6'>
+            <Col xs="12" md="6">
               <Input
-                type={'text'}
-                error={formErrors['email']}
-                label={'Email'}
-                name={'email'}
-                placeholder={'Your Email Address'}
+                type={"text"}
+                error={formErrors["email"]}
+                label={"Email"}
+                name={"email"}
+                placeholder={"abc@example.com"}
                 value={contactFormData.email}
                 onInputChange={(name, value) => {
                   contactFormChange(name, value);
                 }}
               />
             </Col>
-            <Col xs='12' md='12'>
+            <Col xs="12" md="12">
               <Input
-                type={'textarea'}
-                error={formErrors['message']}
-                label={'Message'}
-                name={'message'}
-                placeholder={'Please Describe Your Message'}
+                type={"textarea"}
+                error={formErrors["message"]}
+                label={"Bạn cần hỗ trợ gì?"}
+                name={"message"}
+                placeholder={"Vui lòng nhập thông tin"}
                 value={contactFormData.message}
                 onInputChange={(name, value) => {
                   contactFormChange(name, value);
@@ -75,8 +75,8 @@ class Contact extends React.PureComponent {
             </Col>
           </Row>
           <hr />
-          <div className='contact-actions'>
-            <Button type='submit' text='Submit' />
+          <div className="contact-actions">
+            <Button type="submit" text="Gửi" />
           </div>
         </form>
       </div>

@@ -27,20 +27,16 @@ class CategoryShop extends React.PureComponent {
   }
 
   render() {
-    const { products, isLoading, authenticated, updateWishlist } = this.props;
+    const { products, isLoading, authenticated } = this.props;
 
     return (
-      <div className='category-shop'>
+      <div className="category-shop">
         {isLoading && <LoadingIndicator />}
         {products && products.length > 0 && (
-          <ProductList
-            products={products}
-            authenticated={authenticated}
-            updateWishlist={updateWishlist}
-          />
+          <ProductList products={products} authenticated={authenticated} />
         )}
         {!isLoading && products && products.length <= 0 && (
-          <NotFound message='Không tìm thấy sản phẩm.' />
+          <NotFound message="Không tìm thấy sản phẩm." />
         )}
       </div>
     );

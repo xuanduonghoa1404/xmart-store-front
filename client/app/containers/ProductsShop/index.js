@@ -25,7 +25,6 @@ class ProductsShop extends React.PureComponent {
       products,
       isLoading,
       authenticated,
-      updateWishlist,
       handleAddToCart,
       productShopChange,
       updateProductAfterFlashSale,
@@ -38,7 +37,6 @@ class ProductsShop extends React.PureComponent {
           <ProductList
             products={products}
             authenticated={authenticated}
-            updateWishlist={updateWishlist}
             handleAddToCart={handleAddToCart}
             productShopChange={productShopChange}
             completedCountDown={updateProductAfterFlashSale}

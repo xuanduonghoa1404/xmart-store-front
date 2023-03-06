@@ -10,8 +10,7 @@ import { connect } from 'react-redux';
 
 import actions from '../../actions';
 
-import Admin from '../../components/Manager/Dashboard/Admin';
-import Merchant from '../../components/Manager/Dashboard/Merchant';
+import Admin from "../../components/Manager/Dashboard/Admin";
 import Customer from '../../components/Manager/Dashboard/Customer';
 
 import LoadingIndicator from '../../components/Common/LoadingIndicator';
@@ -34,12 +33,6 @@ class Dashboard extends React.PureComponent {
           <Admin
             isMenuOpen={isMenuOpen}
             links={dashboardLinks["admin"]}
-            toggleMenu={toggleDashboardMenu}
-          />
-        ) : user.role === "ROLE_MERCHANT" && user.merchant ? (
-          <Merchant
-            isMenuOpen={isMenuOpen}
-            links={dashboardLinks["ROLE_MERCHANT"]}
             toggleMenu={toggleDashboardMenu}
           />
         ) : (

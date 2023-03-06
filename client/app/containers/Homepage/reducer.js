@@ -8,6 +8,7 @@ import {
   DEFAULT_ACTION,
   FETCH_STORE_CATEGORIES,
   FETCH_MARKETING,
+  FETCH_SHOP,
 } from "./constants";
 
 const initialState = {
@@ -30,6 +31,11 @@ const homepageReducer = (state = initialState, action) => {
       return {
         ...state,
         marketing: action.payload,
+      };
+    case FETCH_SHOP:
+      return {
+        ...state,
+        shop: action.payload,
       };
     default:
       return state;
