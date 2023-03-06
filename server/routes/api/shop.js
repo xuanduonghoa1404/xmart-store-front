@@ -14,7 +14,7 @@ router.get("/shop", async (req, res) => {
           .replace(/,/g, "\n"),
       });
     } else {
-      res.json({ message: "No shop found" });
+      res.json({ message: "Không tìm thấy thông tin" });
     }
   } catch (error) {
     res.status(400).json({ message: error.message });
