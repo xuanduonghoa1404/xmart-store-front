@@ -119,13 +119,7 @@ const ShippingAddress = (props) => {
             Math.round(result.latlng.lat * 100000) / 100000,
             Math.round(result.latlng.lng * 100000) / 100000
           );
-          // locatorSorted = locatorSorted?.map((locator) => {
-          //   return {
-          //     lat: locator.lat,
-          //     lng: locator.lon,
-          //   };
-          // });
-          // console.log("locatorSorted", locatorSorted);
+
           locatorChange(locatorSorted);
           marker.openPopup();
         });
@@ -246,6 +240,12 @@ const ShippingAddress = (props) => {
             shippingAddressChange("zipCode", addressSelected.zipCode || "");
             shippingAddressChange("name", addressSelected.name || "");
             shippingAddressChange("phone", addressSelected.phone || "");
+            let locatorSorted = handleSelectLocatorByDistance(
+              Math.round(addressSelected.lat * 100000) / 100000,
+              Math.round(addressSelected.lng * 100000) / 100000
+            );
+
+            locatorChange(locatorSorted);
           }}
           label={"Chọn địa chỉ của bạn"}
         ></SelectOption>

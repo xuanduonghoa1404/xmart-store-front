@@ -7,10 +7,9 @@ var jwt = require('jsonwebtoken');
 
 // Bring in Models & Helpers
 const Product = require('../../models/product');
-const Marketing = require("../../models/Marketing");
-const Type = require("../../models/Type");
+const Marketing = require("../../models/marketing");
+const Type = require("../../models/type");
 const Cart = require("../../models/cart");
-const Category = require("../../models/category");
 const auth = require("../../middleware/auth");
 const role = require("../../middleware/role");
 const checkAuth = require("../../helpers/auth");
@@ -28,17 +27,10 @@ router.get("/item/:slug", async (req, res) => {
     const slug = req.params.slug;
 
     const productDoc = await Product.findOne({ slug, status: true });
-    // .populate(
-    //   {
-    //     path: 'brand',
-    //     select: 'name isActive slug'
-    //   }
-    // );
 
-    // if (!productDoc || (productDoc && productDoc?.brand?.isActive === false)) {
     if (!productDoc || (productDoc && productDoc?.type?.status === false)) {
       return res.status(404).json({
-        message: "No product found.",
+        message: "Không tìm thấy sản phẩm",
       });
     }
 
@@ -60,33 +52,6 @@ router.get("/item/:slug", async (req, res) => {
     });
   }
 });
-// fetch product slug api
-// router.get('/item/:slug', async (req, res) => {
-//   try {
-//     const slug = req.params.slug;
-
-//     const productDoc = await Product.findOne({ slug, isActive: true }).populate(
-//       {
-//         path: 'brand',
-//         select: 'name isActive slug'
-//       }
-//     );
-
-//     if (!productDoc || (productDoc && productDoc?.brand?.isActive === false)) {
-//       return res.status(404).json({
-//         message: 'No product found.'
-//       });
-//     }
-
-//     res.status(200).json({
-//       product: productDoc
-//     });
-//   } catch (error) {
-//     res.status(400).json({
-//       error: 'Your request could not be processed. Please try again.'
-//     });
-//   }
-// });
 
 // fetch  product name search api
 router.get("/list/search/:name", async (req, res) => {
@@ -213,99 +178,6 @@ router.get("/list/select", async (req, res) => {
   }
 });
 
-// add product api
-router.post(
-  "/add",
-  auth,
-  role.checkRole(role.ROLES.Admin, role.ROLES.Merchant),
-  upload.single("image"),
-  async (req, res) => {
-    try {
-      const sku = req.body.sku;
-      const name = req.body.name;
-      const description = req.body.description;
-      const quantity = req.body.quantity;
-      const price = req.body.price;
-      const taxable = req.body.taxable;
-      const isActive = req.body.isActive;
-      const brand = req.body.brand;
-      const image = req.file;
-
-      if (!sku) {
-        return res.status(400).json({ error: "You must enter sku." });
-      }
-
-      if (!description || !name) {
-        return res
-          .status(400)
-          .json({ error: "You must enter description & name." });
-      }
-
-      if (!quantity) {
-        return res.status(400).json({ error: "You must enter a quantity." });
-      }
-
-      if (!price) {
-        return res.status(400).json({ error: "You must enter a price." });
-      }
-
-      const foundProduct = await Product.findOne({ sku });
-
-      if (foundProduct) {
-        return res.status(400).json({ error: "This sku is already in use." });
-      }
-
-      let imageUrl = "";
-      let imageKey = "";
-
-      if (image) {
-        const s3bucket = new AWS.S3({
-          accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-          region: process.env.AWS_REGION,
-        });
-
-        const params = {
-          Bucket: process.env.AWS_BUCKET_NAME,
-          Key: image.originalname,
-          Body: image.buffer,
-          ContentType: image.mimetype,
-          ACL: "public-read",
-        };
-
-        const s3Upload = await s3bucket.upload(params).promise();
-
-        imageUrl = s3Upload.Location;
-        imageKey = s3Upload.key;
-      }
-
-      const product = new Product({
-        sku,
-        name,
-        description,
-        quantity,
-        price,
-        taxable,
-        isActive,
-        brand,
-        imageUrl,
-        imageKey,
-      });
-
-      const savedProduct = await product.save();
-
-      res.status(200).json({
-        success: true,
-        message: `Product has been added successfully!`,
-        product: savedProduct,
-      });
-    } catch (error) {
-      return res.status(400).json({
-        error: "Your request could not be processed. Please try again.",
-      });
-    }
-  }
-);
 
 async function getProductById(req, res, next) {
   let product;

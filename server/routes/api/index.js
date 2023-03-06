@@ -5,7 +5,6 @@ const userRoutes = require('./user');
 const addressRoutes = require("./address");
 const productRoutes = require('./product');
 const categoryRoutes = require("./category");
-const contactRoutes = require("./contact");
 const cartRoutes = require("./cart");
 const orderRoutes = require("./order");
 const typeRoutes = require("./type");
@@ -30,9 +29,6 @@ router.use("/type", typeRoutes);
 
 // category routes
 router.use("/category", categoryRoutes);
-
-// contact routes
-router.use("/contact", contactRoutes);
 
 // cart routes
 router.use("/cart", cartRoutes);

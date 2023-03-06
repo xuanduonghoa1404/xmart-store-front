@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Type = require("../../models/Type");
+const Type = require("../../models/type");
 //Getting All
 router.get("/type", async (req, res) => {
   try {

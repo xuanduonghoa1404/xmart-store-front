@@ -6,7 +6,7 @@ const Cart = require('../../models/cart');
 const Product = require('../../models/product');
 const auth = require('../../middleware/auth');
 const store = require('../../helpers/store');
-const Marketing = require("../../models/Marketing");
+const Marketing = require("../../models/marketing");
 
 router.post("/add", auth, async (req, res) => {
   try {
