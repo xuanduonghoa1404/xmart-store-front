@@ -207,6 +207,7 @@ const ShippingAddress = (props) => {
       </Map>
     </Row>
   );
+
   const formAddress = address?.length ? (
     <div className="edit-address">
       <form onSubmit={handleSubmit} noValidate>
@@ -214,6 +215,7 @@ const ShippingAddress = (props) => {
         <SelectOption
           value={addressSelect.value}
           options={addressSelect}
+          // defaultValue={address.find((item) => item.isDefault === true)._id}
           handleSelectChange={(value) => {
             selectAddress("id", value);
             let addressSelected = address.filter(

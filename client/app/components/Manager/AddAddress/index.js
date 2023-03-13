@@ -329,7 +329,7 @@ const AddAddress = (props) => {
             />
           </Col>
           <Col xs="12" md="12">
-            <Checkbox
+            {/* <Checkbox
               id={"default"}
               label={"Chọn làm địa chỉ mặc định"}
               name={"isDefault"}
@@ -338,7 +338,7 @@ const AddAddress = (props) => {
               toggleCheckboxChange={(name, value) => {
                 addressChange(name, value);
               }}
-            />
+            /> */}
           </Col>
         </Row>
         <hr />
