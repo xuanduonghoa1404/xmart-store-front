@@ -27,12 +27,7 @@ const AddressList = props => {
             </div>
             <div className="flex-1 p-3 p-lg-4">
               {address.isDefault ? (
-                <div className="d-flex align-items-center justify-content-between mb-2">
-                  <h4 className="mb-0 mr-2 one-line-ellipsis">
-                    Địa chỉ mặc định
-                  </h4>
-                  <CheckIcon className="text-green" />
-                </div>
+                <h4 className="mb-0">Địa chỉ</h4>
               ) : (
                 <h4 className="mb-0">Địa chỉ</h4>
               )}

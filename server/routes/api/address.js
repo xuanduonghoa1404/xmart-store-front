@@ -74,7 +74,7 @@ router.put("/:id", async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Cập nhật mật khẩu thành công!",
+      message: "Cập nhật địa chỉ thành công!",
     });
   } catch (error) {
     res.status(400).json({
